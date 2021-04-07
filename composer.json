@@ -1,0 +1,55 @@
+{
+    "name": "daniel-de-wit/lighthouse-sanctum",
+    "description": "Laravel Sanctum support for Laravel Lighthouse.",
+    "keywords": [
+        "daniel-de-wit",
+        "laravel-sanctum",
+        "lighthouse",
+        "lighthouse-sanctum"
+    ],
+    "homepage": "https://github.com/daniel-de-wit/lighthouse-sanctum",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Daniel de Wit",
+            "email": "daniel@danieldewit.nl",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "bensampo/laravel-enum": "^3.3",
+        "laravel/sanctum": "^2.0",
+        "nuwave/lighthouse": "^5.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "php-coveralls/php-coveralls": "^2.4",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DanielDeWit\\LighthouseSanctum\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DanielDeWit\\LighthouseSanctum\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DanielDeWit\\LighthouseSanctum\\Providers\\LighthouseSanctumServiceProvider"
+            ]
+        }
+    }
+}

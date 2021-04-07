@@ -1,0 +1,48 @@
+type User {
+    id: ID!
+    name: String!
+    email: String!
+}
+
+type AccessToken {
+    token: String!
+}
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+type LogoutResponse {
+    status: String!
+    message: String
+}
+
+type RegisterResponse {
+    token: String
+    status: RegisterStatus!
+}
+
+input VerifyEmailInput {
+    id: String!
+    hash: String!
+}
+
+input RegisterInput {
+    name: String! @rules(apply: ["required", "string"])
+    email: String! @rules(apply: ["required", "email", "unique:users,email"])
+    password: String! @rules(apply: ["required", "confirmed", "min:8"])
+    password_confirmation: String!
+    verification_url: String
+}
+
+extend type Mutation {
+    login(input: LoginInput @spread): AccessToken!
+        @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\Login")
+    logout: LogoutResponse! @guard
+        @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\Logout")
+    register(input: RegisterInput @spread): RegisterResponse!
+        @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\Register")
+    verifyEmail(input: VerifyEmailInput! @spread): User!
+        @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\VerifyEmail")
+}
