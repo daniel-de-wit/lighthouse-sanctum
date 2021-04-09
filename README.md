@@ -5,7 +5,12 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/daniel-de-wit/lighthouse-sanctum.svg?style=flat-square)](https://packagist.org/packages/daniel-de-wit/lighthouse-sanctum)
 [![Total Downloads](https://img.shields.io/packagist/dt/daniel-de-wit/lighthouse-sanctum.svg?style=flat-square)](https://packagist.org/packages/daniel-de-wit/lighthouse-sanctum)
 
-This package will add several graphql mutation and queries that will support working with [Laravel Sanctum](https://github.com/laravel/sanctum).
+Add [Laravel Sanctum](https://github.com/laravel/sanctum) support to [Lighthouse](https://github.com/nuwave/lighthouse)
+
+## Requirements
+
+ - [Laravel Sanctum](https://github.com/laravel/sanctum)
+ - [Lighthouse](https://github.com/nuwave/lighthouse)
 
 ## Installation
 

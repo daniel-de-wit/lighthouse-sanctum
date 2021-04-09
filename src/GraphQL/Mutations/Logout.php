@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Foundation\Auth\User;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
+use RuntimeException;
 
 class Logout
 {
@@ -19,18 +20,23 @@ class Logout
 
     /**
      * @param null $_
-     * @param array $args
-     * @return array
+     * @param string[] $args
+     * @return array<string, array|string|null>
      * @throws Exception
      */
     public function __invoke($_, array $args): array
     {
-        /**
-         * @var HasApiTokens|User $user
-         */
         $user = $this->authFactory
             ->guard('sanctum')
             ->user();
+
+        if (! $user) {
+            throw new RuntimeException('Unable to detect current user.');
+        }
+
+        if (! method_exists($user, 'currentAccessToken')) {
+            throw new Exception('Missing HasApiTokens trait on "' . get_class($user) . '"');
+        }
 
         /** @var PersonalAccessToken $personalAccessToken */
         $personalAccessToken = $user->currentAccessToken();

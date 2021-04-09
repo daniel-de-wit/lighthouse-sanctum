@@ -3,6 +3,7 @@
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
+use Exception;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Auth\EloquentUserProvider;
@@ -21,16 +22,16 @@ class Register
     }
 
     /**
-     * @param $_
-     * @param array $args
-     * @return array
+     * @param null $_
+     * @param string[] $args
+     * @return array<string, array|string|null>
+     * @throws Exception
      */
     public function __invoke($_, array $args): array
     {
         /** @var EloquentUserProvider $userProvider */
         $userProvider = $this->authManager->createUserProvider(config('lighthouse-sanctum.provider'));
 
-        /** @var Authenticatable|Model|HasApiTokens $user */
         $user = $userProvider->createModel();
         $user->fill($args);
         $user->save();
@@ -56,6 +57,10 @@ class Register
                 'tokens' => [],
                 'status' => RegisterStatus::MUST_VERIFY_EMAIL,
             ];
+        }
+
+        if (! method_exists($user, 'createToken')) {
+            throw new Exception('Missing HasApiTokens trait on "' . get_class($user) . '"');
         }
 
         return [

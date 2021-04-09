@@ -2,10 +2,12 @@
 
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
+use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Nuwave\Lighthouse\Exceptions\ValidationException;
+use RuntimeException;
 
 class VerifyEmail
 {
@@ -19,22 +21,27 @@ class VerifyEmail
     }
 
     /**
-     * @param $_
-     * @param array $args
-     * @return MustVerifyEmail|null
+     * @param null $_
+     * @param string[] $args
+     * @return MustVerifyEmail
      * @throws ValidationException
+     * @throws Exception
      */
-    public function __invoke($_, array $args)
+    public function __invoke($_, array $args): MustVerifyEmail
     {
         $userProvider = $this->authManager->createUserProvider(config('lighthouse-sanctum.provider'));
 
-        /** @var MustVerifyEmail|null $user */
+        if (! $userProvider) {
+            throw new RuntimeException('No UserProvider available.');
+        }
+
         $user = $userProvider->retrieveById($args['id']);
 
-        \Log::info('user', [$user]);
-        \Log::info('hash', [$args['hash']]);
+        if (! $user instanceof MustVerifyEmail) {
+            throw new RuntimeException('User not instance of MustVerifyEmail');
+        }
 
-        if (! hash_equals((string) $args['hash'],
+        if (! hash_equals($args['hash'],
             sha1($user->getEmailForVerification()))) {
             throw new ValidationException('The provided id and hash are incorrect.', Validator::make([], []));
         }

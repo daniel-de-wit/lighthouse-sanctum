@@ -2,11 +2,11 @@
 
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
+use Exception;
 use Illuminate\Auth\AuthManager;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
-use Laravel\Sanctum\HasApiTokens;
 use Nuwave\Lighthouse\Exceptions\ValidationException;
+use RuntimeException;
 
 class Login
 {
@@ -16,17 +16,19 @@ class Login
     public function __construct(
         ValidationFactory $validator,
         AuthManager $authManager
-    ) {
+    )
+    {
         $this->validator = $validator;
         $this->authManager = $authManager;
     }
 
     /**
-     * @param $_
-     * @param array $args
-     * @return array
+     * @param null $_
+     * @param string[] $args
+     * @return string[]
      * @throws ValidationException
      * @throws \Illuminate\Validation\ValidationException
+     * @throws Exception
      */
     public function __invoke($_, array $args): array
     {
@@ -38,11 +40,18 @@ class Login
 
         $userProvider = $this->authManager->createUserProvider(config('lighthouse-sanctum.provider'));
 
-        /** @var Authenticatable|HasApiTokens $user */
+        if (! $userProvider) {
+            throw new RuntimeException('No UserProvider available.');
+        }
+
         $user = $userProvider->retrieveByCredentials($validator->validated());
 
         if (! $user) {
             throw new ValidationException('The provided credentials are incorrect.', $validator);
+        }
+
+        if (! method_exists($user, 'createToken')) {
+            throw new Exception('Missing HasApiTokens trait on "' . get_class($user) . '"');
         }
 
         return [
