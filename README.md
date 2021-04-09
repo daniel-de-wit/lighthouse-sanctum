@@ -11,23 +11,34 @@ This package will add several graphql mutation and queries that will support wor
 
 ## Installation
 
-You can install the package via composer:
+1. Install using composer:
 
 ```bash
 composer require daniel-de-wit/lighthouse-sanctum
 ```
 
+2. Publish configuration and schema
+
+```bash
+php artisan vendor:publish --tag=lighthouse-sanctum
+```
+
 ## Usage
+
+Import the published schema into your main GraphQL schema (`./graphql/schema.graphql`)
+
+```graphql
+type Query
+type Mutation
+
+#import sanctum.grapqhl
+```
 
 ### Testing
 
-``` bash
+```bash
 composer test
 ```
-
-### Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
 ## Contributing
 

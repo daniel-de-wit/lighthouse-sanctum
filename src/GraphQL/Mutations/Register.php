@@ -2,6 +2,7 @@
 
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
+use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Auth\EloquentUserProvider;
@@ -53,13 +54,13 @@ class Register
 
             return [
                 'tokens' => [],
-                'status' => 'MUST_VERIFY_EMAIL',
+                'status' => RegisterStatus::MUST_VERIFY_EMAIL,
             ];
         }
 
         return [
             'token'  => $user->createToken('default')->plainTextToken,
-            'status' => 'SUCCESS',
+            'status' => RegisterStatus::SUCCESS,
         ];
     }
 }

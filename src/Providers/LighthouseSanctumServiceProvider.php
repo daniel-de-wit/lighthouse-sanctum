@@ -13,31 +13,46 @@ use Nuwave\Lighthouse\Schema\Types\LaravelEnumType;
 
 class LighthouseSanctumServiceProvider extends ServiceProvider
 {
+    protected TypeRegistry $typeRegistry;
+
     public function boot(Dispatcher $dispatcher, TypeRegistry $typeRegistry): void
     {
-        $dispatcher->listen(BuildSchemaString::class, function (): string {
-            if (config('lighthouse-sanctum.schema')) {
-                return file_get_contents(config('lighthouse-sanctum.schema'));
-            }
+        $this->typeRegistry = $typeRegistry;
 
-            return file_get_contents(__DIR__ . '/../../graphql/sanctum.graphql');
-        });
+        $this->publishConfig();
+        $this->publishSchema();
 
+        $this->mergeConfig();
+
+        $this->registerEnums();
+    }
+
+    protected function publishConfig(): void
+    {
         $this->publishes([
-            __DIR__.'/../graphql/' => __DIR__ . '/../../graphql/sanctum.graphql',
+            __DIR__.'/../../config/lighthouse-sanctum.php' => config_path('lighthouse-sanctum.php'),
         ], 'lighthouse-sanctum');
+    }
 
-        $typeRegistry->register(
-            new LaravelEnumType(RegisterStatus::class),
-        );
+    protected function publishSchema(): void
+    {
+        $this->publishes([
+            __DIR__.'/../../graphql/sanctum.graphql' => base_path('graphql/sanctum.graphql'),
+        ], 'lighthouse-sanctum');
+    }
 
+    protected function mergeConfig(): void
+    {
         $this->mergeConfigFrom(
             __DIR__.'/../../config/lighthouse-sanctum.php',
             'lighthouse-sanctum',
         );
+    }
 
-        $this->publishes([
-            __DIR__.'/../../config/lighthouse-sanctum.php' => config_path('lighthouse-sanctum.php'),
-        ], 'config');
+    protected function registerEnums(): void
+    {
+        $this->typeRegistry->register(
+            new LaravelEnumType(RegisterStatus::class),
+        );
     }
 }
