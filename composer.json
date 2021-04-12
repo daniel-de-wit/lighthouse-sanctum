@@ -20,6 +20,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "bensampo/laravel-enum": "^3.3",
+        "laravel/framework": "^8.36.2",
         "laravel/sanctum": "^2.0",
         "nuwave/lighthouse": "^5.0"
     },

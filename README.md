@@ -8,9 +8,9 @@
 Add [Laravel Sanctum](https://github.com/laravel/sanctum) support to [Lighthouse](https://github.com/nuwave/lighthouse)
 
 ## Requirements
-
- - [Laravel Sanctum](https://github.com/laravel/sanctum)
- - [Lighthouse](https://github.com/nuwave/lighthouse)
+ - [laravel/laravel:^8.36.2](https://github.com/laravel/laravel)
+ - [laravel/sanctum:^2.0](https://github.com/laravel/sanctum)
+ - [nuwave/lighthouse:^5.0](https://github.com/nuwave/lighthouse)
 
 ## Installation
 
