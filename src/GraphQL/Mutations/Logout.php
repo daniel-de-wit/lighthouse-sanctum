@@ -4,8 +4,6 @@ namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use Exception;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
-use Illuminate\Foundation\Auth\User;
-use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 use RuntimeException;
 

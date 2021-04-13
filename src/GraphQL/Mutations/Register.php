@@ -4,13 +4,10 @@ namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
 use Exception;
-use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Model;
-use Laravel\Sanctum\HasApiTokens;
 
 class Register
 {
