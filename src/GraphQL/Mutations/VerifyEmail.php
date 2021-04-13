@@ -2,6 +2,7 @@
 
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
+use DanielDeWit\LighthouseSanctum\Enums\EmailVerificationStatus;
 use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -13,9 +14,7 @@ class VerifyEmail
 {
     protected AuthManager $authManager;
 
-    public function __construct(
-        AuthManager $authManager
-    )
+    public function __construct(AuthManager $authManager)
     {
         $this->authManager = $authManager;
     }
@@ -23,11 +22,10 @@ class VerifyEmail
     /**
      * @param null $_
      * @param string[] $args
-     * @return MustVerifyEmail
+     * @return array
      * @throws ValidationException
-     * @throws Exception
      */
-    public function __invoke($_, array $args): MustVerifyEmail
+    public function __invoke($_, array $args): array
     {
         $userProvider = $this->authManager->createUserProvider(config('lighthouse-sanctum.provider'));
 
@@ -48,6 +46,8 @@ class VerifyEmail
 
         $user->markEmailAsVerified();
 
-        return $user;
+        return [
+            'status' => EmailVerificationStatus::VERIFIED,
+        ];
     }
 }

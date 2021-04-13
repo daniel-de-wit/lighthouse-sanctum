@@ -2,6 +2,7 @@
 
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
+use DanielDeWit\LighthouseSanctum\Enums\LogoutStatus;
 use Exception;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -41,7 +42,7 @@ class Logout
         $personalAccessToken->delete();
 
         return [
-            'status'  => 'TOKEN_REVOKED',
+            'status'  => LogoutStatus::TOKEN_REVOKED,
             'message' => __('Your session has been terminated'),
         ];
     }

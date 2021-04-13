@@ -34,19 +34,21 @@ class Register
         $user->save();
 
         if ($user instanceof MustVerifyEmail) {
-            VerifyEmail::createUrlUsing(function ($notifiable) use ($args) {
-                $urlWithHash = str_replace(
-                    '{{HASH}}',
-                    sha1($notifiable->getEmailForVerification()),
-                    $args['verification_url'],
-                );
+            if ($args['verification_url']) {
+                VerifyEmail::createUrlUsing(function ($notifiable) use ($args) {
+                    $urlWithHash = str_replace(
+                        '{{HASH}}',
+                        sha1($notifiable->getEmailForVerification()),
+                        $args['verification_url'],
+                    );
 
-                return str_replace(
-                    '{{ID}}',
-                    $notifiable->getKey(),
-                    $urlWithHash,
-                );
-            });
+                    return str_replace(
+                        '{{ID}}',
+                        $notifiable->getKey(),
+                        $urlWithHash,
+                    );
+                });
+            }
 
             $user->sendEmailVerificationNotification();
 
