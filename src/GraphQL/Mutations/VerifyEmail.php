@@ -22,7 +22,7 @@ class VerifyEmail
     /**
      * @param null $_
      * @param string[] $args
-     * @return array
+     * @return string[]
      * @throws ValidationException
      */
     public function __invoke($_, array $args): array
