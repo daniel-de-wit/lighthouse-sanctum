@@ -3,7 +3,6 @@
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Enums\EmailVerificationStatus;
-use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
