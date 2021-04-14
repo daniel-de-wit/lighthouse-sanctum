@@ -38,6 +38,11 @@ type Mutation
 
 ## Usage
 
+- [Login](#login)
+- [Logout](#logout)
+- [Register](#register)
+- [Email Verification](#email-verification)
+
 ### Login
 
 Authenticate the user to receive a Bearer token.
@@ -106,7 +111,7 @@ mutation VerifyEmail {
 }
 ```
 
-### Testing
+## Testing
 
 ```bash
 composer test
