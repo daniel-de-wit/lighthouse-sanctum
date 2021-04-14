@@ -22,13 +22,8 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <report>
+            <clover outputFile="build/clover.xml"/>
+        </report>
     </coverage>
-
-    <logging>
-        <junit outputFile="build/junit.xml"/>
-        <teamcity outputFile="build/teamcity.txt"/>
-        <testdoxHtml outputFile="build/testdox.html"/>
-        <testdoxText outputFile="build/testdox.txt"/>
-        <testdoxXml outputFile="build/testdox.xml"/>
-    </logging>
 </phpunit>

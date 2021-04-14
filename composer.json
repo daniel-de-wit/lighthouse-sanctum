@@ -30,7 +30,7 @@
         "php-coveralls/php-coveralls": "^2.4",
         "phpstan/phpstan-mockery": "^0.12.13",
         "phpstan/phpstan-phpunit": "^0.12.18",
-        "phpunit/phpunit": "^9.0",
+        "phpunit/phpunit": "^9.5",
         "thecodingmachine/phpstan-safe-rule": "^1.0"
     },
     "autoload": {
