@@ -39,7 +39,8 @@ jobs:
             - name: Install dependencies
               run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
-            - run: vendor/bin/phpstan
+            - name: Execute static code analysis
+              run: vendor/bin/phpstan
 
             - name: Execute tests
               run: vendor/bin/phpunit
@@ -47,6 +48,4 @@ jobs:
             - name: Upload coverage results to Coveralls
               env:
                   COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-              run: |
-                  composer global require php-coveralls/php-coveralls
-                  php-coveralls
+              run: php-coveralls
