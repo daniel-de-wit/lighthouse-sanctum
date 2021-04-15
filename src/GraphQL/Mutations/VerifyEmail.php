@@ -3,19 +3,25 @@
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Enums\EmailVerificationStatus;
+use DanielDeWit\LighthouseSanctum\Traits\CreatesUserProvider;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Support\Facades\Validator;
 use Nuwave\Lighthouse\Exceptions\ValidationException;
 use RuntimeException;
 
 class VerifyEmail
 {
-    protected AuthManager $authManager;
+    use CreatesUserProvider;
 
-    public function __construct(AuthManager $authManager)
+    protected AuthManager $authManager;
+    protected Config $config;
+
+    public function __construct(AuthManager $authManager, Config $config)
     {
         $this->authManager = $authManager;
+        $this->config = $config;
     }
 
     /**
@@ -26,11 +32,7 @@ class VerifyEmail
      */
     public function __invoke($_, array $args): array
     {
-        $userProvider = $this->authManager->createUserProvider(config('lighthouse-sanctum.provider'));
-
-        if (! $userProvider) {
-            throw new RuntimeException('No UserProvider available.');
-        }
+        $userProvider = $this->createUserProvider();
 
         $user = $userProvider->retrieveById($args['id']);
 
@@ -48,5 +50,15 @@ class VerifyEmail
         return [
             'status' => EmailVerificationStatus::VERIFIED,
         ];
+    }
+
+    protected function getAuthManager(): AuthManager
+    {
+        return $this->authManager;
+    }
+
+    protected function getConfig(): Config
+    {
+        return $this->config;
     }
 }
