@@ -35,6 +35,9 @@ abstract class AbstractIntegrationTest extends TestCase
         $this->loadLaravelMigrations();
     }
 
+    /**
+     * @param Application $app
+     */
     protected function defineEnvironment($app): void
     {
         $app['config']->set('lighthouse.schema.register', $this->getStubsPath('schema.graphql'));
@@ -43,6 +46,6 @@ abstract class AbstractIntegrationTest extends TestCase
 
     protected function getStubsPath(string $path): string
     {
-        return realpath(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . $path);
+        return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . $path;
     }
 }

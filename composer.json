@@ -43,7 +43,8 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit",
+        "phpstan": "php ./vendor/phpstan/phpstan/phpstan analyse --memory-limit 1G"
     },
     "config": {
         "sort-packages": true
