@@ -5,16 +5,19 @@ namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 use DanielDeWit\LighthouseSanctum\Enums\LogoutStatus;
 use Exception;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Contracts\Translation\Translator;
 use Laravel\Sanctum\PersonalAccessToken;
 use RuntimeException;
 
 class Logout
 {
     protected AuthFactory $authFactory;
+    protected Translator $translator;
 
-    public function __construct(AuthFactory $authFactory)
+    public function __construct(AuthFactory $authFactory, Translator $translator)
     {
         $this->authFactory = $authFactory;
+        $this->translator = $translator;
     }
 
     /**
@@ -42,8 +45,8 @@ class Logout
         $personalAccessToken->delete();
 
         return [
-            'status'  => LogoutStatus::TOKEN_REVOKED,
-            'message' => __('Your session has been terminated'),
+            'status'  => LogoutStatus::TOKEN_REVOKED(),
+            'message' => $this->translator->get('Your session has been terminated'),
         ];
     }
 }
