@@ -9,8 +9,8 @@ type AccessToken {
 }
 
 input LoginInput {
-    email: String!
-    password: String!
+    email: String! @rules(apply: ["required", "email"])
+    password: String! @rules(apply: ["required", "string"])
 }
 
 type LogoutResponse {
@@ -28,16 +28,16 @@ type EmailVerificationResponse {
 }
 
 input VerifyEmailInput {
-    id: String!
-    hash: String!
+    id: ID! @rules(apply: ["required", "exists:users,id"])
+    hash: String! @rules(apply: ["required", "string"])
 }
 
 input RegisterInput {
     name: String! @rules(apply: ["required", "string"])
     email: String! @rules(apply: ["required", "email", "unique:users,email"])
     password: String! @rules(apply: ["required", "confirmed"])
-    password_confirmation: String!
-    verification_url: String
+    password_confirmation: String! @rules(apply: ["required", "string"])
+    verification_url: String @rules(apply: ["url"])
 }
 
 extend type Mutation {
