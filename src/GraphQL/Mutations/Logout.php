@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Enums\LogoutStatus;
@@ -17,13 +19,13 @@ class Logout
     public function __construct(AuthFactory $authFactory, Translator $translator)
     {
         $this->authFactory = $authFactory;
-        $this->translator = $translator;
+        $this->translator  = $translator;
     }
 
     /**
      * @param mixed $_
-     * @param string[] $args
-     * @return array<string, array|string|null>
+     * @param array<string, mixed> $args
+     * @return array<string, LogoutStatus|string|array|null>
      * @throws Exception
      */
     public function __invoke($_, array $args): array

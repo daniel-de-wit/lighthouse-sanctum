@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Traits\CreatesUserProvider;
@@ -18,12 +20,12 @@ class Login
     public function __construct(AuthManager $authManager, Config $config)
     {
         $this->authManager = $authManager;
-        $this->config = $config;
+        $this->config      = $config;
     }
 
     /**
      * @param mixed $_
-     * @param string[] $args
+     * @param array<string, string> $args
      * @return string[]
      * @throws Exception
      */
