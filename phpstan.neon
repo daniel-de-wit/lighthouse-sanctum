@@ -1,11 +1,16 @@
 includes:
-- vendor/nunomaduro/larastan/extension.neon
-- vendor/phpstan/phpstan-mockery/extension.neon
-- vendor/phpstan/phpstan-phpunit/extension.neon
-- vendor/phpstan/phpstan-phpunit/rules.neon
-- vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon
+    - vendor/nunomaduro/larastan/extension.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon
+
 parameters:
   level: max
   paths:
-  - src
-  - tests
+    - src
+    - tests
+  ignoreErrors:
+    -
+      message: '#Parameter \#1 \$(function|callback) of function call_user_func expects callable\(\): mixed, Closure\|null given\.#'
+      path: tests/Integration/Services/EmailVerificationServiceTest.php
