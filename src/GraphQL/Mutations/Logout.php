@@ -18,7 +18,7 @@ class Logout
     }
 
     /**
-     * @param null $_
+     * @param mixed $_
      * @param string[] $args
      * @return array<string, array|string|null>
      * @throws Exception
