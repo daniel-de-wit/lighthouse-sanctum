@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration;
 
 use DanielDeWit\LighthouseSanctum\Providers\LighthouseSanctumServiceProvider;
+use DanielDeWit\LighthouseSanctum\Tests\Traits\AssertsGraphQLErrorMessage;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\SanctumServiceProvider;
@@ -14,6 +15,7 @@ use Orchestra\Testbench\TestCase;
 
 abstract class AbstractIntegrationTest extends TestCase
 {
+    use AssertsGraphQLErrorMessage;
     use MakesGraphQLRequests;
     use RefreshDatabase;
 

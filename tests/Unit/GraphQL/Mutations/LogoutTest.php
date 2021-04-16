@@ -8,13 +8,16 @@ use DanielDeWit\LighthouseSanctum\Enums\LogoutStatus;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\Logout;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Translation\Translator;
+use Illuminate\Foundation\Auth\User;
 use Laravel\Sanctum\PersonalAccessToken;
 use Mockery;
 use Mockery\MockInterface;
+use RuntimeException;
 
 class LogoutTest extends AbstractUnitTest
 {
@@ -49,6 +52,34 @@ class LogoutTest extends AbstractUnitTest
         static::assertCount(2, $result);
         static::assertTrue(LogoutStatus::TOKEN_REVOKED()->is($result['status']));
         static::assertSame('Translated string!', $result['message']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_throws_an_exception_if_no_user_is_found_by_the_guard(): void
+    {
+        static::expectException(RuntimeException::class);
+        static::expectExceptionMessage('Unable to detect current user.');
+
+        $mutation = new Logout($this->mockAuthFactory(), Mockery::mock(Translator::class));
+
+        $mutation(null, []);
+    }
+
+    /**
+     * @test
+     */
+    public function it_throws_an_exception_if_the_user_does_not_have_the_has_api_tokens_trait(): void
+    {
+        $user = Mockery::mock(User::class);
+
+        static::expectException(Exception::class);
+        static::expectExceptionMessage('Missing HasApiTokens trait on "' . get_class($user) . '"');
+
+        $mutation = new Logout($this->mockAuthFactory($user), Mockery::mock(Translator::class));
+
+        $mutation(null, []);
     }
 
     /**
