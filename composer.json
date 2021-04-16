@@ -21,7 +21,7 @@
         "php": "^7.4|^8.0",
         "bensampo/laravel-enum": "^3.3",
         "laravel/framework": "^8.36.2",
-        "laravel/sanctum": "^2.0",
+        "laravel/sanctum": "^2.10",
         "nuwave/lighthouse": "^5.0"
     },
     "require-dev": {

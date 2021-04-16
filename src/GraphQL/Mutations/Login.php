@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
+use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use DanielDeWit\LighthouseSanctum\Traits\CreatesUserProvider;
 use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Config\Repository as Config;
+use Laravel\Sanctum\Contracts\HasApiTokens;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 
 class Login
@@ -39,8 +41,8 @@ class Login
             throw new AuthenticationException('The provided credentials are incorrect.');
         }
 
-        if (! method_exists($user, 'createToken')) {
-            throw new Exception('Missing HasApiTokens trait on "' . get_class($user) . '"');
+        if (! $user instanceof HasApiTokens) {
+            throw new HasApiTokensException($user);
         }
 
         return [

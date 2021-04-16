@@ -6,12 +6,14 @@ namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInterface;
 use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
+use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use DanielDeWit\LighthouseSanctum\Traits\CreatesUserProvider;
 use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Config\Repository as Config;
+use Laravel\Sanctum\Contracts\HasApiTokens;
 
 class Register
 {
@@ -59,8 +61,8 @@ class Register
             ];
         }
 
-        if (! method_exists($user, 'createToken')) {
-            throw new Exception('Missing HasApiTokens trait on "' . get_class($user) . '"');
+        if (! $user instanceof HasApiTokens) {
+            throw new HasApiTokensException($user);
         }
 
         return [
