@@ -3,19 +3,25 @@
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
+use DanielDeWit\LighthouseSanctum\Traits\CreatesUserProvider;
 use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Config\Repository as Config;
 
 class Register
 {
-    protected AuthManager $authManager;
+    use CreatesUserProvider;
 
-    public function __construct(AuthManager $authManager)
+    protected AuthManager $authManager;
+    protected Config $config;
+
+    public function __construct(AuthManager $authManager, Config $config)
     {
         $this->authManager = $authManager;
+        $this->config = $config;
     }
 
     /**
@@ -27,7 +33,7 @@ class Register
     public function __invoke($_, array $args): array
     {
         /** @var EloquentUserProvider $userProvider */
-        $userProvider = $this->authManager->createUserProvider(config('lighthouse-sanctum.provider'));
+        $userProvider = $this->createUserProvider();
 
         $user = $userProvider->createModel();
         $user->fill($args);
@@ -66,5 +72,15 @@ class Register
             'token'  => $user->createToken('default')->plainTextToken,
             'status' => RegisterStatus::SUCCESS,
         ];
+    }
+
+    protected function getAuthManager(): AuthManager
+    {
+        return $this->authManager;
+    }
+
+    protected function getConfig(): Config
+    {
+        return $this->config;
     }
 }
