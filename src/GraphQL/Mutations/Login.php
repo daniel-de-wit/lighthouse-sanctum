@@ -17,7 +17,7 @@ class Login
     }
 
     /**
-     * @param null $_
+     * @param mixed $_
      * @param string[] $args
      * @return string[]
      * @throws Exception
