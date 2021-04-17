@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Enums\EmailVerificationStatus;
@@ -21,13 +23,13 @@ class VerifyEmail
     public function __construct(AuthManager $authManager, Config $config)
     {
         $this->authManager = $authManager;
-        $this->config = $config;
+        $this->config      = $config;
     }
 
     /**
      * @param mixed $_
-     * @param string[] $args
-     * @return string[]
+     * @param array<string, string|int> $args
+     * @return array<string, EmailVerificationStatus>
      * @throws ValidationException
      */
     public function __invoke($_, array $args): array
@@ -40,7 +42,7 @@ class VerifyEmail
             throw new RuntimeException('User not instance of MustVerifyEmail');
         }
 
-        if (! hash_equals($args['hash'],
+        if (! hash_equals((string) $args['hash'],
             sha1($user->getEmailForVerification()))) {
             throw new ValidationException('The provided id and hash are incorrect.', Validator::make([], []));
         }
@@ -48,7 +50,7 @@ class VerifyEmail
         $user->markEmailAsVerified();
 
         return [
-            'status' => EmailVerificationStatus::VERIFIED,
+            'status' => EmailVerificationStatus::VERIFIED(),
         ];
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
@@ -21,13 +23,13 @@ class Register
     public function __construct(AuthManager $authManager, Config $config)
     {
         $this->authManager = $authManager;
-        $this->config = $config;
+        $this->config      = $config;
     }
 
     /**
      * @param mixed $_
-     * @param string[] $args
-     * @return array<string, array|string|null>
+     * @param array<string, string> $args
+     * @return array<string, RegisterStatus|array|string|null>
      * @throws Exception
      */
     public function __invoke($_, array $args): array
@@ -60,7 +62,7 @@ class Register
 
             return [
                 'tokens' => [],
-                'status' => RegisterStatus::MUST_VERIFY_EMAIL,
+                'status' => RegisterStatus::MUST_VERIFY_EMAIL(),
             ];
         }
 
@@ -70,7 +72,7 @@ class Register
 
         return [
             'token'  => $user->createToken('default')->plainTextToken,
-            'status' => RegisterStatus::SUCCESS,
+            'status' => RegisterStatus::SUCCESS(),
         ];
     }
 

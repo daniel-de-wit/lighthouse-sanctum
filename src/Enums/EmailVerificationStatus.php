@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DanielDeWit\LighthouseSanctum\Enums;
 
 use BenSampo\Enum\Enum;
