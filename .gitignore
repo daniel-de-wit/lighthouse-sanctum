@@ -5,3 +5,4 @@ vendor
 coverage
 .phpunit.cache
 .php_cs.cache
+.php_cs.tests.cache
