@@ -40,6 +40,26 @@ input RegisterInput {
     verification_url: String @rules(apply: ["url"])
 }
 
+input ForgotPasswordInput {
+    email: String! @rules(apply: ["required", "email"])
+    reset_password_url: ResetPasswordUrlInput
+}
+
+"""
+The url used to reset the password.
+Use the `__EMAIL__` and `__TOKEN__` placeholders to inject the reset password email and token.
+
+e.g; https://my-front-end.com?reset-password?email=__EMAIL__&token=__TOKEN__
+"""
+input ResetPasswordUrlInput {
+    url: String!
+}
+
+type ForgotPasswordResponse {
+    status: ForgotPasswordStatus!
+    message: String
+}
+
 extend type Mutation {
     login(input: LoginInput @spread): AccessToken!
         @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\Login")
@@ -49,4 +69,6 @@ extend type Mutation {
         @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\Register")
     verifyEmail(input: VerifyEmailInput! @spread): EmailVerificationResponse!
         @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\VerifyEmail")
+    forgotPassword(input: ForgotPasswordInput! @spread): ForgotPasswordResponse!
+            @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\ForgotPassword")
 }
