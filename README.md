@@ -118,6 +118,18 @@ mutation VerifyEmail {
 composer test
 ```
 
+## Coverage
+
+```bash
+composer coverage
+```
+
+## Static Analysis
+
+```bash
+composer analyze
+```
+
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
@@ -125,6 +137,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 ## Credits
 
 - [Daniel de Wit](https://github.com/daniel-de-wit)
+- [wimski](https://github.com/wimski)
 - [All Contributors](../../contributors)
 
 ## License
