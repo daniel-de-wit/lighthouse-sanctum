@@ -1,16 +1,16 @@
-name: run-tests
+name: run-static-analysis
 
 on: [push, pull_request]
 
 jobs:
-    test:
+    static-analysis:
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: true
             matrix:
                 os: [ubuntu-latest]
-                php: [7.4, 8.0]
-                dependency-version: [prefer-lowest, prefer-stable]
+                php: [8.0]
+                dependency-version: [prefer-stable]
 
         name: P${{ matrix.php }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
@@ -29,15 +29,10 @@ jobs:
               with:
                   php-version: ${{ matrix.php }}
                   extensions: dom, curl, libxml, mbstring, zip
-                  coverage: none
-
-            - name: Setup Problem Matches
-              run: |
-                  echo "::add-matcher::${{ runner.tool_cache }}/php.json"
-                  echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+                  coverage: pcov
 
             - name: Install dependencies
               run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
-            - name: Execute tests
-              run: composer test
+            - name: Execute static code analysis
+              run: composer analyze

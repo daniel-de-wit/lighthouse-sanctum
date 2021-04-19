@@ -4,3 +4,4 @@ docs
 vendor
 coverage
 .phpunit.cache
+.php_cs.cache

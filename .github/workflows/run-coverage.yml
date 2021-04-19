@@ -3,14 +3,14 @@ name: run-tests
 on: [push, pull_request]
 
 jobs:
-    test:
+    coverage:
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: true
             matrix:
                 os: [ubuntu-latest]
-                php: [7.4, 8.0]
-                dependency-version: [prefer-lowest, prefer-stable]
+                php: [8.0]
+                dependency-version: [prefer-stable]
 
         name: P${{ matrix.php }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
@@ -29,15 +29,17 @@ jobs:
               with:
                   php-version: ${{ matrix.php }}
                   extensions: dom, curl, libxml, mbstring, zip
-                  coverage: none
-
-            - name: Setup Problem Matches
-              run: |
-                  echo "::add-matcher::${{ runner.tool_cache }}/php.json"
-                  echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+                  coverage: pcov
 
             - name: Install dependencies
               run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
-            - name: Execute tests
-              run: composer test
+            - name: Execute tests with coverage
+              run: composer coverage
+
+            - name: Upload coverage results to Coveralls
+              env:
+                  COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  composer global require php-coveralls/php-coveralls
+                  php-coveralls
