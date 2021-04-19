@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
+use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInterface;
 use DanielDeWit\LighthouseSanctum\Enums\EmailVerificationStatus;
 use DanielDeWit\LighthouseSanctum\Traits\CreatesUserProvider;
+use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Config\Repository as Config;
-use Illuminate\Support\Facades\Validator;
-use Nuwave\Lighthouse\Exceptions\ValidationException;
 use RuntimeException;
 
 class VerifyEmail
@@ -19,18 +19,23 @@ class VerifyEmail
 
     protected AuthManager $authManager;
     protected Config $config;
+    protected EmailVerificationServiceInterface $emailVerificationService;
 
-    public function __construct(AuthManager $authManager, Config $config)
-    {
-        $this->authManager = $authManager;
-        $this->config      = $config;
+    public function __construct(
+        AuthManager $authManager,
+        Config $config,
+        EmailVerificationServiceInterface $emailVerificationService
+    ) {
+        $this->authManager              = $authManager;
+        $this->config                   = $config;
+        $this->emailVerificationService = $emailVerificationService;
     }
 
     /**
      * @param mixed $_
      * @param array<string, string|int> $args
      * @return array<string, EmailVerificationStatus>
-     * @throws ValidationException
+     * @throws Exception
      */
     public function __invoke($_, array $args): array
     {
@@ -42,10 +47,7 @@ class VerifyEmail
             throw new RuntimeException('User not instance of MustVerifyEmail');
         }
 
-        if (! hash_equals((string) $args['hash'],
-            sha1($user->getEmailForVerification()))) {
-            throw new ValidationException('The provided id and hash are incorrect.', Validator::make([], []));
-        }
+        $this->emailVerificationService->verify($user, (string) $args['hash']);
 
         $user->markEmailAsVerified();
 

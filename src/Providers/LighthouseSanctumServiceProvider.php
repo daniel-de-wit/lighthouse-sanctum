@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Providers;
 
+use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInterface;
 use DanielDeWit\LighthouseSanctum\Enums\EmailVerificationStatus;
 use DanielDeWit\LighthouseSanctum\Enums\LogoutStatus;
 use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
+use DanielDeWit\LighthouseSanctum\Services\EmailVerificationService;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 use Nuwave\Lighthouse\Schema\TypeRegistry;
@@ -15,6 +17,11 @@ use Nuwave\Lighthouse\Schema\Types\LaravelEnumType;
 class LighthouseSanctumServiceProvider extends ServiceProvider
 {
     protected TypeRegistry $typeRegistry;
+
+    public function register(): void
+    {
+        $this->app->singleton(EmailVerificationServiceInterface::class, EmailVerificationService::class);
+    }
 
     public function boot(Dispatcher $dispatcher, TypeRegistry $typeRegistry): void
     {

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
+use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInterface;
 use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
 use DanielDeWit\LighthouseSanctum\Traits\CreatesUserProvider;
 use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Auth\EloquentUserProvider;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Config\Repository as Config;
 
@@ -19,11 +19,16 @@ class Register
 
     protected AuthManager $authManager;
     protected Config $config;
+    protected EmailVerificationServiceInterface $emailVerificationService;
 
-    public function __construct(AuthManager $authManager, Config $config)
-    {
-        $this->authManager = $authManager;
-        $this->config      = $config;
+    public function __construct(
+        AuthManager $authManager,
+        Config $config,
+        EmailVerificationServiceInterface $emailVerificationService
+    ) {
+        $this->authManager              = $authManager;
+        $this->config                   = $config;
+        $this->emailVerificationService = $emailVerificationService;
     }
 
     /**
@@ -43,19 +48,7 @@ class Register
 
         if ($user instanceof MustVerifyEmail) {
             if ($args['verification_url']) {
-                VerifyEmail::createUrlUsing(function ($notifiable) use ($args) {
-                    $urlWithHash = str_replace(
-                        '{{HASH}}',
-                        sha1($notifiable->getEmailForVerification()),
-                        $args['verification_url'],
-                    );
-
-                    return str_replace(
-                        '{{ID}}',
-                        $notifiable->getKey(),
-                        $urlWithHash,
-                    );
-                });
+                $this->emailVerificationService->setVerificationUrl($args['verification_url']);
             }
 
             $user->sendEmailVerificationNotification();
