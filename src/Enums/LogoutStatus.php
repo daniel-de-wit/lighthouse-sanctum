@@ -11,5 +11,5 @@ use BenSampo\Enum\Enum;
  */
 final class LogoutStatus extends Enum
 {
-    const TOKEN_REVOKED = 'TOKEN_REVOKED';
+    public const TOKEN_REVOKED = 'TOKEN_REVOKED';
 }

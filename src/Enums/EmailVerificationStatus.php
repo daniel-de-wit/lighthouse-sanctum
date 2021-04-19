@@ -11,5 +11,5 @@ use BenSampo\Enum\Enum;
  */
 final class EmailVerificationStatus extends Enum
 {
-    const VERIFIED = 'VERIFIED';
+    public const VERIFIED = 'VERIFIED';
 }

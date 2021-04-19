@@ -16,7 +16,7 @@ class EmailVerificationService implements EmailVerificationServiceInterface
         VerifyEmail::createUrlUsing(function ($notifiable) use ($url) {
             return str_replace([
                 '{{ID}}',
-                '{{HASH}}'
+                '{{HASH}}',
             ], [
                 $notifiable->getKey(),
                 $this->createHash($notifiable),

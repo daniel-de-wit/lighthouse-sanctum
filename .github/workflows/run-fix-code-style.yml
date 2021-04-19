@@ -1,0 +1,38 @@
+name: Fix Code Style
+
+on:
+    push:
+
+jobs:
+    fix-style:
+        name: Fix Code Style
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: true
+            matrix:
+                os: [ ubuntu-latest ]
+                php: [ 8.0 ]
+                dependency-version: [ prefer-stable ]
+        env:
+            COMPOSER_NO_INTERACTION: 1
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  extensions: dom, curl, libxml, mbstring, zip
+                  coverage: pcov
+
+            - name: Install dependencies
+              run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
+
+            - run: composer fix-style
+              continue-on-error: true
+
+            - uses: stefanzweifel/git-auto-commit-action@v4
+              with:
+                  commit_message: composer fix-style
