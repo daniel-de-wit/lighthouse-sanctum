@@ -43,6 +43,7 @@ type Mutation
 - [Logout](#logout)
 - [Register](#register)
 - [Email Verification](#email-verification)
+- [Forgot Password](#forgot-password)
 
 ### Login
 
@@ -109,6 +110,26 @@ mutation VerifyEmail {
     name
     email
   }
+}
+```
+
+### Forgot Password
+
+Sends a reset password notification.
+
+Optionally use custom reset url using both `__EMAIL__` and `__TOKEN__` placeholders.
+
+```graphql
+mutation ForgotPassword {
+    forgotPassword(input: {
+        email: "john.doe@gmail.com"
+        reset_password_url: {
+            url: "https://my-front-end.com/reset-password?email=__EMAIL__&token=__TOKEN__"
+        }
+    }) {
+        status
+        message
+    }
 }
 ```
 

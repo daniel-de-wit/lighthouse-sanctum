@@ -8,9 +8,11 @@ use DanielDeWit\LighthouseSanctum\Providers\LighthouseSanctumServiceProvider;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\AssertsGraphQLErrorMessage;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Notifications\NotificationServiceProvider;
 use Laravel\Sanctum\SanctumServiceProvider;
 use Nuwave\Lighthouse\LighthouseServiceProvider;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
+use Nuwave\Lighthouse\Validation\ValidationServiceProvider;
 use Orchestra\Testbench\TestCase;
 
 abstract class AbstractIntegrationTest extends TestCase
@@ -28,7 +30,9 @@ abstract class AbstractIntegrationTest extends TestCase
         return [
             LighthouseSanctumServiceProvider::class,
             LighthouseServiceProvider::class,
+            NotificationServiceProvider::class,
             SanctumServiceProvider::class,
+            ValidationServiceProvider::class,
         ];
     }
 
