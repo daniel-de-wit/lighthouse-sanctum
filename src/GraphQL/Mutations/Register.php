@@ -33,7 +33,7 @@ class Register
 
     /**
      * @param mixed $_
-     * @param array<string, string> $args
+     * @param array<string, mixed> $args
      * @return array<string, RegisterStatus|array|string|null>
      * @throws Exception
      */
