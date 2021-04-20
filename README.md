@@ -81,8 +81,7 @@ mutation Logout {
 
 ### Register
 
-When registering a user while implementing the `MustVerifyEmail` contract you can optionally define the url for email verification.
-Both `{{ID}}` and `{{HASH}}` will be replaced with the proper values.
+Successfully registering a user will immediately yield a bearer token (unless email verification is required).
 
 ```graphql
 mutation Register {
@@ -91,7 +90,26 @@ mutation Register {
         email: "john.doe@gmail.com"
         password: "secret"
         password_confirmation: "secret"
-        verification_url: "https://my-front-end.com/verify?id={{ID}}&token={{HASH}}"
+    }) {
+        token
+        status
+    }
+}
+```
+
+When registering a user in combination with the `MustVerifyEmail` contract you can optionally define the url for email verification.
+Both `__ID__` and `__HASH__` will be replaced with the proper values.
+
+```graphql
+mutation Register {
+    register(input: {
+        name: "John Doe"
+        email: "john.doe@gmail.com"
+        password: "secret"
+        password_confirmation: "secret"
+        verification_url: {
+            url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__"
+        }
     }) {
         token
         status

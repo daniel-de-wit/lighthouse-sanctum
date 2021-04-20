@@ -37,7 +37,17 @@ input RegisterInput {
     email: String! @rules(apply: ["required", "email", "unique:users,email"])
     password: String! @rules(apply: ["required", "confirmed"])
     password_confirmation: String! @rules(apply: ["required", "string"])
-    verification_url: String @rules(apply: ["url"])
+    verification_url: VerificationUrlInput
+}
+
+"""
+The url used to verify the email address.
+Use __ID__ and __HASH__ to inject values.
+
+e.g; https://my-front-end.com/verify-email?id=__ID__&hash=__HASH__
+"""
+input VerificationUrlInput {
+    url: String! @rules(apply: ["required", "url"])
 }
 
 input ForgotPasswordInput {
@@ -52,7 +62,7 @@ Use the `__EMAIL__` and `__TOKEN__` placeholders to inject the reset password em
 e.g; https://my-front-end.com?reset-password?email=__EMAIL__&token=__TOKEN__
 """
 input ResetPasswordUrlInput {
-    url: String!
+    url: String! @rules(apply: ["required", "url"])
 }
 
 type ForgotPasswordResponse {

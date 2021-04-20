@@ -32,7 +32,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTest
             'email' => 'user@example.com',
         ]);
 
-        $this->service->setVerificationUrl('https://mysite.com/verify-email/{{ID}}/{{HASH}}');
+        $this->service->setVerificationUrl('https://mysite.com/verify-email/__ID__/__HASH__');
 
         $url = call_user_func(VerifyEmail::$createUrlCallback, $user);
 
