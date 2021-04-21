@@ -13,6 +13,8 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Support\Arr;
 use Laravel\Sanctum\Contracts\HasApiTokens;
 
 class Register
@@ -21,15 +23,18 @@ class Register
 
     protected AuthManager $authManager;
     protected Config $config;
+    protected Hasher $hash;
     protected EmailVerificationServiceInterface $emailVerificationService;
 
     public function __construct(
         AuthManager $authManager,
         Config $config,
+        Hasher $hash,
         EmailVerificationServiceInterface $emailVerificationService
     ) {
         $this->authManager              = $authManager;
         $this->config                   = $config;
+        $this->hash                     = $hash;
         $this->emailVerificationService = $emailVerificationService;
     }
 
@@ -45,18 +50,18 @@ class Register
         $userProvider = $this->createUserProvider();
 
         $user = $userProvider->createModel();
-        $user->fill($args);
+        $user->fill($this->getPropertiesFromArgs($args));
         $user->save();
 
         if ($user instanceof MustVerifyEmail) {
-            if ($args['verification_url']) {
+            if (isset($args['verification_url'])) {
                 $this->emailVerificationService->setVerificationUrl($args['verification_url']['url']);
             }
 
             $user->sendEmailVerificationNotification();
 
             return [
-                'tokens' => [],
+                'token'  => null,
                 'status' => RegisterStatus::MUST_VERIFY_EMAIL(),
             ];
         }
@@ -69,6 +74,23 @@ class Register
             'token'  => $user->createToken('default')->plainTextToken,
             'status' => RegisterStatus::SUCCESS(),
         ];
+    }
+
+    /**
+     * @param array<string, mixed> $args
+     * @return array<string, string>
+     */
+    protected function getPropertiesFromArgs(array $args): array
+    {
+        $properties = Arr::except($args, [
+            'directive',
+            'password_confirmation',
+            'verification_url',
+        ]);
+
+        $properties['password'] = $this->hash->make($properties['password']);
+
+        return $properties;
     }
 
     protected function getAuthManager(): AuthManager
