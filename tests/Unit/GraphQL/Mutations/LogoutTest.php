@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Enums\LogoutStatus;
+use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\Logout;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
@@ -74,8 +75,8 @@ class LogoutTest extends AbstractUnitTest
     {
         $user = Mockery::mock(User::class);
 
-        static::expectException(Exception::class);
-        static::expectExceptionMessage('Missing HasApiTokens trait on "' . get_class($user) . '"');
+        static::expectException(HasApiTokensException::class);
+        static::expectExceptionMessage('"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
 
         $mutation = new Logout($this->mockAuthFactory($user), Mockery::mock(Translator::class));
 

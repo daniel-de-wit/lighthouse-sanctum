@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Enums\LogoutStatus;
+use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use Exception;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Translation\Translator;
+use Laravel\Sanctum\Contracts\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 use RuntimeException;
 
@@ -38,8 +40,8 @@ class Logout
             throw new RuntimeException('Unable to detect current user.');
         }
 
-        if (! method_exists($user, 'currentAccessToken')) {
-            throw new Exception('Missing HasApiTokens trait on "' . get_class($user) . '"');
+        if (! $user instanceof HasApiTokens) {
+            throw new HasApiTokensException($user);
         }
 
         /** @var PersonalAccessToken $personalAccessToken */
