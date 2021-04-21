@@ -4,39 +4,15 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
-use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\ForgotPassword;
 use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
-use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserCanResetPassword;
+use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
-use Illuminate\Contracts\Auth\PasswordBroker;
-use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Sanctum\Sanctum;
 
 class ForgotPasswordTest extends AbstractIntegrationTest
 {
-    protected ForgotPassword $mutation;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->app['config']->set('auth.providers', [
-            'users' => [
-                'driver' => 'eloquent',
-                'model'  => UserCanResetPassword::class,
-            ],
-        ]);
-
-        $this->mutation = new ForgotPassword(
-            $this->app->make(PasswordBroker::class),
-            $this->app->make(ResetPasswordServiceInterface::class),
-            $this->app->make(Translator::class),
-        );
-    }
-
     /**
      * @test
      */
@@ -44,8 +20,8 @@ class ForgotPasswordTest extends AbstractIntegrationTest
     {
         Notification::fake();
 
-        /** @var UserCanResetPassword $user */
-        $user = UserCanResetPassword::factory()->create([
+        /** @var UserHasApiTokens $user */
+        $user = UserHasApiTokens::factory()->create([
             'email' => 'john.doe@gmail.com',
         ]);
 
