@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration;
 
 use DanielDeWit\LighthouseSanctum\Providers\LighthouseSanctumServiceProvider;
+use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\AssertsGraphQLErrorMessage;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -46,6 +47,7 @@ abstract class AbstractIntegrationTest extends TestCase
      */
     protected function defineEnvironment($app): void
     {
+        $app['config']->set('auth.providers.users.model', UserHasApiTokens::class);
         $app['config']->set('lighthouse.schema.register', $this->getStubsPath('schema.graphql'));
         $app['config']->set('lighthouse.guard', 'sanctum');
     }

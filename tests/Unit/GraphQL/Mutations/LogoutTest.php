@@ -24,7 +24,7 @@ class LogoutTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function it_log_a_user_out(): void
+    public function it_logs_a_user_out(): void
     {
         /** @var PersonalAccessToken|MockInterface $token */
         $token = Mockery::mock(PersonalAccessToken::class)

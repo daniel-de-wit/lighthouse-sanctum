@@ -35,7 +35,10 @@ class Login
     {
         $userProvider = $this->createUserProvider();
 
-        $user = $userProvider->retrieveByCredentials($args);
+        $user = $userProvider->retrieveByCredentials([
+            'email'    => $args['email'],
+            'password' => $args['password'],
+        ]);
 
         if (! $user) {
             throw new AuthenticationException('The provided credentials are incorrect.');
