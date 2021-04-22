@@ -19,6 +19,31 @@ class UserHasApiTokens extends User implements HasApiTokensContract
 
     protected $table = 'users';
 
+    /**
+     * @var string[]
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'email_verified_at',
+    ];
+
+    /**
+     * @var string[]
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
     protected static function newFactory(): Factory
     {
         return new UserHasApiTokensFactory();
