@@ -44,7 +44,7 @@ class VerifyEmail
         $user = $userProvider->retrieveById($args['id']);
 
         if (! $user instanceof MustVerifyEmail) {
-            throw new RuntimeException('User not instance of MustVerifyEmail');
+            throw new RuntimeException('User must implement "' . MustVerifyEmail::class . '".');
         }
 
         $this->emailVerificationService->verify($user, (string) $args['hash']);
