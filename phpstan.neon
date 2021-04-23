@@ -14,3 +14,4 @@ parameters:
     -
       message: '#Parameter \#1 \$(function|callback) of function call_user_func expects callable\(\): mixed, Closure\|null given\.#'
       path: tests/Integration/Services/*
+    - '#Call to an undefined method Illuminate\\Testing\\TestResponse::assertGraphQLErrorMessage\(\).#'
