@@ -16,25 +16,80 @@ Add [Laravel Sanctum](https://github.com/laravel/sanctum) support to [Lighthouse
 
 ## Installation
 
-1. Install using composer:
+#### 1. Install using composer:
 
 ```bash
 composer require daniel-de-wit/lighthouse-sanctum
 ```
 
-2. Publish configuration and schema
+#### 2. Publish configuration and schema
 
 ```bash
 php artisan vendor:publish --tag=lighthouse-sanctum
 ```
 
-3. Import the published schema into your main GraphQL schema (`./graphql/schema.graphql`)
+#### 3. Import the published schema into your main GraphQL schema (`./graphql/schema.graphql`)
 
 ```graphql
 type Query
 type Mutation
 
 #import sanctum.grapqhl
+```
+
+#### 4. HasApiTokens
+
+Apply the `Laravel\Sanctum\HasApiTokens` trait to your Authenticatable model as [described in the Laravel Sanctum documentation](https://laravel.com/docs/8.x/sanctum#issuing-api-tokens).
+
+```php
+use Illuminate\Auth\Authenticatable;
+use Laravel\Sanctum\Contracts\HasApiTokens as HasApiTokensContract;
+use Laravel\Sanctum\HasApiTokens;
+
+class User extends Authenticatable implements HasApiTokensContract
+{
+    use HasApiTokens;
+}
+
+```
+
+#### 5. Configuration
+
+This package relies on [API Token Authentication](https://laravel.com/docs/8.x/sanctum#api-token-authentication), which uses stateless Bearer tokens to authenticate requests.
+
+By default, [Laravel Sanctum](https://laravel.com/docs/8.x/sanctum) assumes that requests made from localhost should use the stateful [Spa Authentication](https://laravel.com/docs/8.x/sanctum#spa-authentication) instead.
+To disable this behaviour, remove any lines in your sanctum configuration:
+
+```php
+// File: ./config/sanctum.php
+
+    /*
+    |--------------------------------------------------------------------------
+    | Stateful Domains
+    |--------------------------------------------------------------------------
+    |
+    | Requests from the following domains / hosts will receive stateful API
+    | authentication cookies. Typically, these should include your local
+    | and production domains which access your API via a frontend SPA.
+    |
+    */
+
+    'stateful' => [
+        // Remove entries here    
+    ],
+```
+
+Make sure the following middleware is enabled for Lighthouse:
+
+```php
+// File: ./config/lighthouse.php
+    'middleware' => [
+        ...
+        
+        \Nuwave\Lighthouse\Support\Http\Middleware\AttemptAuthentication::class,
+
+        ...
+    ],
 ```
 
 ## Usage
