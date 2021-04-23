@@ -52,6 +52,23 @@ class VerifyEmailTest extends AbstractIntegrationTest
     /**
      * @test
      */
+    public function it_returns_an_error_if_the_user_is_not_found(): void
+    {
+        $this->graphQL(/** @lang GraphQL */ '
+            mutation {
+                verifyEmail(input: {
+                    id: 123,
+                    hash: "foobar"
+                }) {
+                    status
+                }
+            }
+        ')->assertGraphQLErrorMessage('The provided id and hash are incorrect.');
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_an_error_if_the_hash_is_incorrect(): void
     {
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);

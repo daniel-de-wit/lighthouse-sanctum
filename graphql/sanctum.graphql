@@ -28,7 +28,7 @@ type EmailVerificationResponse {
 }
 
 input VerifyEmailInput {
-    id: ID! @rules(apply: ["required", "exists:users,id"])
+    id: ID! @rules(apply: ["required"])
     hash: String! @rules(apply: ["required", "string"])
 }
 

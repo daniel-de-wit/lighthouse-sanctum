@@ -10,6 +10,7 @@ use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\VerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksUserProvider;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Foundation\Auth\User;
 use Mockery;
@@ -64,6 +65,28 @@ class VerifyEmailTest extends AbstractUnitTest
 
         $mutation = new VerifyEmail(
             $this->mockAuthManager(null),
+            $this->mockConfig(),
+            Mockery::mock(EmailVerificationServiceInterface::class),
+        );
+
+        $mutation(null, [
+            'id'   => 123,
+            'hash' => '1234567890',
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_throws_an_exception_if_the_user_is_not_found(): void
+    {
+        static::expectException(AuthenticationException::class);
+        static::expectExceptionMessage('The provided id and hash are incorrect.');
+
+        $userProvider = $this->mockUserProvider(null);
+
+        $mutation = new VerifyEmail(
+            $this->mockAuthManager($userProvider),
             $this->mockConfig(),
             Mockery::mock(EmailVerificationServiceInterface::class),
         );

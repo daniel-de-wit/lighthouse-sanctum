@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Config\Repository as Config;
+use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 use RuntimeException;
 
 class VerifyEmail
@@ -42,6 +43,10 @@ class VerifyEmail
         $userProvider = $this->createUserProvider();
 
         $user = $userProvider->retrieveById($args['id']);
+
+        if (! $user) {
+            throw new AuthenticationException('The provided id and hash are incorrect.');
+        }
 
         if (! $user instanceof MustVerifyEmail) {
             throw new RuntimeException('User must implement "' . MustVerifyEmail::class . '".');
