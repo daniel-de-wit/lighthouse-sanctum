@@ -39,15 +39,14 @@ class LogoutTest extends AbstractIntegrationTest
      */
     public function it_returns_an_error_if_the_user_is_unauthenticated(): void
     {
-        $response = $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */'
             mutation {
                 logout {
                     status
                     message
                 }
             }
-        ');
-
-        $this->assertGraphQLErrorMessage($response, 'Unauthenticated.');
+        ')
+        ->assertGraphQLErrorMessage('Unauthenticated.');
     }
 }

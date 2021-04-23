@@ -35,9 +35,9 @@ class LoginTest extends AbstractIntegrationTest
      */
     public function it_returns_an_error_if_the_credentials_are_incorrect(): void
     {
-        $response = $this->makeRequest();
-
-        $this->assertGraphQLErrorMessage($response, 'The provided credentials are incorrect.');
+        $this
+            ->makeRequest()
+            ->assertGraphQLErrorMessage('The provided credentials are incorrect.');
     }
 
     protected function makeRequest(): TestResponse
