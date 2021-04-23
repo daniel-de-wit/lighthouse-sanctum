@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
+use DanielDeWit\LighthouseSanctum\Contracts\Factories\UniqueValidationExceptionFactoryInterface;
 use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInterface;
 use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
 use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use DanielDeWit\LighthouseSanctum\Traits\CreatesUserProvider;
 use Exception;
+use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Arr;
 use Laravel\Sanctum\Contracts\HasApiTokens;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Register
 {
@@ -25,33 +29,46 @@ class Register
     protected Config $config;
     protected Hasher $hash;
     protected EmailVerificationServiceInterface $emailVerificationService;
+    protected UniqueValidationExceptionFactoryInterface $uniqueValidationExceptionFactory;
 
     public function __construct(
         AuthManager $authManager,
         Config $config,
         Hasher $hash,
-        EmailVerificationServiceInterface $emailVerificationService
+        EmailVerificationServiceInterface $emailVerificationService,
+        UniqueValidationExceptionFactoryInterface $uniqueValidationExceptionFactory
     ) {
-        $this->authManager              = $authManager;
-        $this->config                   = $config;
-        $this->hash                     = $hash;
-        $this->emailVerificationService = $emailVerificationService;
+        $this->authManager                      = $authManager;
+        $this->config                           = $config;
+        $this->hash                             = $hash;
+        $this->emailVerificationService         = $emailVerificationService;
+        $this->uniqueValidationExceptionFactory = $uniqueValidationExceptionFactory;
     }
 
     /**
      * @param mixed $_
      * @param array<string, mixed> $args
+     * @param GraphQLContext $context
+     * @param ResolveInfo $resolveInfo
      * @return array<string, RegisterStatus|array|string|null>
      * @throws Exception
      */
-    public function __invoke($_, array $args): array
+    public function __invoke($_, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
     {
         /** @var EloquentUserProvider $userProvider */
         $userProvider = $this->createUserProvider();
 
-        $user = $userProvider->createModel();
-        $user->fill($this->getPropertiesFromArgs($args));
-        $user->save();
+        $user = $userProvider->createModel()->fill($this->getPropertiesFromArgs($args));
+
+        try {
+            $user->save();
+        } catch (QueryException $exception) {
+            throw $this->uniqueValidationExceptionFactory->make(
+                $exception,
+                'The input must be unique.',
+                implode('.', $resolveInfo->path),
+            );
+        }
 
         if ($user instanceof MustVerifyEmail) {
             if (isset($args['verification_url'])) {

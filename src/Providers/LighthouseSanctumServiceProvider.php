@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Providers;
 
+use DanielDeWit\LighthouseSanctum\Contracts\Factories\UniqueValidationExceptionFactoryInterface;
 use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInterface;
 use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
 use DanielDeWit\LighthouseSanctum\Enums\EmailVerificationStatus;
 use DanielDeWit\LighthouseSanctum\Enums\ForgotPasswordStatus;
 use DanielDeWit\LighthouseSanctum\Enums\LogoutStatus;
 use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
+use DanielDeWit\LighthouseSanctum\Factories\UniqueValidationExceptionFactory;
 use DanielDeWit\LighthouseSanctum\Services\EmailVerificationService;
 use DanielDeWit\LighthouseSanctum\Services\ResetPasswordService;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -25,6 +27,7 @@ class LighthouseSanctumServiceProvider extends ServiceProvider
     {
         $this->app->singleton(EmailVerificationServiceInterface::class, EmailVerificationService::class);
         $this->app->singleton(ResetPasswordServiceInterface::class, ResetPasswordService::class);
+        $this->app->singleton(UniqueValidationExceptionFactoryInterface::class, UniqueValidationExceptionFactory::class);
     }
 
     public function boot(Dispatcher $dispatcher, TypeRegistry $typeRegistry): void

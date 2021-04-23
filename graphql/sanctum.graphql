@@ -34,7 +34,7 @@ input VerifyEmailInput {
 
 input RegisterInput {
     name: String! @rules(apply: ["required", "string"])
-    email: String! @rules(apply: ["required", "email", "unique:users,email"])
+    email: String! @rules(apply: ["required", "email"])
     password: String! @rules(apply: ["required", "confirmed"])
     password_confirmation: String! @rules(apply: ["required", "string"])
     verification_url: VerificationUrlInput

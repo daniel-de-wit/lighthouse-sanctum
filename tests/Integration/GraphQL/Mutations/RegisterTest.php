@@ -6,6 +6,7 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
 use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Notification;
@@ -64,6 +65,20 @@ class RegisterTest extends AbstractIntegrationTest
         $user = UserMustVerifyEmail::first();
 
         Notification::assertSentTo($user, VerifyEmail::class);
+    }
+
+    /**
+     * @test
+     */
+    public function unique_email(): void
+    {
+        UserHasApiTokens::factory()->create([
+            'email' => 'foo@bar.com',
+        ]);
+
+        $this->makeRequest()
+            ->assertGraphQLErrorMessage('Validation failed for the field [register].')
+            ->assertGraphQLValidationError('input', 'The input must be unique.');
     }
 
     protected function makeRequest(): TestResponse
