@@ -61,7 +61,7 @@ class VerifyEmailTest extends AbstractIntegrationTest
             'email_verified_at' => null,
         ]);
 
-        $response = $this->graphQL(/** @lang GraphQL */ '
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 verifyEmail(input: {
                     id: 123,
@@ -70,8 +70,6 @@ class VerifyEmailTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ');
-
-        $this->assertGraphQLErrorMessage($response, 'The provided id and hash are incorrect.');
+        ')->assertGraphQLErrorMessage('The provided id and hash are incorrect.');
     }
 }

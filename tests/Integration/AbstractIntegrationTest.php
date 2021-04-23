@@ -6,7 +6,6 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Integration;
 
 use DanielDeWit\LighthouseSanctum\Providers\LighthouseSanctumServiceProvider;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
-use DanielDeWit\LighthouseSanctum\Tests\Traits\AssertsGraphQLErrorMessage;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Notifications\NotificationServiceProvider;
@@ -18,7 +17,6 @@ use Orchestra\Testbench\TestCase;
 
 abstract class AbstractIntegrationTest extends TestCase
 {
-    use AssertsGraphQLErrorMessage;
     use MakesGraphQLRequests;
     use RefreshDatabase;
 
