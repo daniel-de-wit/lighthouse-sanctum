@@ -7,10 +7,8 @@ namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
 use DanielDeWit\LighthouseSanctum\Enums\ForgotPasswordStatus;
 use Exception;
-use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Translation\Translator;
-use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class ForgotPassword
 {
@@ -31,14 +29,12 @@ class ForgotPassword
     /**
      * @param mixed $_
      * @param array<string, mixed> $args
-     * @param GraphQLContext|null $context
-     * @param ResolveInfo $resolveInfo
      * @return array<string, ForgotPasswordStatus|array|string|null>
      * @throws Exception
      */
-    public function __invoke($_, array $args, GraphQLContext $context = null, ResolveInfo $resolveInfo): array
+    public function __invoke($_, array $args): array
     {
-        if ($args['reset_password_url']) {
+        if (isset($args['reset_password_url'])) {
             $this->resetPasswordService->setResetPasswordUrl($args['reset_password_url']['url']);
         }
 
