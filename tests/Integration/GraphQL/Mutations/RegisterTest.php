@@ -39,6 +39,7 @@ class RegisterTest extends AbstractIntegrationTest
             ],
         ]);
 
+        static::assertNotNull($response->json('data.register.token'));
         static::assertTrue(RegisterStatus::SUCCESS()->is($response->json('data.register.status')));
 
         $this->assertDatabaseHas('users', [
@@ -63,6 +64,9 @@ class RegisterTest extends AbstractIntegrationTest
                     email: "foo@bar.com",
                     password: "supersecret",
                     password_confirmation: "supersecret",
+                    verification_url: {
+                        url: "https://mysite.com/verify-email/__ID__/__HASH__"
+                    }
                 }) {
                     token
                     status
@@ -85,9 +89,17 @@ class RegisterTest extends AbstractIntegrationTest
             'email' => 'foo@bar.com',
         ]);
 
+        /** @var UserMustVerifyEmail $user */
         $user = UserMustVerifyEmail::first();
 
-        Notification::assertSentTo($user, VerifyEmail::class);
+        Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user) {
+            $url = call_user_func($notification::$createUrlCallback, $user);
+
+            $id   = $user->getKey();
+            $hash = sha1($user->getEmailForVerification());
+
+            return $url === "https://mysite.com/verify-email/{$id}/{$hash}";
+        });
     }
 
     /**
