@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Enums\LogoutStatus;
 use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\Logout;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
@@ -50,7 +49,7 @@ class LogoutTest extends AbstractUnitTest
 
         static::assertIsArray($result);
         static::assertCount(2, $result);
-        static::assertTrue(LogoutStatus::TOKEN_REVOKED()->is($result['status']));
+        static::assertSame('TOKEN_REVOKED', $result['status']);
         static::assertSame('Translated string!', $result['message']);
     }
 

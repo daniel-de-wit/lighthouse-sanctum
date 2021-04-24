@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Enums\ResetPasswordStatus;
 use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use Illuminate\Auth\Events\PasswordReset;
@@ -19,7 +18,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
      */
     public function it_resets_a_password(): void
     {
-        Event::fake();
+        Event::fake([PasswordReset::class]);
 
         /** @var UserHasApiTokens $user */
         $user = UserHasApiTokens::factory()->create([
@@ -37,7 +36,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
             }
         );
 
-        $response = $this->graphQL(/** @lang GraphQL */ '
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 resetPassword(input: {
                     email: "foo@bar.com",
@@ -49,17 +48,14 @@ class ResetPasswordTest extends AbstractIntegrationTest
                     message
                 }
             }
-        ')->assertJsonStructure([
+        ')->assertJson([
             'data' => [
                 'resetPassword' => [
-                    'status',
-                    'message',
+                    'status'  => 'PASSWORD_RESET',
+                    'message' => 'Your password has been reset!',
                 ],
             ],
         ]);
-
-        static::assertTrue(ResetPasswordStatus::PASSWORD_RESET()->is($response->json('data.resetPassword.status')));
-        static::assertSame('Your password has been reset!', $response->json('data.resetPassword.message'));
 
         Event::assertDispatched(function (PasswordReset $event) use ($user) {
             /** @var Model $eventUser */
