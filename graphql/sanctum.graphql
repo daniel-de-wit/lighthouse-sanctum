@@ -9,8 +9,8 @@ type AccessToken {
 }
 
 input LoginInput {
-    email: String! @rules(apply: ["required", "email"])
-    password: String! @rules(apply: ["required", "string"])
+    email: String! @rules(apply: ["email"])
+    password: String!
 }
 
 type LogoutResponse {
