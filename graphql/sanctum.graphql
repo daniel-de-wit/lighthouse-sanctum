@@ -28,8 +28,8 @@ type EmailVerificationResponse {
 }
 
 input VerifyEmailInput {
-    id: ID! @rules(apply: ["required"])
-    hash: String! @rules(apply: ["required", "string"])
+    id: ID!
+    hash: String!
 }
 
 input RegisterInput {
