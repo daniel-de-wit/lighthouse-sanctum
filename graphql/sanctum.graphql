@@ -70,6 +70,18 @@ type ForgotPasswordResponse {
     message: String
 }
 
+input ResetPasswordInput {
+    email: String! @rules(apply: ["email"])
+    token: String!
+    password: String! @rules(apply: ["confirmed"])
+    password_confirmation: String!
+}
+
+type ResetPasswordResponse {
+    status: ResetPasswordStatus!
+    message: String
+}
+
 extend type Mutation {
     login(input: LoginInput @spread): AccessToken!
         @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\Login")
@@ -80,5 +92,7 @@ extend type Mutation {
     verifyEmail(input: VerifyEmailInput! @spread): EmailVerificationResponse!
         @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\VerifyEmail")
     forgotPassword(input: ForgotPasswordInput! @spread): ForgotPasswordResponse!
-            @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\ForgotPassword")
+        @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\ForgotPassword")
+    resetPassword(input: ResetPasswordInput! @spread): ResetPasswordResponse!
+        @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\ResetPassword")
 }

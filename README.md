@@ -206,6 +206,24 @@ mutation ForgotPassword {
 }
 ```
 
+### Reset Password
+
+Reset the user's password.
+
+```graphql
+mutation ResetPassword {
+    resetPassword(input: {
+        email: "john.doe@gmail.com",
+        token: "af269947ed80d4a7bc3f78a6dfd05ec369373f9d"
+        password: "secret"
+        password_confirmation: "secret"
+    }) {
+        status
+        message
+    }
+}
+```
+
 ## Testing
 
 ```bash
