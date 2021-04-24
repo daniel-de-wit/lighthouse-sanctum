@@ -33,10 +33,10 @@ input VerifyEmailInput {
 }
 
 input RegisterInput {
-    name: String! @rules(apply: ["required", "string"])
-    email: String! @rules(apply: ["required", "email", "unique:users,email"])
-    password: String! @rules(apply: ["required", "confirmed"])
-    password_confirmation: String! @rules(apply: ["required", "string"])
+    name: String!
+    email: String! @rules(apply: ["bail", "email", "unique:users,email"])
+    password: String! @rules(apply: ["confirmed"])
+    password_confirmation: String!
     verification_url: VerificationUrlInput
 }
 
@@ -47,7 +47,7 @@ Use __ID__ and __HASH__ to inject values.
 e.g; `https://my-front-end.com/verify-email?id=__ID__&hash=__HASH__`
 """
 input VerificationUrlInput {
-    url: String! @rules(apply: ["required", "url"])
+    url: String! @rules(apply: ["url"])
 }
 
 input ForgotPasswordInput {
