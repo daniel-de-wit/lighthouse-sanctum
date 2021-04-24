@@ -51,7 +51,7 @@ input VerificationUrlInput {
 }
 
 input ForgotPasswordInput {
-    email: String! @rules(apply: ["required", "email"])
+    email: String! @rules(apply: ["email"])
     reset_password_url: ResetPasswordUrlInput
 }
 
@@ -62,7 +62,7 @@ Use the `__EMAIL__` and `__TOKEN__` placeholders to inject the reset password em
 e.g; `https://my-front-end.com?reset-password?email=__EMAIL__&token=__TOKEN__`
 """
 input ResetPasswordUrlInput {
-    url: String! @rules(apply: ["required", "url"])
+    url: String! @rules(apply: ["url"])
 }
 
 type ForgotPasswordResponse {
