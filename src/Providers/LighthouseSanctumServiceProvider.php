@@ -10,6 +10,7 @@ use DanielDeWit\LighthouseSanctum\Enums\EmailVerificationStatus;
 use DanielDeWit\LighthouseSanctum\Enums\ForgotPasswordStatus;
 use DanielDeWit\LighthouseSanctum\Enums\LogoutStatus;
 use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
+use DanielDeWit\LighthouseSanctum\Enums\ResetPasswordStatus;
 use DanielDeWit\LighthouseSanctum\Services\EmailVerificationService;
 use DanielDeWit\LighthouseSanctum\Services\ResetPasswordService;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -77,6 +78,10 @@ class LighthouseSanctumServiceProvider extends ServiceProvider
 
         $this->typeRegistry->register(
             new LaravelEnumType(ForgotPasswordStatus::class),
+        );
+
+        $this->typeRegistry->register(
+            new LaravelEnumType(ResetPasswordStatus::class),
         );
     }
 }
