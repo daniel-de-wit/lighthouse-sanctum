@@ -8,6 +8,16 @@
 
 Add [Laravel Sanctum](https://github.com/laravel/sanctum) support to [Lighthouse](https://github.com/nuwave/lighthouse)
 
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+    - [Login](#login)
+    - [Logout](#logout)
+    - [Register](#register)
+    - [Email Verification](#email-verification)
+    - [Forgot Password](#forgot-password)
+    - [Reset Password](#reset-password)
+
 ## Requirements
 
 - [laravel/laravel:^8.36.2](https://github.com/laravel/laravel)
@@ -99,6 +109,7 @@ Make sure the following middleware is enabled for Lighthouse:
 - [Register](#register)
 - [Email Verification](#email-verification)
 - [Forgot Password](#forgot-password)
+- [Reset Password](#reset-password)
 
 ### Login
 
