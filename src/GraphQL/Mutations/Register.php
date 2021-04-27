@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInterface;
-use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
 use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use DanielDeWit\LighthouseSanctum\Traits\CreatesUserProvider;
 use Exception;
@@ -41,7 +40,7 @@ class Register
     /**
      * @param mixed $_
      * @param array<string, mixed> $args
-     * @return array<string, RegisterStatus|array|string|null>
+     * @return array<string, string|null>
      * @throws Exception
      */
     public function __invoke($_, array $args): array
@@ -62,7 +61,7 @@ class Register
 
             return [
                 'token'  => null,
-                'status' => RegisterStatus::MUST_VERIFY_EMAIL(),
+                'status' => 'MUST_VERIFY_EMAIL',
             ];
         }
 
@@ -72,7 +71,7 @@ class Register
 
         return [
             'token'  => $user->createToken('default')->plainTextToken,
-            'status' => RegisterStatus::SUCCESS(),
+            'status' => 'SUCCESS',
         ];
     }
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInterface;
-use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
 use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\Register;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
@@ -57,7 +56,7 @@ class RegisterTest extends AbstractUnitTest
 
         static::assertIsArray($result);
         static::assertCount(2, $result);
-        static::assertTrue(RegisterStatus::SUCCESS()->is($result['status']));
+        static::assertSame('SUCCESS', $result['status']);
         static::assertSame('1234567890', $result['token']);
     }
 
@@ -96,7 +95,7 @@ class RegisterTest extends AbstractUnitTest
 
         static::assertIsArray($result);
         static::assertCount(2, $result);
-        static::assertTrue(RegisterStatus::MUST_VERIFY_EMAIL()->is($result['status']));
+        static::assertSame('MUST_VERIFY_EMAIL', $result['status']);
         static::assertNull($result['token']);
     }
 
@@ -144,7 +143,7 @@ class RegisterTest extends AbstractUnitTest
 
         static::assertIsArray($result);
         static::assertCount(2, $result);
-        static::assertTrue(RegisterStatus::MUST_VERIFY_EMAIL()->is($result['status']));
+        static::assertSame('MUST_VERIFY_EMAIL', $result['status']);
         static::assertNull($result['token']);
     }
 

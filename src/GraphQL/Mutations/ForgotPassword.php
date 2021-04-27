@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
-use DanielDeWit\LighthouseSanctum\Enums\ForgotPasswordStatus;
 use Exception;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Translation\Translator;
@@ -29,7 +28,7 @@ class ForgotPassword
     /**
      * @param mixed $_
      * @param array<string, mixed> $args
-     * @return array<string, ForgotPasswordStatus|array|string|null>
+     * @return array<string, string|array>
      * @throws Exception
      */
     public function __invoke($_, array $args): array
@@ -43,7 +42,7 @@ class ForgotPassword
         ]);
 
         return [
-            'status'  => ForgotPasswordStatus::EMAIL_SENT(),
+            'status'  => 'EMAIL_SENT',
             'message' => $this->translator->get('An email has been sent'),
         ];
     }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInterface;
-use DanielDeWit\LighthouseSanctum\Enums\EmailVerificationStatus;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\VerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksUserProvider;
@@ -52,7 +51,7 @@ class VerifyEmailTest extends AbstractUnitTest
 
         static::assertIsArray($result);
         static::assertCount(1, $result);
-        static::assertTrue(EmailVerificationStatus::VERIFIED()->is($result['status']));
+        static::assertSame('VERIFIED', $result['status']);
     }
 
     /**

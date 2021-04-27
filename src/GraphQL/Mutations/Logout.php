@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Enums\LogoutStatus;
 use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use Exception;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
@@ -27,7 +26,7 @@ class Logout
     /**
      * @param mixed $_
      * @param array<string, mixed> $args
-     * @return array<string, LogoutStatus|string|array|null>
+     * @return array<string, string|array>
      * @throws Exception
      */
     public function __invoke($_, array $args): array
@@ -49,7 +48,7 @@ class Logout
         $personalAccessToken->delete();
 
         return [
-            'status'  => LogoutStatus::TOKEN_REVOKED(),
+            'status'  => 'TOKEN_REVOKED',
             'message' => $this->translator->get('Your session has been terminated'),
         ];
     }

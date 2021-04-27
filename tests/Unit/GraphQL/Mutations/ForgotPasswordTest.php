@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
-use DanielDeWit\LighthouseSanctum\Enums\ForgotPasswordStatus;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\ForgotPassword;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
 use Illuminate\Contracts\Auth\PasswordBroker;
@@ -47,7 +46,7 @@ class ForgotPasswordTest extends AbstractUnitTest
 
         static::assertIsArray($result);
         static::assertCount(2, $result);
-        static::assertTrue(ForgotPasswordStatus::EMAIL_SENT()->is($result['status']));
+        static::assertSame('EMAIL_SENT', $result['status']);
         static::assertSame('translation', $result['message']);
     }
 
@@ -92,7 +91,7 @@ class ForgotPasswordTest extends AbstractUnitTest
 
         static::assertIsArray($result);
         static::assertCount(2, $result);
-        static::assertTrue(ForgotPasswordStatus::EMAIL_SENT()->is($result['status']));
+        static::assertSame('EMAIL_SENT', $result['status']);
         static::assertSame('translation', $result['message']);
     }
 }
