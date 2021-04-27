@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 
 use Closure;
+use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
 use DanielDeWit\LighthouseSanctum\Exceptions\ResetPasswordException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\ResetPassword;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
 use GraphQL\Type\Definition\ResolveInfo;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Auth\PasswordBroker;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Foundation\Auth\User;
 use Mockery;
@@ -27,13 +25,7 @@ class ResetPasswordTest extends AbstractUnitTest
     public function it_resets_a_password(): void
     {
         /** @var User|MockInterface $user */
-        $user = Mockery::mock(User::class)
-            ->shouldReceive('setAttribute')
-            ->with('password', 'some-hash')
-            ->andReturnSelf()
-            ->getMock()
-            ->shouldReceive('save')
-            ->getMock();
+        $user = Mockery::mock(User::class);
 
         /** @var PasswordBroker|MockInterface $passwordBroker */
         $passwordBroker = Mockery::mock(PasswordBroker::class)
@@ -50,21 +42,6 @@ class ResetPasswordTest extends AbstractUnitTest
             ->andReturn('passwords.reset')
             ->getMock();
 
-        /** @var Hasher|MockInterface $hash */
-        $hash = Mockery::mock(Hasher::class)
-            ->shouldReceive('make')
-            ->with('supersecret')
-            ->andReturn('some-hash')
-            ->getMock();
-
-        /** @var Dispatcher|MockInterface $dispatcher */
-        $dispatcher = Mockery::mock(Dispatcher::class)
-            ->shouldReceive('dispatch')
-            ->withArgs(function (PasswordReset $event) use ($user) {
-                return $event->user === $user;
-            })
-            ->getMock();
-
         /** @var Translator|MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
@@ -72,11 +49,16 @@ class ResetPasswordTest extends AbstractUnitTest
             ->andReturn('response-translation')
             ->getMock();
 
+        /** @var ResetPasswordServiceInterface|MockInterface $resetPasswordService */
+        $resetPasswordService = Mockery::mock(ResetPasswordServiceInterface::class)
+            ->shouldReceive('resetPassword')
+            ->with($user, 'supersecret')
+            ->getMock();
+
         $mutation = new ResetPassword(
             $passwordBroker,
-            $hash,
-            $dispatcher,
             $translator,
+            $resetPasswordService,
         );
 
         $result = $mutation(null, [
@@ -120,14 +102,18 @@ class ResetPasswordTest extends AbstractUnitTest
             ->andReturn('error-translation')
             ->getMock();
 
+        /** @var ResetPasswordServiceInterface|MockInterface $resetPasswordService */
+        $resetPasswordService = Mockery::mock(ResetPasswordServiceInterface::class)
+            ->shouldNotReceive('resetPassword')
+            ->getMock();
+
         $resolveInfo = Mockery::mock(ResolveInfo::class);
         $resolveInfo->path = ['some', 'dotted', 'path'];
 
         $mutation = new ResetPassword(
             $passwordBroker,
-            Mockery::mock(Hasher::class),
-            Mockery::mock(Dispatcher::class),
             $translator,
+            $resetPasswordService,
         );
 
         $mutation(null, [
