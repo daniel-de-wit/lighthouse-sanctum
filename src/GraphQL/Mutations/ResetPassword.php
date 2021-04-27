@@ -4,36 +4,30 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
+use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
 use DanielDeWit\LighthouseSanctum\Exceptions\ResetPasswordException;
 use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\PasswordBroker;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Translation\Translator;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class ResetPassword
 {
     protected PasswordBroker $passwordBroker;
-    protected Hasher $hash;
-    protected Dispatcher $dispatcher;
     protected Translator $translator;
+    protected ResetPasswordServiceInterface $resetPasswordService;
 
     public function __construct(
         PasswordBroker $passwordBroker,
-        Hasher $hash,
-        Dispatcher $dispatcher,
-        Translator $translator
+        Translator $translator,
+        ResetPasswordServiceInterface $resetPasswordService
     ) {
-        $this->passwordBroker = $passwordBroker;
-        $this->hash           = $hash;
-        $this->dispatcher     = $dispatcher;
-        $this->translator     = $translator;
+        $this->passwordBroker       = $passwordBroker;
+        $this->translator           = $translator;
+        $this->resetPasswordService = $resetPasswordService;
     }
 
     /**
@@ -52,9 +46,7 @@ class ResetPassword
         ]);
 
         $response = $this->passwordBroker->reset($credentials, function (Authenticatable $user, string $password) {
-            $this->resetPassword($user, $password);
-
-            $this->dispatcher->dispatch(new PasswordReset($user));
+            $this->resetPasswordService->resetPassword($user, $password);
         });
 
         if ($response === PasswordBroker::PASSWORD_RESET) {
@@ -68,12 +60,5 @@ class ResetPassword
             $this->translator->get($response),
             implode('.', $resolveInfo->path),
         );
-    }
-
-    protected function resetPassword(Authenticatable $user, string $password): void
-    {
-        /** @var Model $user */
-        $user->setAttribute('password', $this->hash->make($password));
-        $user->save();
     }
 }

@@ -6,8 +6,13 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Integration\Services;
 
 use DanielDeWit\LighthouseSanctum\Services\ResetPasswordService;
 use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Event;
 
 class ResetPasswordServiceTest extends AbstractIntegrationTest
 {
@@ -17,7 +22,12 @@ class ResetPasswordServiceTest extends AbstractIntegrationTest
     {
         parent::setUp();
 
-        $this->service = new ResetPasswordService();
+        $dispatcher = Event::fake([PasswordReset::class]);
+
+        $this->service = new ResetPasswordService(
+            $this->app->make(Hasher::class),
+            $dispatcher,
+        );
     }
 
     /**
@@ -37,5 +47,32 @@ class ResetPasswordServiceTest extends AbstractIntegrationTest
         $url = call_user_func(ResetPassword::$createUrlCallback, $user, $token);
 
         static::assertSame('https://mysite.com/reset-password/user@example.com/token123', $url);
+    }
+
+    /**
+     * @test
+     */
+    public function it_resets_a_password(): void
+    {
+        /** @var Hasher $hasher */
+        $hasher = $this->app->make(Hasher::class);
+
+        $password = $hasher->make('some-password');
+
+        /** @var UserHasApiTokens $user */
+        $user = UserHasApiTokens::factory()->create([
+            'password' => $password,
+        ]);
+
+        $this->service->resetPassword($user, 'supersecret');
+
+        static::assertNotSame($password, $user->getAuthPassword());
+
+        Event::assertDispatched(function (PasswordReset $event) use ($user) {
+            /** @var Model $eventUser */
+            $eventUser = $event->user;
+
+            return $eventUser->is($user);
+        });
     }
 }
