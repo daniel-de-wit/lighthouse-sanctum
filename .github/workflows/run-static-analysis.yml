@@ -1,4 +1,4 @@
-name: run-static-analysis
+name: Static Analysis
 
 on: [push, pull_request]
 
