@@ -18,13 +18,31 @@ type LogoutResponse {
     message: String!
 }
 
+enum LogoutStatus {
+    """TOKEN_REVOKED"""
+    TOKEN_REVOKED
+}
+
 type RegisterResponse {
     token: String
     status: RegisterStatus!
 }
 
+enum RegisterStatus {
+    """MUST_VERIFY_EMAIL"""
+    MUST_VERIFY_EMAIL
+
+    """SUCCESS"""
+    SUCCESS
+}
+
 type EmailVerificationResponse {
     status: EmailVerificationStatus!
+}
+
+enum EmailVerificationStatus {
+    """VERIFIED"""
+    VERIFIED
 }
 
 input VerifyEmailInput {
@@ -70,6 +88,11 @@ type ForgotPasswordResponse {
     message: String
 }
 
+enum ForgotPasswordStatus {
+    """EMAIL_SENT"""
+    EMAIL_SENT
+}
+
 input ResetPasswordInput {
     email: String! @rules(apply: ["email"])
     token: String!
@@ -80,6 +103,11 @@ input ResetPasswordInput {
 type ResetPasswordResponse {
     status: ResetPasswordStatus!
     message: String
+}
+
+enum ResetPasswordStatus {
+    """PASSWORD_RESET"""
+    PASSWORD_RESET
 }
 
 extend type Mutation {

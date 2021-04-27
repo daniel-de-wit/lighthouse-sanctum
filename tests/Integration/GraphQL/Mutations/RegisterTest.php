@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Enums\RegisterStatus;
 use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
@@ -40,7 +39,7 @@ class RegisterTest extends AbstractIntegrationTest
         ]);
 
         static::assertNotNull($response->json('data.register.token'));
-        static::assertTrue(RegisterStatus::SUCCESS()->is($response->json('data.register.status')));
+        static::assertSame('SUCCESS', $response->json('data.register.status'));
 
         $this->assertDatabaseHas('users', [
             'name'  => 'Foo Bar',
@@ -82,7 +81,7 @@ class RegisterTest extends AbstractIntegrationTest
         ]);
 
         static::assertNull($response->json('data.register.token'));
-        static::assertTrue(RegisterStatus::MUST_VERIFY_EMAIL()->is($response->json('data.register.status')));
+        static::assertSame('MUST_VERIFY_EMAIL', $response->json('data.register.status'));
 
         $this->assertDatabaseHas('users', [
             'name'  => 'Foo Bar',

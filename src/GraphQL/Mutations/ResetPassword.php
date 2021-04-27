@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Enums\ResetPasswordStatus;
 use DanielDeWit\LighthouseSanctum\Exceptions\ResetPasswordException;
 use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -42,7 +41,7 @@ class ResetPassword
      * @param array<string, mixed> $args
      * @param GraphQLContext $context
      * @param ResolveInfo $resolveInfo
-     * @return array<string, ResetPasswordStatus|string|null>
+     * @return array<string, string|array>
      * @throws Exception
      */
     public function __invoke($_, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
@@ -60,7 +59,7 @@ class ResetPassword
 
         if ($response === PasswordBroker::PASSWORD_RESET) {
             return [
-                'status'  => ResetPasswordStatus::PASSWORD_RESET(),
+                'status'  => 'PASSWORD_RESET',
                 'message' => $this->translator->get($response),
             ];
         }

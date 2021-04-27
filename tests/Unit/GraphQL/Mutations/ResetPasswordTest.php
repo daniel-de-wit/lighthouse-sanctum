@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 
 use Closure;
-use DanielDeWit\LighthouseSanctum\Enums\ResetPasswordStatus;
 use DanielDeWit\LighthouseSanctum\Exceptions\ResetPasswordException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\ResetPassword;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
@@ -89,7 +88,7 @@ class ResetPasswordTest extends AbstractUnitTest
 
         static::assertIsArray($result);
         static::assertCount(2, $result);
-        static::assertTrue(ResetPasswordStatus::PASSWORD_RESET()->is($result['status']));
+        static::assertSame('PASSWORD_RESET', $result['status']);
         static::assertSame('response-translation', $result['message']);
     }
 
