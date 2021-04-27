@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInterface;
-use DanielDeWit\LighthouseSanctum\Enums\EmailVerificationStatus;
 use DanielDeWit\LighthouseSanctum\Traits\CreatesUserProvider;
 use Exception;
 use Illuminate\Auth\AuthManager;
@@ -35,7 +34,7 @@ class VerifyEmail
     /**
      * @param mixed $_
      * @param array<string, string|int> $args
-     * @return array<string, EmailVerificationStatus>
+     * @return array<string, string>
      * @throws Exception
      */
     public function __invoke($_, array $args): array
@@ -57,7 +56,7 @@ class VerifyEmail
         $user->markEmailAsVerified();
 
         return [
-            'status' => EmailVerificationStatus::VERIFIED(),
+            'status' => 'VERIFIED',
         ];
     }
 
