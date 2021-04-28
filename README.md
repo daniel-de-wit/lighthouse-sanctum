@@ -239,6 +239,11 @@ mutation ResetPassword {
 }
 ```
 
+:point_up: **Want to disable password confirmation?** Update your schema
+
+<img src="https://user-images.githubusercontent.com/3015394/116374360-8045d200-a80e-11eb-891b-c9395d4e91a0.png" height="160">
+
+
 ## Testing
 
 ```bash
