@@ -163,6 +163,10 @@ mutation Register {
 }
 ```
 
+:point_up: **Want to disable password confirmation?** Update your schema
+
+<img src="https://user-images.githubusercontent.com/3015394/116370867-1c6dda00-a80b-11eb-8fc4-e51166faa883.png" height="170">
+
 When registering a user in combination with the `MustVerifyEmail` contract you can optionally define the url for email verification.
 Both `__ID__` and `__HASH__` will be replaced with the proper values.
 
@@ -234,6 +238,11 @@ mutation ResetPassword {
     }
 }
 ```
+
+:point_up: **Want to disable password confirmation?** Update your schema
+
+<img src="https://user-images.githubusercontent.com/3015394/116374360-8045d200-a80e-11eb-891b-c9395d4e91a0.png" height="160">
+
 
 ## Testing
 
