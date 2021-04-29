@@ -22,6 +22,7 @@ class VerifyEmailTest extends AbstractIntegrationTest
         /** @var UserMustVerifyEmail $user */
         $user = UserMustVerifyEmail::factory()->create([
             'id'                => 123,
+            'email'             => 'john.doe@gmail.com',
             'email_verified_at' => null,
         ]);
 
@@ -31,7 +32,7 @@ class VerifyEmailTest extends AbstractIntegrationTest
             mutation {
                 verifyEmail(input: {
                     id: 123,
-                    hash: "' . sha1($user->getEmailForVerification()) . '"
+                    hash: "' . sha1('john.doe@gmail.com') . '"
                 }) {
                     status
                 }

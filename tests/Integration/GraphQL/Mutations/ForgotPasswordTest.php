@@ -47,8 +47,39 @@ class ForgotPasswordTest extends AbstractIntegrationTest
         Notification::assertSentTo($user, function (ResetPassword $notification) use ($user) {
             $url = call_user_func($notification::$createUrlCallback, $user, $notification->token);
 
-            return $url === "https://my-front-end.com/reset-password?email={$user->getEmailForVerification()}&token={$notification->token}";
+            return $url === "https://my-front-end.com/reset-password?email=john.doe@gmail.com&token={$notification->token}";
         });
+    }
+
+    /**
+     * @test
+     */
+    public function it_fails_silently_when_the_email_is_not_found(): void
+    {
+        Notification::fake();
+
+        $this->graphQL(/** @lang GraphQL */ '
+            mutation {
+                forgotPassword(input: {
+                    email: "john.doe@gmail.com"
+                    reset_password_url: {
+                      url: "https://my-front-end.com/reset-password?email=__EMAIL__&token=__TOKEN__"
+                    }
+                }) {
+                    status
+                    message
+                }
+            }
+        ')->assertJson([
+            'data' => [
+                'forgotPassword' => [
+                    'status'  => 'EMAIL_SENT',
+                    'message' => 'An email has been sent',
+                ],
+            ],
+        ]);
+
+        Notification::assertNothingSent();
     }
 
     /**
