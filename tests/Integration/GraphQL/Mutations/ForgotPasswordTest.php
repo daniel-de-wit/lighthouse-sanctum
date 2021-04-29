@@ -54,6 +54,37 @@ class ForgotPasswordTest extends AbstractIntegrationTest
     /**
      * @test
      */
+    public function it_fails_silently_when_the_email_is_not_found(): void
+    {
+        Notification::fake();
+
+        $this->graphQL(/** @lang GraphQL */ '
+            mutation {
+                forgotPassword(input: {
+                    email: "john.doe@gmail.com"
+                    reset_password_url: {
+                      url: "https://my-front-end.com/reset-password?email=__EMAIL__&token=__TOKEN__"
+                    }
+                }) {
+                    status
+                    message
+                }
+            }
+        ')->assertJson([
+            'data' => [
+                'forgotPassword' => [
+                    'status'  => 'EMAIL_SENT',
+                    'message' => 'An email has been sent',
+                ],
+            ],
+        ]);
+
+        Notification::assertNothingSent();
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */'
