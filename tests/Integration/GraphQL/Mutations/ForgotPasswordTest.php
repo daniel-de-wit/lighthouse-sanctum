@@ -8,7 +8,6 @@ use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
-use Laravel\Sanctum\Sanctum;
 
 class ForgotPasswordTest extends AbstractIntegrationTest
 {
@@ -23,8 +22,6 @@ class ForgotPasswordTest extends AbstractIntegrationTest
         $user = UserHasApiTokens::factory()->create([
             'email' => 'john.doe@gmail.com',
         ]);
-
-        Sanctum::actingAs($user);
 
         $this->graphQL(/** @lang GraphQL */ '
             mutation {
