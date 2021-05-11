@@ -58,6 +58,28 @@ class LoginTest extends AbstractIntegrationTest
     /**
      * @test
      */
+    public function it_returns_an_error_if_the_password_is_incorrect(): void
+    {
+        UserHasApiTokens::factory()->create([
+            'email'    => 'foo@bar.com',
+            'password' => Hash::make('supersecret'),
+        ]);
+
+        $this->graphQL(/** @lang GraphQL */'
+            mutation {
+                login(input: {
+                    email: "foo@bar.com",
+                    password: "wrong"
+                }) {
+                    token
+                }
+            }
+        ')->assertGraphQLErrorMessage('The provided credentials are incorrect.');
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */'

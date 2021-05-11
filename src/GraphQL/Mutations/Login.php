@@ -40,7 +40,7 @@ class Login
             'password' => $args['password'],
         ]);
 
-        if (! $user) {
+        if (! $user || ! $userProvider->validateCredentials($user, $args)) {
             throw new AuthenticationException('The provided credentials are incorrect.');
         }
 
