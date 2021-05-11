@@ -37,6 +37,14 @@ class LoginTest extends AbstractUnitTest
             ->getMock();
 
         $userProvider = $this->mockUserProvider($user);
+        $userProvider
+            ->shouldReceive('validateCredentials')
+            ->with($user, [
+                'email'    => 'foo@bar.com',
+                'password' => 'supersecret',
+            ])
+            ->andReturnTrue()
+            ->getMock();
 
         $mutation = new Login(
             $this->mockAuthManager($userProvider),
@@ -96,6 +104,47 @@ class LoginTest extends AbstractUnitTest
     /**
      * @test
      */
+    public function it_throws_an_exception_if_the_password_is_incorrect(): void
+    {
+        static::expectException(AuthenticationException::class);
+        static::expectExceptionMessage('The provided credentials are incorrect.');
+
+        /** @var UserHasApiTokens|MockInterface $user */
+        $user = Mockery::mock(UserHasApiTokens::class);
+
+        /** @var UserProvider|MockInterface $userProvider */
+        $userProvider = Mockery::mock(UserProvider::class)
+            ->shouldReceive('retrieveByCredentials')
+            ->with([
+                'email'    => 'foo@bar.com',
+                'password' => 'wrong',
+            ])
+            ->andReturn($user)
+            ->getMock();
+
+        $userProvider
+            ->shouldReceive('validateCredentials')
+            ->with($user, [
+                'email'    => 'foo@bar.com',
+                'password' => 'wrong',
+            ])
+            ->andReturnFalse()
+            ->getMock();
+
+        $mutation = new Login(
+            $this->mockAuthManager($userProvider),
+            $this->mockConfig(),
+        );
+
+        $mutation(null, [
+            'email'    => 'foo@bar.com',
+            'password' => 'wrong',
+        ]);
+    }
+
+    /**
+     * @test
+     */
     public function it_throws_an_exception_if_the_user_does_not_have_the_has_api_tokens_trait(): void
     {
         $user = Mockery::mock(User::class);
@@ -104,6 +153,14 @@ class LoginTest extends AbstractUnitTest
         static::expectExceptionMessage('"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
 
         $userProvider = $this->mockUserProvider($user);
+        $userProvider
+            ->shouldReceive('validateCredentials')
+            ->with($user, [
+                'email'    => 'foo@bar.com',
+                'password' => 'supersecret',
+            ])
+            ->andReturnTrue()
+            ->getMock();
 
         $mutation = new Login(
             $this->mockAuthManager($userProvider),
