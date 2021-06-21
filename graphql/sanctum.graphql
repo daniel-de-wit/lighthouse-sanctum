@@ -48,6 +48,8 @@ enum EmailVerificationStatus {
 input VerifyEmailInput {
     id: ID!
     hash: String!
+    expires: Int
+    signature: String
 }
 
 input RegisterInput {
@@ -63,6 +65,11 @@ The url used to verify the email address.
 Use __ID__ and __HASH__ to inject values.
 
 e.g; `https://my-front-end.com/verify-email?id=__ID__&hash=__HASH__`
+
+If the API uses signed email verification urls
+you must also use __EXPIRES__ and __SIGNATURE__
+
+e.g; `https://my-front-end.com/verify-email?id=__ID__&hash=__HASH__&expires=__EXPIRES__&signature=__SIGNATURE__`
 """
 input VerificationUrlInput {
     url: String! @rules(apply: ["url"])

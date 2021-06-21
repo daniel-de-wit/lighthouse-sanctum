@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
+use Carbon\Carbon;
 use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
@@ -95,9 +96,71 @@ class RegisterTest extends AbstractIntegrationTest
             $url = call_user_func($notification::$createUrlCallback, $user);
 
             $id   = $user->getKey();
-            $hash = sha1($user->getEmailForVerification());
+            $hash = sha1('foo@bar.com');
 
             return $url === "https://mysite.com/verify-email/{$id}/{$hash}";
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function it_sends_a_signed_email_verification_notification(): void
+    {
+        Notification::fake();
+
+        Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
+
+        $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
+        $this->app['config']->set('lighthouse-sanctum.use_signed_email_verification_url', true);
+
+        $response = $this->graphQL(/** @lang GraphQL */'
+            mutation {
+                register(input: {
+                    name: "Foo Bar",
+                    email: "foo@bar.com",
+                    password: "supersecret",
+                    password_confirmation: "supersecret",
+                    verification_url: {
+                        url: "https://mysite.com/verify-email/__ID__/__HASH__/__EXPIRES__/__SIGNATURE__"
+                    }
+                }) {
+                    token
+                    status
+                }
+            }
+        ')->assertJsonStructure([
+            'data' => [
+                'register' => [
+                    'token',
+                    'status',
+                ],
+            ],
+        ]);
+
+        static::assertNull($response->json('data.register.token'));
+        static::assertSame('MUST_VERIFY_EMAIL', $response->json('data.register.status'));
+
+        $this->assertDatabaseHas('users', [
+            'name'  => 'Foo Bar',
+            'email' => 'foo@bar.com',
+        ]);
+
+        /** @var UserMustVerifyEmail $user */
+        $user = UserMustVerifyEmail::first();
+
+        Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user) {
+            $url = call_user_func($notification::$createUrlCallback, $user);
+
+            $id        = $user->getKey();
+            $hash      = sha1('foo@bar.com');
+            $signature = hash_hmac('sha256', serialize([
+                'id'      => $id,
+                'hash'    => $hash,
+                'expires' => 1609480800,
+            ]), $this->app['config']->get('app.key'));
+
+            return $url === "https://mysite.com/verify-email/{$id}/{$hash}/1609480800/{$signature}";
         });
     }
 

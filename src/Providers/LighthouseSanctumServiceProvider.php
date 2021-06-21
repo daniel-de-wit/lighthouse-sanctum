@@ -6,16 +6,36 @@ namespace DanielDeWit\LighthouseSanctum\Providers;
 
 use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInterface;
 use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
+use DanielDeWit\LighthouseSanctum\Contracts\Services\SignatureServiceInterface;
 use DanielDeWit\LighthouseSanctum\Services\EmailVerificationService;
 use DanielDeWit\LighthouseSanctum\Services\ResetPasswordService;
+use DanielDeWit\LighthouseSanctum\Services\SignatureService;
+use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
 class LighthouseSanctumServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(EmailVerificationServiceInterface::class, EmailVerificationService::class);
         $this->app->singleton(ResetPasswordServiceInterface::class, ResetPasswordService::class);
+
+        $this->app->singleton(SignatureServiceInterface::class, function (Container $container) {
+            /** @var Config $config */
+            $config = $container->make(Config::class);
+
+            return new SignatureService($config->get('app.key'));
+        });
+
+        $this->app->singleton(EmailVerificationServiceInterface::class, function (Container $container) {
+            /** @var Config $config */
+            $config = $container->make(Config::class);
+
+            return new EmailVerificationService(
+                $container->make(SignatureServiceInterface::class),
+                $config->get('auth.verification.expire', 60),
+            );
+        });
     }
 
     public function boot(): void

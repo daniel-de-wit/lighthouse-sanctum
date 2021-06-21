@@ -170,6 +170,7 @@ mutation Register {
 
 When registering a user in combination with the `MustVerifyEmail` contract you can optionally define the url for email verification.
 Both `__ID__` and `__HASH__` will be replaced with the proper values.
+When `use_signed_email_verification_url` is enabled in the configuration, the placeholders `__EXPIRES__` and `__SIGNATURE__` will be replaced.
 
 ```graphql
 mutation Register {
@@ -180,6 +181,7 @@ mutation Register {
         password_confirmation: "secret"
         verification_url: {
             url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__"
+# Signed:   url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__&expires=__EXPIRES__&signature=__SIGNATURE__"
         }
     }) {
         token
@@ -195,6 +197,22 @@ mutation VerifyEmail {
   verifyEmail(input: {
     id: "1"
     hash: "af269947ed80d4a7bc3f78a6dfd05ec369373f9d"
+  }) {
+    name
+    email
+  }
+}
+```
+
+When `use_signed_email_verification_url` is enabled in the configuration, the input requires two additional fields.
+
+```graphql
+mutation VerifyEmail {
+  verifyEmail(input: {
+    id: "1"
+    hash: "af269947ed80d4a7bc3f78a6dfd05ec369373f9d"
+    expires: 1619775828
+    signature: "e923636f1093c414aab39f846e9d7a372beefa7b628b28179197e539c56aa0f0"
   }) {
     name
     email

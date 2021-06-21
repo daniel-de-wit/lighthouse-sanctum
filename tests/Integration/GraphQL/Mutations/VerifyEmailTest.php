@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
+use Carbon\Carbon;
 use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
-use Illuminate\Support\Facades\Notification;
 
 class VerifyEmailTest extends AbstractIntegrationTest
 {
@@ -15,8 +15,6 @@ class VerifyEmailTest extends AbstractIntegrationTest
      */
     public function it_verifies_an_email(): void
     {
-        Notification::fake();
-
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
 
         /** @var UserMustVerifyEmail $user */
@@ -26,13 +24,58 @@ class VerifyEmailTest extends AbstractIntegrationTest
             'email_verified_at' => null,
         ]);
 
-        $user->sendEmailVerificationNotification();
-
         $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 verifyEmail(input: {
                     id: 123,
                     hash: "' . sha1('john.doe@gmail.com') . '"
+                }) {
+                    status
+                }
+            }
+        ')->assertJson([
+            'data' => [
+                'verifyEmail' => [
+                    'status' => 'VERIFIED',
+                ],
+            ],
+        ]);
+
+        $user->refresh();
+
+        static::assertNotNull($user->getAttribute('email_verified_at'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_verifies_an_email_with_a_signature(): void
+    {
+        Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
+
+        $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
+        $this->app['config']->set('lighthouse-sanctum.use_signed_email_verification_url', true);
+
+        /** @var UserMustVerifyEmail $user */
+        $user = UserMustVerifyEmail::factory()->create([
+            'id'                => 123,
+            'email'             => 'john.doe@gmail.com',
+            'email_verified_at' => null,
+        ]);
+
+        $signature = hash_hmac('sha256', serialize([
+            'id'      => 123,
+            'hash'    => sha1('john.doe@gmail.com'),
+            'expires' => 1609480800,
+        ]), $this->app['config']->get('app.key'));
+
+        $this->graphQL(/** @lang GraphQL */ '
+            mutation {
+                verifyEmail(input: {
+                    id: 123,
+                    hash: "' . sha1('john.doe@gmail.com') . '",
+                    expires: 1609480800,
+                    signature: "' . $signature . '"
                 }) {
                     status
                 }
@@ -64,7 +107,7 @@ class VerifyEmailTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('The provided id and hash are incorrect.');
+        ')->assertGraphQLErrorMessage('The provided input is incorrect.');
     }
 
     /**
@@ -88,7 +131,109 @@ class VerifyEmailTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('The provided id and hash are incorrect.');
+        ')->assertGraphQLErrorMessage('The provided input is incorrect.');
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_an_error_if_the_expires_is_incorrect(): void
+    {
+        Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
+
+        $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
+        $this->app['config']->set('lighthouse-sanctum.use_signed_email_verification_url', true);
+
+        UserMustVerifyEmail::factory()->create([
+            'id'                => 123,
+            'email'             => 'john.doe@gmail.com',
+            'email_verified_at' => null,
+        ]);
+
+        $signature = hash_hmac('sha256', serialize([
+            'id'      => 123,
+            'hash'    => sha1('john.doe@gmail.com'),
+            'expires' => 1609480800,
+        ]), $this->app['config']->get('app.key'));
+
+        $this->graphQL(/** @lang GraphQL */ '
+            mutation {
+                verifyEmail(input: {
+                    id: 123,
+                    hash: "' . sha1('john.doe@gmail.com') . '"
+                    expires: 456,
+                    signature: "' . $signature . '"
+                }) {
+                    status
+                }
+            }
+        ')->assertGraphQLErrorMessage('The provided input is incorrect.');
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_an_error_if_the_signature_has_expired(): void
+    {
+        Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
+
+        $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
+        $this->app['config']->set('lighthouse-sanctum.use_signed_email_verification_url', true);
+
+        UserMustVerifyEmail::factory()->create([
+            'id'                => 123,
+            'email'             => 'john.doe@gmail.com',
+            'email_verified_at' => null,
+        ]);
+
+        $signature = hash_hmac('sha256', serialize([
+            'id'      => 123,
+            'hash'    => sha1('john.doe@gmail.com'),
+            'expires' => 1609476200,
+        ]), $this->app['config']->get('app.key'));
+
+        $this->graphQL(/** @lang GraphQL */ '
+            mutation {
+                verifyEmail(input: {
+                    id: 123,
+                    hash: "' . sha1('john.doe@gmail.com') . '"
+                    expires: 1609476200,
+                    signature: "' . $signature . '"
+                }) {
+                    status
+                }
+            }
+        ')->assertGraphQLErrorMessage('The provided input is incorrect.');
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_an_error_if_the_signature_is_incorrect(): void
+    {
+        Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
+
+        $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
+        $this->app['config']->set('lighthouse-sanctum.use_signed_email_verification_url', true);
+
+        UserMustVerifyEmail::factory()->create([
+            'id'                => 123,
+            'email'             => 'john.doe@gmail.com',
+            'email_verified_at' => null,
+        ]);
+
+        $this->graphQL(/** @lang GraphQL */ '
+            mutation {
+                verifyEmail(input: {
+                    id: 123,
+                    hash: "' . sha1('john.doe@gmail.com') . '"
+                    expires: 1609480800,
+                    signature: "1234567890"
+                }) {
+                    status
+                }
+            }
+        ')->assertGraphQLErrorMessage('The provided input is incorrect.');
     }
 
     /**
@@ -143,7 +288,7 @@ class VerifyEmailTest extends AbstractIntegrationTest
     /**
      * @test
      */
-    public function it_returns_an_error_if_the_has_field_is_not_a_string(): void
+    public function it_returns_an_error_if_the_hash_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
             mutation {
@@ -155,5 +300,125 @@ class VerifyEmailTest extends AbstractIntegrationTest
                 }
             }
         ')->assertGraphQLErrorMessage('Field "verifyEmail" argument "input" requires type String!, found 12345.');
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_an_error_if_the_expires_field_is_missing_when_using_signed_verification(): void
+    {
+        $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
+        $this->app['config']->set('lighthouse-sanctum.use_signed_email_verification_url', true);
+
+        UserMustVerifyEmail::factory()->create([
+            'id'                => 123,
+            'email'             => 'john.doe@gmail.com',
+            'email_verified_at' => null,
+        ]);
+
+        $this->graphQL(/** @lang GraphQL */ '
+            mutation {
+                verifyEmail(input: {
+                    id: 123,
+                    hash: "foobar",
+                    signature: "1234567890"
+                }) {
+                    status
+                }
+            }
+        ')
+            ->assertGraphQLErrorMessage('Validation failed for the field [verifyEmail].')
+            ->assertGraphQLValidationError(
+                'expires',
+                'The expires field is required.',
+            );
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_an_error_if_the_expires_field_is_not_an_int(): void
+    {
+        $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
+        $this->app['config']->set('lighthouse-sanctum.use_signed_email_verification_url', true);
+
+        UserMustVerifyEmail::factory()->create([
+            'id'                => 123,
+            'email'             => 'john.doe@gmail.com',
+            'email_verified_at' => null,
+        ]);
+
+        $this->graphQL(/** @lang GraphQL */ '
+            mutation {
+                verifyEmail(input: {
+                    id: 123,
+                    hash: "foobar",
+                    expires: true,
+                    signature: "1234567890"
+                }) {
+                    status
+                }
+            }
+        ')->assertGraphQLErrorMessage('Field "verifyEmail" argument "input" requires type Int, found true.');
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_an_error_if_the_signature_field_is_missing_when_using_signed_verification(): void
+    {
+        $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
+        $this->app['config']->set('lighthouse-sanctum.use_signed_email_verification_url', true);
+
+        UserMustVerifyEmail::factory()->create([
+            'id'                => 123,
+            'email'             => 'john.doe@gmail.com',
+            'email_verified_at' => null,
+        ]);
+
+        $this->graphQL(/** @lang GraphQL */ '
+            mutation {
+                verifyEmail(input: {
+                    id: 123,
+                    hash: "foobar",
+                    expires: 1609480800
+                }) {
+                    status
+                }
+            }
+        ')
+            ->assertGraphQLErrorMessage('Validation failed for the field [verifyEmail].')
+            ->assertGraphQLValidationError(
+                'signature',
+                'The signature field is required.',
+            );
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_an_error_if_the_signature_field_is_not_a_string(): void
+    {
+        $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
+        $this->app['config']->set('lighthouse-sanctum.use_signed_email_verification_url', true);
+
+        UserMustVerifyEmail::factory()->create([
+            'id'                => 123,
+            'email'             => 'john.doe@gmail.com',
+            'email_verified_at' => null,
+        ]);
+
+        $this->graphQL(/** @lang GraphQL */ '
+            mutation {
+                verifyEmail(input: {
+                    id: 123,
+                    hash: "foobar",
+                    expires: 1609480800,
+                    signature: 12345
+                }) {
+                    status
+                }
+            }
+        ')->assertGraphQLErrorMessage('Field "verifyEmail" argument "input" requires type String, found 12345.');
     }
 }
