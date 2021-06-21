@@ -109,6 +109,7 @@ Make sure the following middleware is enabled for Lighthouse:
 - [Logout](#logout)
 - [Register](#register)
 - [Email Verification](#email-verification)
+- [Resend Email Verification Link](#resend-email-verification-link)
 - [Forgot Password](#forgot-password)
 - [Reset Password](#reset-password)
 
@@ -217,6 +218,22 @@ mutation VerifyEmail {
     name
     email
   }
+}
+```
+
+### Resend Email Verification Link
+
+```graphql
+mutation ResendEmailVerification {
+    resendEmailVerification(input: {
+        email: "john.doe@gmail.com",
+        verification_url: {
+            url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__"
+# Signed:   url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__&expires=__EXPIRES__&signature=__SIGNATURE__"
+        }
+    }) {
+        status
+    }
 }
 ```
 
