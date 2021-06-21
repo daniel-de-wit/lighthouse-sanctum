@@ -45,11 +45,25 @@ enum EmailVerificationStatus {
     VERIFIED
 }
 
+type ResendEmailVerificationResponse {
+    status: ResendEmailVerificationStatus!
+}
+
+enum ResendEmailVerificationStatus {
+    """EMAIL_SENT"""
+    EMAIL_SENT
+}
+
 input VerifyEmailInput {
     id: ID!
     hash: String!
     expires: Int
     signature: String
+}
+
+input ResendEmailVerificationInput {
+    email: String! @rules(apply: ["email"])
+    verification_url: VerificationUrlInput
 }
 
 input RegisterInput {
@@ -126,6 +140,8 @@ extend type Mutation {
         @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\Register")
     verifyEmail(input: VerifyEmailInput! @spread): EmailVerificationResponse!
         @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\VerifyEmail")
+    resendEmailVerification(input: ResendEmailVerificationInput! @spread): ResendEmailVerificationResponse!
+        @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\ResendEmailVerification")
     forgotPassword(input: ForgotPasswordInput! @spread): ForgotPasswordResponse!
         @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\ForgotPassword")
     resetPassword(input: ResetPasswordInput! @spread): ResetPasswordResponse!
