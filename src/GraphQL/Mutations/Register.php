@@ -13,6 +13,7 @@ use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Laravel\Sanctum\Contracts\HasApiTokens;
 
@@ -48,9 +49,10 @@ class Register
         /** @var EloquentUserProvider $userProvider */
         $userProvider = $this->createUserProvider();
 
-        $user = $userProvider->createModel();
-        $user->fill($this->getPropertiesFromArgs($args));
-        $user->save();
+        $user = $this->saveUser(
+            $userProvider->createModel(),
+            $this->getPropertiesFromArgs($args),
+        );
 
         if ($user instanceof MustVerifyEmail) {
             if (isset($args['verification_url'])) {
@@ -73,6 +75,20 @@ class Register
             'token'  => $user->createToken('default')->plainTextToken,
             'status' => 'SUCCESS',
         ];
+    }
+
+    /**
+     * @param Model $user
+     * @param array<string, mixed> $attributes
+     * @return Model
+     */
+    protected function saveUser(Model $user, array $attributes): Model
+    {
+        $user
+            ->fill($attributes)
+            ->save();
+
+        return $user;
     }
 
     /**
