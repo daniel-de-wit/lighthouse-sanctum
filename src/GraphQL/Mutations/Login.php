@@ -8,6 +8,7 @@ use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use DanielDeWit\LighthouseSanctum\Traits\CreatesUserProvider;
 use Exception;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Config\Repository as Config;
 use Laravel\Sanctum\Contracts\HasApiTokens;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
@@ -42,6 +43,10 @@ class Login
 
         if (! $user || ! $userProvider->validateCredentials($user, $args)) {
             throw new AuthenticationException('The provided credentials are incorrect.');
+        }
+
+        if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
+            throw new AuthenticationException('Your email address is not verified.');
         }
 
         if (! $user instanceof HasApiTokens) {

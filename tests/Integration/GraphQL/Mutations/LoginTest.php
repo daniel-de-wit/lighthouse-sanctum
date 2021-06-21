@@ -6,6 +6,7 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
+use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Support\Facades\Hash;
 
 class LoginTest extends AbstractIntegrationTest
@@ -75,6 +76,31 @@ class LoginTest extends AbstractIntegrationTest
                 }
             }
         ')->assertGraphQLErrorMessage('The provided credentials are incorrect.');
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_an_error_if_the_email_is_not_verified(): void
+    {
+        $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
+
+        UserMustVerifyEmail::factory()->create([
+            'email'             => 'foo@bar.com',
+            'password'          => Hash::make('supersecret'),
+            'email_verified_at' => null,
+        ]);
+
+        $this->graphQL(/** @lang GraphQL */'
+            mutation {
+                login(input: {
+                    email: "foo@bar.com",
+                    password: "supersecret"
+                }) {
+                    token
+                }
+            }
+        ')->assertGraphQLErrorMessage('Your email address is not verified.');
     }
 
     /**

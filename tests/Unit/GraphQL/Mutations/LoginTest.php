@@ -7,14 +7,15 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\Login;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
+use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksUserProvider;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Foundation\Auth\User;
 use Laravel\Sanctum\NewAccessToken;
 use Mockery;
 use Mockery\MockInterface;
+use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 use RuntimeException;
 
 class LoginTest extends AbstractUnitTest
@@ -151,6 +152,41 @@ class LoginTest extends AbstractUnitTest
 
         static::expectException(HasApiTokensException::class);
         static::expectExceptionMessage('"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
+
+        $userProvider = $this->mockUserProvider($user);
+        $userProvider
+            ->shouldReceive('validateCredentials')
+            ->with($user, [
+                'email'    => 'foo@bar.com',
+                'password' => 'supersecret',
+            ])
+            ->andReturnTrue()
+            ->getMock();
+
+        $mutation = new Login(
+            $this->mockAuthManager($userProvider),
+            $this->mockConfig(),
+        );
+
+        $mutation(null, [
+            'email'    => 'foo@bar.com',
+            'password' => 'supersecret',
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_throws_an_exception_if_the_users_email_is_not_verified(): void
+    {
+        static::expectException(AuthenticationException::class);
+        static::expectExceptionMessage('Your email address is not verified.');
+
+        /** @var UserMustVerifyEmail|MockInterface $user */
+        $user = Mockery::mock(UserMustVerifyEmail::class)
+            ->shouldReceive('hasVerifiedEmail')
+            ->andReturnFalse()
+            ->getMock();
 
         $userProvider = $this->mockUserProvider($user);
         $userProvider
