@@ -7,10 +7,8 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\Logout;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
+use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksAuthFactory;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Factory as AuthFactory;
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Foundation\Auth\User;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -20,6 +18,8 @@ use RuntimeException;
 
 class LogoutTest extends AbstractUnitTest
 {
+    use MocksAuthFactory;
+
     /**
      * @test
      */
@@ -79,27 +79,5 @@ class LogoutTest extends AbstractUnitTest
         $mutation = new Logout($this->mockAuthFactory($user), Mockery::mock(Translator::class));
 
         $mutation(null, []);
-    }
-
-    /**
-     * @param Authenticatable|MockInterface|null $user
-     * @return AuthFactory|MockInterface
-     */
-    protected function mockAuthFactory($user = null)
-    {
-        /** @var Guard|MockInterface $guard */
-        $guard = Mockery::mock(Guard::class)
-            ->shouldReceive('user')
-            ->andReturn($user)
-            ->getMock();
-
-        /** @var AuthFactory|MockInterface $authFactory */
-        $authFactory = Mockery::mock(AuthFactory::class)
-            ->shouldReceive('guard')
-            ->with('sanctum')
-            ->andReturn($guard)
-            ->getMock();
-
-        return $authFactory;
     }
 }
