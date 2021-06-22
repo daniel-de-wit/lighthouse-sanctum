@@ -118,7 +118,7 @@ Make sure the following middleware is enabled for Lighthouse:
 Authenticate the user to receive a Bearer token.
 
 ```graphql
-mutation Login {
+mutation {
     login(input: {
         email: "john.doe@gmail.com"
         password: "secret"
@@ -139,7 +139,7 @@ Apply the Authorization header on subsequent calls using the token
 Revoke the current token.
 
 ```graphql
-mutation Logout {
+mutation {
     logout {
         status
         message
@@ -152,7 +152,7 @@ mutation Logout {
 Successfully registering a user will immediately yield a bearer token (unless email verification is required).
 
 ```graphql
-mutation Register {
+mutation {
     register(input: {
         name: "John Doe"
         email: "john.doe@gmail.com"
@@ -174,7 +174,7 @@ Both `__ID__` and `__HASH__` will be replaced with the proper values.
 When `use_signed_email_verification_url` is enabled in the configuration, the placeholders `__EXPIRES__` and `__SIGNATURE__` will be replaced.
 
 ```graphql
-mutation Register {
+mutation {
     register(input: {
         name: "John Doe"
         email: "john.doe@gmail.com"
@@ -194,7 +194,7 @@ mutation Register {
 ### Email Verification
 
 ```graphql
-mutation VerifyEmail {
+mutation {
   verifyEmail(input: {
     id: "1"
     hash: "af269947ed80d4a7bc3f78a6dfd05ec369373f9d"
@@ -208,7 +208,7 @@ mutation VerifyEmail {
 When `use_signed_email_verification_url` is enabled in the configuration, the input requires two additional fields.
 
 ```graphql
-mutation VerifyEmail {
+mutation {
   verifyEmail(input: {
     id: "1"
     hash: "af269947ed80d4a7bc3f78a6dfd05ec369373f9d"
@@ -224,7 +224,7 @@ mutation VerifyEmail {
 ### Resend Email Verification Link
 
 ```graphql
-mutation ResendEmailVerification {
+mutation {
     resendEmailVerification(input: {
         email: "john.doe@gmail.com",
         verification_url: {
@@ -244,7 +244,7 @@ Sends a reset password notification.
 Optionally use custom reset url using both `__EMAIL__` and `__TOKEN__` placeholders.
 
 ```graphql
-mutation ForgotPassword {
+mutation {
     forgotPassword(input: {
         email: "john.doe@gmail.com"
         reset_password_url: {
@@ -262,7 +262,7 @@ mutation ForgotPassword {
 Reset the user's password.
 
 ```graphql
-mutation ResetPassword {
+mutation {
     resetPassword(input: {
         email: "john.doe@gmail.com",
         token: "af269947ed80d4a7bc3f78a6dfd05ec369373f9d"
