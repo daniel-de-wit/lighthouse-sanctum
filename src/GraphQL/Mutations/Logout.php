@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
+use DanielDeWit\LighthouseSanctum\Traits\HasAuthenticatedUser;
 use Exception;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Translation\Translator;
 use Laravel\Sanctum\Contracts\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
-use RuntimeException;
 
 class Logout
 {
+    use HasAuthenticatedUser;
+
     protected AuthFactory $authFactory;
     protected Translator $translator;
 
@@ -31,13 +33,7 @@ class Logout
      */
     public function __invoke($_, array $args): array
     {
-        $user = $this->authFactory
-            ->guard('sanctum')
-            ->user();
-
-        if (! $user) {
-            throw new RuntimeException('Unable to detect current user.');
-        }
+        $user = $this->getAuthenticatedUser();
 
         if (! $user instanceof HasApiTokens) {
             throw new HasApiTokensException($user);
@@ -51,5 +47,10 @@ class Logout
             'status'  => 'TOKEN_REVOKED',
             'message' => $this->translator->get('Your session has been terminated'),
         ];
+    }
+
+    protected function getAuthFactory(): AuthFactory
+    {
+        return $this->authFactory;
     }
 }
