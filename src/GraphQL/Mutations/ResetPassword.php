@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
-use DanielDeWit\LighthouseSanctum\Exceptions\ResetPasswordException;
+use DanielDeWit\LighthouseSanctum\Exceptions\GraphQLValidationException;
 use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -56,9 +56,24 @@ class ResetPassword
             ];
         }
 
-        throw new ResetPasswordException(
+        throw new GraphQLValidationException(
             $this->translator->get($response),
-            implode('.', $resolveInfo->path),
+            $this->getInvalidField($response),
+            $resolveInfo,
         );
+    }
+
+    protected function getInvalidField(string $response): string
+    {
+        switch ($response) {
+            case PasswordBroker::INVALID_USER:
+                return 'email';
+
+            case PasswordBroker::INVALID_TOKEN:
+                return 'token';
+
+            default:
+                return '';
+        }
     }
 }

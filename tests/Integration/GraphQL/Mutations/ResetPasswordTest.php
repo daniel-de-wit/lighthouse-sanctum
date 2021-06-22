@@ -148,7 +148,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
             }
         ')
             ->assertGraphQLErrorMessage('Validation failed for the field [resetPassword].')
-            ->assertGraphQLValidationError('input', "We can't find a user with that email address.");
+            ->assertGraphQLValidationError('input.email', "We can't find a user with that email address.");
     }
 
     /**
@@ -213,7 +213,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
             }
         ')
             ->assertGraphQLErrorMessage('Validation failed for the field [resetPassword].')
-            ->assertGraphQLValidationError('input', 'This password reset token is invalid.');
+            ->assertGraphQLValidationError('input.token', 'This password reset token is invalid.');
     }
 
     /**
