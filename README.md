@@ -112,6 +112,7 @@ Make sure the following middleware is enabled for Lighthouse:
 - [Resend Email Verification Link](#resend-email-verification-link)
 - [Forgot Password](#forgot-password)
 - [Reset Password](#reset-password)
+- [Update Password](#update-password)
 
 ### Login
 
@@ -279,6 +280,21 @@ mutation {
 
 <img src="https://user-images.githubusercontent.com/3015394/116374360-8045d200-a80e-11eb-891b-c9395d4e91a0.png" height="160">
 
+### Update Password
+
+Updates the current user's password.
+
+```graphql
+mutation {
+    updatePassword(input: {
+        current_password: "mypass",
+        password: "secret",
+        password_confirmation: "secret"
+    }) {
+        status
+    }
+}
+```
 
 ## Testing
 
