@@ -6,7 +6,7 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 
 use Closure;
 use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
-use DanielDeWit\LighthouseSanctum\Exceptions\ResetPasswordException;
+use DanielDeWit\LighthouseSanctum\Exceptions\GraphQLValidationException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\ResetPassword;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -79,7 +79,7 @@ class ResetPasswordTest extends AbstractUnitTest
      */
     public function it_throws_an_exception_if_the_reset_failed(): void
     {
-        static::expectException(ResetPasswordException::class);
+        static::expectException(GraphQLValidationException::class);
         static::expectExceptionMessage('Validation failed for the field [some.dotted.path].');
 
         /** @var PasswordBroker|MockInterface $passwordBroker */

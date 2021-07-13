@@ -7,15 +7,16 @@ namespace DanielDeWit\LighthouseSanctum\Services;
 use Carbon\Carbon;
 use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInterface;
 use DanielDeWit\LighthouseSanctum\Contracts\Services\SignatureServiceInterface;
+use DanielDeWit\LighthouseSanctum\Traits\HasUserModel;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
-use RuntimeException;
 
 class EmailVerificationService implements EmailVerificationServiceInterface
 {
+    use HasUserModel;
+
     protected SignatureServiceInterface $signatureService;
     protected int $expiresIn;
 
@@ -115,14 +116,5 @@ class EmailVerificationService implements EmailVerificationServiceInterface
         return Carbon::now()
             ->addMinutes($this->expiresIn)
             ->getTimestamp();
-    }
-
-    protected function getModelFromUser(MustVerifyEmail $user): Model
-    {
-        if (! $user instanceof Model) {
-            throw new RuntimeException('The class implementing "' . MustVerifyEmail::class . '" must extend "' . Model::class . '".');
-        }
-
-        return $user;
     }
 }

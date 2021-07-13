@@ -131,6 +131,21 @@ enum ResetPasswordStatus {
     PASSWORD_RESET
 }
 
+input UpdatePasswordInput {
+    current_password: String!
+    password: String! @rules(apply: ["confirmed"])
+    password_confirmation: String!
+}
+
+type UpdatePasswordResponse {
+    status: UpdatePasswordStatus!
+}
+
+enum UpdatePasswordStatus {
+    """PASSWORD_UPDATED"""
+    PASSWORD_UPDATED
+}
+
 extend type Mutation {
     login(input: LoginInput @spread): AccessToken!
         @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\Login")
@@ -146,4 +161,6 @@ extend type Mutation {
         @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\ForgotPassword")
     resetPassword(input: ResetPasswordInput! @spread): ResetPasswordResponse!
         @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\ResetPassword")
+    updatePassword(input: UpdatePasswordInput! @spread): UpdatePasswordResponse! @guard
+        @field(resolver: "DanielDeWit\\LighthouseSanctum\\GraphQL\\Mutations\\UpdatePassword")
 }
