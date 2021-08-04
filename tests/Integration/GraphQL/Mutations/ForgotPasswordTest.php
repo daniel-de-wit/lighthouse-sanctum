@@ -205,7 +205,7 @@ class ForgotPasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [forgotPassword].')
             ->assertGraphQLValidationError(
                 'input.reset_password_url.url',
-                'The input.reset password url.url format is invalid.',
+                'The input.reset password url.url must be a valid URL.',
             );
     }
 }
