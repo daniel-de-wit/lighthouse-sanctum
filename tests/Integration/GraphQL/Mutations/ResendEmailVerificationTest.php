@@ -318,7 +318,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [resendEmailVerification].')
             ->assertGraphQLValidationError(
                 'input.verification_url.url',
-                'The input.verification url.url format is invalid.',
+                'The input.verification url.url must be a valid URL.',
             );
     }
 }
