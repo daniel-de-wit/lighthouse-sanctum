@@ -24,16 +24,21 @@ class ResetPasswordService implements ResetPasswordServiceInterface
         $this->dispatcher = $dispatcher;
     }
 
+    public function transformUrl(CanResetPassword $notifiable, string $token, string $url): string
+    {
+        return str_replace([
+            '__EMAIL__',
+            '__TOKEN__',
+        ], [
+            $notifiable->getEmailForPasswordReset(),
+            $token,
+        ], $url);
+    }
+
     public function setResetPasswordUrl(string $url): void
     {
         ResetPasswordNotification::createUrlUsing(function (CanResetPassword $notifiable, string $token) use ($url) {
-            return str_replace([
-                '__EMAIL__',
-                '__TOKEN__',
-            ], [
-                $notifiable->getEmailForPasswordReset(),
-                $token,
-            ], $url);
+            return $this->transformUrl($notifiable, $token, $url);
         });
     }
 

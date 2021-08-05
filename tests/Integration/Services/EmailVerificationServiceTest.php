@@ -29,6 +29,49 @@ class EmailVerificationServiceTest extends AbstractIntegrationTest
     /**
      * @test
      */
+    public function it_transforms_a_verification_url(): void
+    {
+        /** @var UserMustVerifyEmail $user */
+        $user = UserMustVerifyEmail::factory()->create([
+            'id'    => 12345,
+            'email' => 'user@example.com',
+        ]);
+
+        $url = $this->service->transformUrl(
+            $user,
+            'https://mysite.com/verify-email/__ID__/__HASH__'
+        );
+
+        static::assertSame('https://mysite.com/verify-email/12345/' . sha1('user@example.com'), $url);
+    }
+
+    /**
+     * @test
+     */
+    public function it_transforms_a_signed_verification_url(): void
+    {
+        Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
+
+        /** @var UserMustVerifyEmail $user */
+        $user = UserMustVerifyEmail::factory()->create([
+            'id'    => 12345,
+            'email' => 'user@example.com',
+        ]);
+
+        $url = $this->service->transformUrl($user, 'https://mysite.com/verify-email/__ID__/__HASH__/__EXPIRES__/__SIGNATURE__');
+
+        $signature = hash_hmac('sha256', serialize([
+            'id'      => 12345,
+            'hash'    => sha1('user@example.com'),
+            'expires' => 1609480800,
+        ]), $this->app['config']->get('app.key'));
+
+        static::assertSame('https://mysite.com/verify-email/12345/' . sha1('user@example.com') . '/1609480800/' . $signature, $url);
+    }
+
+    /**
+     * @test
+     */
     public function it_sets_the_verification_url(): void
     {
         /** @var UserMustVerifyEmail $user */

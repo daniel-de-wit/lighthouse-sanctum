@@ -9,6 +9,8 @@ use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 
 interface EmailVerificationServiceInterface
 {
+    public function transformUrl(MustVerifyEmail $user, string $url): string;
+
     public function setVerificationUrl(string $url): void;
 
     /**
