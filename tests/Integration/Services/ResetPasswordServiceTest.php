@@ -33,6 +33,23 @@ class ResetPasswordServiceTest extends AbstractIntegrationTest
     /**
      * @test
      */
+    public function it_transforms_a_reset_password_url(): void
+    {
+        /** @var UserMustVerifyEmail $user */
+        $user = UserMustVerifyEmail::factory()->create([
+            'email' => 'user@example.com',
+        ]);
+
+        $token = 'token123';
+
+        $url = $this->service->transformUrl($user, $token, 'https://mysite.com/reset-password/__EMAIL__/__TOKEN__');
+
+        static::assertSame('https://mysite.com/reset-password/user@example.com/token123', $url);
+    }
+
+    /**
+     * @test
+     */
     public function it_sets_the_reset_password_url(): void
     {
         /** @var UserMustVerifyEmail $user */

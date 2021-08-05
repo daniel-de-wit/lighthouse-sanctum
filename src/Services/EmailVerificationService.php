@@ -26,17 +26,22 @@ class EmailVerificationService implements EmailVerificationServiceInterface
         $this->expiresIn        = $expiresIn;
     }
 
+    public function transformUrl(MustVerifyEmail $user, string $url): string
+    {
+        $parameters = $this->createUrlParameters($user);
+
+        return str_replace([
+            '__ID__',
+            '__HASH__',
+            '__EXPIRES__',
+            '__SIGNATURE__',
+        ], $parameters, $url);
+    }
+
     public function setVerificationUrl(string $url): void
     {
-        VerifyEmail::createUrlUsing(function ($user) use ($url) {
-            $parameters = $this->createUrlParameters($user);
-
-            return str_replace([
-                '__ID__',
-                '__HASH__',
-                '__EXPIRES__',
-                '__SIGNATURE__',
-            ], $parameters, $url);
+        VerifyEmail::createUrlUsing(function (MustVerifyEmail $user) use ($url) {
+            return $this->transformUrl($user, $url);
         });
     }
 
