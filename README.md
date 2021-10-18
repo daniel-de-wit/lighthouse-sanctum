@@ -45,7 +45,7 @@ php artisan vendor:publish --tag=lighthouse-sanctum
 type Query
 type Mutation
 
-#import sanctum.grapqhl
+#import sanctum.graphql
 ```
 
 #### 4. HasApiTokens
