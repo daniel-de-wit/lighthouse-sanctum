@@ -30,7 +30,7 @@ class ForgotPasswordTest extends AbstractUnitTest
         /** @var Translator|MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
-            ->with('An email has been sent')
+            ->with('lighthouse-sanctum::message.email_sent')
             ->andReturn('translation')
             ->getMock();
 
@@ -72,7 +72,7 @@ class ForgotPasswordTest extends AbstractUnitTest
         /** @var Translator|MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
-            ->with('An email has been sent')
+            ->with('lighthouse-sanctum::message.email_sent')
             ->andReturn('translation')
             ->getMock();
 

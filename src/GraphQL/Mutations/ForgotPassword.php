@@ -43,7 +43,7 @@ class ForgotPassword
 
         return [
             'status'  => 'EMAIL_SENT',
-            'message' => $this->translator->get('An email has been sent'),
+            'message' => $this->translator->get("lighthouse-sanctum::message.email_sent"),
         ];
     }
 }

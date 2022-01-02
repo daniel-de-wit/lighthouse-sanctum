@@ -126,7 +126,9 @@ class UpdatePasswordTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field UpdatePasswordInput.current_password of required type String! was not provided.');
+        ')->assertGraphQLErrorMessage(
+            'Field UpdatePasswordInput.current_password of required type String! was not provided.'
+        );
     }
 
     /**
@@ -229,7 +231,9 @@ class UpdatePasswordTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field UpdatePasswordInput.password_confirmation of required type String! was not provided.');
+        ')->assertGraphQLErrorMessage(
+            'Field UpdatePasswordInput.password_confirmation of required type String! was not provided.'
+        );
     }
 
     /**

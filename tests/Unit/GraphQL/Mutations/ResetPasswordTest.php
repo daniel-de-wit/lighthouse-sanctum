@@ -45,7 +45,7 @@ class ResetPasswordTest extends AbstractUnitTest
         /** @var Translator|MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
-            ->with('passwords.reset')
+            ->with('lighthouse-sanctum::passwords.reset')
             ->andReturn('response-translation')
             ->getMock();
 
@@ -57,8 +57,8 @@ class ResetPasswordTest extends AbstractUnitTest
 
         $mutation = new ResetPassword(
             $passwordBroker,
-            $translator,
             $resetPasswordService,
+            $translator,
         );
 
         $result = $mutation(null, [
@@ -98,8 +98,11 @@ class ResetPasswordTest extends AbstractUnitTest
         /** @var Translator|MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
-            ->with('some-error')
+            ->with('lighthouse-sanctum::some-error')
             ->andReturn('error-translation')
+            ->shouldReceive('get')
+            ->with("lighthouse-sanctum::exception.validation_exception", ['path'=>'some.dotted.path'])
+            ->andReturn("Validation failed for the field [some.dotted.path].")
             ->getMock();
 
         /** @var ResetPasswordServiceInterface|MockInterface $resetPasswordService */
@@ -112,8 +115,8 @@ class ResetPasswordTest extends AbstractUnitTest
 
         $mutation = new ResetPassword(
             $passwordBroker,
-            $translator,
             $resetPasswordService,
+            $translator,
         );
 
         $mutation(null, [

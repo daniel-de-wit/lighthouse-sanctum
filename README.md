@@ -39,7 +39,14 @@ composer require daniel-de-wit/lighthouse-sanctum
 php artisan vendor:publish --tag=lighthouse-sanctum
 ```
 
-#### 3. Import the published schema into your main GraphQL schema (`./graphql/schema.graphql`)
+#### 3. Publish localization files (optional)
+Publishing the localization files allows you to adapt the standard exception messages and provide your own language files.
+
+```bash
+php artisan vendor:publish --tag=lighthouse-sanctum-translations
+```
+
+#### 4. Import the published schema into your main GraphQL schema (`./graphql/schema.graphql`)
 
 ```graphql
 type Query
@@ -48,7 +55,7 @@ type Mutation
 #import sanctum.graphql
 ```
 
-#### 4. HasApiTokens
+#### 5. HasApiTokens
 
 Apply the `Laravel\Sanctum\HasApiTokens` trait to your Authenticatable model as [described in the Laravel Sanctum documentation](https://laravel.com/docs/8.x/sanctum#issuing-api-tokens).
 
@@ -64,7 +71,7 @@ class User extends Authenticatable implements HasApiTokensContract
 
 ```
 
-#### 5. Configuration
+#### 6. Configuration
 
 This package relies on [API Token Authentication](https://laravel.com/docs/8.x/sanctum#api-token-authentication), which uses stateless Bearer tokens to authenticate requests.
 

@@ -12,6 +12,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Config\Repository as Config;
 use Laravel\Sanctum\Contracts\HasApiTokens;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
+use Illuminate\Contracts\Translation\Translator;
 
 class Login
 {
@@ -19,11 +20,17 @@ class Login
 
     protected AuthManager $authManager;
     protected Config $config;
+    protected Translator $translator;
 
-    public function __construct(AuthManager $authManager, Config $config)
-    {
+
+    public function __construct(
+        AuthManager $authManager,
+        Config $config,
+        Translator $translator
+    ) {
         $this->authManager = $authManager;
         $this->config      = $config;
+        $this->translator  = $translator;
     }
 
     /**
@@ -41,16 +48,20 @@ class Login
             'password' => $args['password'],
         ]);
 
-        if (! $user || ! $userProvider->validateCredentials($user, $args)) {
-            throw new AuthenticationException('The provided credentials are incorrect.');
+        if (!$user || !$userProvider->validateCredentials($user, $args)) {
+            throw new AuthenticationException(
+                $this->translator->get("lighthouse-sanctum::exception.authentication_incorrect_credentials")
+            );
         }
 
-        if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
-            throw new AuthenticationException('Your email address is not verified.');
+        if ($user instanceof MustVerifyEmail && !$user->hasVerifiedEmail()) {
+            throw new AuthenticationException(
+                $this->translator->get("lighthouse-sanctum::exception.authentication_email_not_verified")
+            );
         }
 
-        if (! $user instanceof HasApiTokens) {
-            throw new HasApiTokensException($user);
+        if (!$user instanceof HasApiTokens) {
+            throw new HasApiTokensException($user, $this->translator);
         }
 
         return [

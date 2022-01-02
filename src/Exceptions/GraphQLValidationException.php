@@ -6,6 +6,7 @@ namespace DanielDeWit\LighthouseSanctum\Exceptions;
 
 use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
+use Illuminate\Contracts\Translation\Translator;
 use Nuwave\Lighthouse\Exceptions\RendersErrorsExtensions;
 
 class GraphQLValidationException extends Exception implements RendersErrorsExtensions
@@ -18,7 +19,7 @@ class GraphQLValidationException extends Exception implements RendersErrorsExten
      * @param string $field
      * @param string|ResolveInfo $path
      */
-    public function __construct(string $message, string $field, $path)
+    public function __construct(string $message, string $field, $path, Translator $translator)
     {
         $this->validationMessage = $message;
         $this->field             = $field;
@@ -27,7 +28,7 @@ class GraphQLValidationException extends Exception implements RendersErrorsExten
             $path = implode('.', $path->path);
         }
 
-        parent::__construct("Validation failed for the field [{$path}].");
+        parent::__construct($translator->get("lighthouse-sanctum::exception.validation_exception", ["path"=>$path]));
     }
 
     public function isClientSafe(): bool

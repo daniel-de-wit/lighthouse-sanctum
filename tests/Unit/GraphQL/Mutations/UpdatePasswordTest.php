@@ -124,14 +124,17 @@ class UpdatePasswordTest extends AbstractUnitTest
         /** @var Translator|MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
-            ->once()
-            ->with('validation.same', [
-                'attribute' => 'current_password',
+            ->with('lighthouse-sanctum::validation.same', [
+                'attribute' => 'current password',
                 'other'     => 'user password',
             ])
             ->andReturn('error-message')
-            ->getMock();
-
+            ->shouldReceive('get')->with("lighthouse-sanctum::validation.attributes.current_password")
+            ->andReturn("current password")->atLeast()->once()
+            ->shouldReceive('get')->with("lighthouse-sanctum::exception.validation_exception", ['path'=>'some.path'])
+            ->andReturn("Validation failed for the field [some.path].")->once()
+            ->shouldReceive('get')->with("lighthouse-sanctum::validation.attributes.user_password")
+            ->andReturn("user password")->once()->getMock();
         $mutation = new UpdatePassword(
             $this->mockAuthFactory($user),
             $hasher,
@@ -180,13 +183,17 @@ class UpdatePasswordTest extends AbstractUnitTest
         /** @var Translator|MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
-            ->once()
-            ->with('validation.different', [
+            ->with('lighthouse-sanctum::validation.different', [
                 'attribute' => 'password',
                 'other'     => 'user password',
             ])
-            ->andReturn('error-message')
-            ->getMock();
+            ->andReturn('error-message')->once()
+            ->shouldReceive('get')->with("lighthouse-sanctum::validation.attributes.password")
+            ->andReturn("password")->atLeast()->once()
+            ->shouldReceive('get')->with("lighthouse-sanctum::exception.validation_exception", ['path'=>'some.path'])
+            ->andReturn("Validation failed for the field [some.path].")->once()
+            ->shouldReceive('get')->with("lighthouse-sanctum::validation.attributes.user_password")
+            ->andReturn("user password")->once()->getMock();
 
         $mutation = new UpdatePassword(
             $this->mockAuthFactory($user),
@@ -201,7 +208,7 @@ class UpdatePasswordTest extends AbstractUnitTest
                 'password'         => 'new-password',
             ],
             Mockery::mock(GraphQLContext::class),
-            $this->mockResolveInfo(),
+            $this->mockResolveInfo()
         );
     }
 

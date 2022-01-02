@@ -11,6 +11,7 @@ use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksUserProvider;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
 use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Foundation\Auth\User;
 use Laravel\Sanctum\NewAccessToken;
 use Mockery;
@@ -47,9 +48,13 @@ class LoginTest extends AbstractUnitTest
             ->andReturnTrue()
             ->getMock();
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class);
+
         $mutation = new Login(
             $this->mockAuthManager($userProvider),
             $this->mockConfig(),
+            $translator
         );
 
         $result = $mutation(null, [
@@ -70,9 +75,13 @@ class LoginTest extends AbstractUnitTest
         static::expectException(RuntimeException::class);
         static::expectExceptionMessage('User provider not found.');
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class);
+
         $mutation = new Login(
             $this->mockAuthManager(null),
             $this->mockConfig(),
+            $translator
         );
 
         $mutation(null, [
@@ -91,9 +100,17 @@ class LoginTest extends AbstractUnitTest
 
         $userProvider = $this->mockUserProvider(null);
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class)
+            ->shouldReceive('get')
+            ->with('lighthouse-sanctum::exception.authentication_incorrect_credentials')
+            ->andReturn('The provided credentials are incorrect.')->getMock();
+
+
         $mutation = new Login(
             $this->mockAuthManager($userProvider),
             $this->mockConfig(),
+            $translator
         );
 
         $mutation(null, [
@@ -132,9 +149,17 @@ class LoginTest extends AbstractUnitTest
             ->andReturnFalse()
             ->getMock();
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class)
+            ->shouldReceive('get')
+            ->with('lighthouse-sanctum::exception.authentication_incorrect_credentials')
+            ->andReturn('The provided credentials are incorrect.')->getMock();
+
+
         $mutation = new Login(
             $this->mockAuthManager($userProvider),
             $this->mockConfig(),
+            $translator
         );
 
         $mutation(null, [
@@ -151,7 +176,9 @@ class LoginTest extends AbstractUnitTest
         $user = Mockery::mock(User::class);
 
         static::expectException(HasApiTokensException::class);
-        static::expectExceptionMessage('"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
+        static::expectExceptionMessage(
+            '"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".'
+        );
 
         $userProvider = $this->mockUserProvider($user);
         $userProvider
@@ -163,9 +190,21 @@ class LoginTest extends AbstractUnitTest
             ->andReturnTrue()
             ->getMock();
 
+
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class)
+            ->shouldReceive('get')
+            ->with(
+                'lighthouse-sanctum::exception.has_api_tokens_exception',
+                ['userClass' => get_class($user), 'apiTokenClass' => 'Laravel\Sanctum\Contracts\HasApiTokens']
+            )
+            ->andReturn('"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".')
+            ->getMock();
+
         $mutation = new Login(
             $this->mockAuthManager($userProvider),
             $this->mockConfig(),
+            $translator
         );
 
         $mutation(null, [
@@ -198,9 +237,17 @@ class LoginTest extends AbstractUnitTest
             ->andReturnTrue()
             ->getMock();
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class)
+            ->shouldReceive('get')
+            ->with('lighthouse-sanctum::exception.authentication_email_not_verified')
+            ->andReturn('Your email address is not verified.')
+            ->getMock();
+
         $mutation = new Login(
             $this->mockAuthManager($userProvider),
             $this->mockConfig(),
+            $translator
         );
 
         $mutation(null, [

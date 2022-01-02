@@ -22,8 +22,9 @@ class UpdatePassword
 
     protected AuthFactory $authFactory;
     protected Hasher $hasher;
-    protected Translator $translator;
     protected ResolveInfo $resolveInfo;
+    protected Translator $translator;
+
 
     public function __construct(AuthFactory $authFactory, Hasher $hasher, Translator $translator)
     {
@@ -66,12 +67,17 @@ class UpdatePassword
     protected function currentPasswordMustBeTheSame(Authenticatable $user, string $currentPassword): void
     {
         if (! $this->hasher->check($currentPassword, $user->getAuthPassword())) {
-            $message = $this->translator->get('validation.same', [
-                'attribute' => 'current_password',
-                'other'     => 'user password',
+            $message = $this->translator->get('lighthouse-sanctum::validation.same', [
+                'attribute' => $this->translator->get('lighthouse-sanctum::validation.attributes.current_password'),
+                'other'     => $this->translator->get('lighthouse-sanctum::validation.attributes.user_password'),
             ]);
 
-            throw new GraphQLValidationException($message, 'current_password', $this->resolveInfo);
+            throw new GraphQLValidationException(
+                $message,
+                $this->translator->get("lighthouse-sanctum::validation.attributes.current_password"),
+                $this->resolveInfo,
+                $this->translator
+            );
         }
     }
 
@@ -83,12 +89,17 @@ class UpdatePassword
     protected function newPasswordMustBeDifferent(Authenticatable $user, string $newPassword): void
     {
         if ($this->hasher->check($newPassword, $user->getAuthPassword())) {
-            $message = $this->translator->get('validation.different', [
-                'attribute' => 'password',
-                'other'     => 'user password',
+            $message = $this->translator->get('lighthouse-sanctum::validation.different', [
+                'attribute' => $this->translator->get('lighthouse-sanctum::validation.attributes.password'),
+                'other'     => $this->translator->get('lighthouse-sanctum::validation.attributes.user_password'),
             ]);
 
-            throw new GraphQLValidationException($message, 'password', $this->resolveInfo);
+            throw new GraphQLValidationException(
+                $message,
+                $this->translator->get("lighthouse-sanctum::validation.attributes.password"),
+                $this->resolveInfo,
+                $this->translator
+            );
         }
     }
 

@@ -296,7 +296,9 @@ class ResetPasswordTest extends AbstractIntegrationTest
                     message
                 }
             }
-        ')->assertGraphQLErrorMessage('Field ResetPasswordInput.password_confirmation of required type String! was not provided.');
+        ')->assertGraphQLErrorMessage(
+            'Field ResetPasswordInput.password_confirmation of required type String! was not provided.'
+        );
     }
 
     /**

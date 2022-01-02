@@ -34,6 +34,7 @@ class LighthouseSanctumServiceProvider extends ServiceProvider
             return new EmailVerificationService(
                 $container->make(SignatureServiceInterface::class),
                 $config->get('auth.verification.expire', 60),
+                $container->make('translator'),
             );
         });
     }
@@ -42,6 +43,7 @@ class LighthouseSanctumServiceProvider extends ServiceProvider
     {
         $this->publishConfig();
         $this->publishSchema();
+        $this->publishTranslations();
 
         $this->mergeConfig();
     }
@@ -58,6 +60,15 @@ class LighthouseSanctumServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../graphql/sanctum.graphql' => base_path('graphql/sanctum.graphql'),
         ], 'lighthouse-sanctum');
+    }
+    protected function publishTranslations(): void
+    {
+
+        $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'lighthouse-sanctum');
+
+        $this->publishes([
+            __DIR__.'/../../resources/lang' => resource_path('lang/vendor/lighthouse-sanctum'),
+        ], 'lighthouse-sanctum-translations');
     }
 
     protected function mergeConfig(): void
