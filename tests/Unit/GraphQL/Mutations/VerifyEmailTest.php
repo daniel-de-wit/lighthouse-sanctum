@@ -12,6 +12,7 @@ use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Validation\Validator;
@@ -50,11 +51,14 @@ class VerifyEmailTest extends AbstractUnitTest
             ->andReturnFalse()
             ->getMock();
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class);
         $mutation = new VerifyEmail(
             $this->mockAuthManager($userProvider),
             $config,
             Mockery::mock(ValidationFactory::class),
             $verificationService,
+            $translator
         );
 
         $result = $mutation(null, [
@@ -92,11 +96,15 @@ class VerifyEmailTest extends AbstractUnitTest
             ->andReturnTrue()
             ->getMock();
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class);
+
         $mutation = new VerifyEmail(
             $this->mockAuthManager($userProvider),
             $config,
             $this->mockValidator(),
             $verificationService,
+            $translator
         );
 
         $resolveInfo = Mockery::mock(ResolveInfo::class);
@@ -122,11 +130,22 @@ class VerifyEmailTest extends AbstractUnitTest
         static::expectException(RuntimeException::class);
         static::expectExceptionMessage('User provider not found.');
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class)
+            ->shouldReceive('get')
+            ->with(
+                "lighthouse-sanctum::exception.validation_exception",
+                ["path" => "foo.bar"]
+            )
+            ->andReturn('Validation failed for the field [foo.bar].')
+            ->getMock();
+
         $mutation = new VerifyEmail(
             $this->mockAuthManager(null),
             $this->mockConfig(),
             Mockery::mock(ValidationFactory::class),
             Mockery::mock(EmailVerificationServiceInterface::class),
+            $translator
         );
 
         $mutation(null, [
@@ -147,11 +166,22 @@ class VerifyEmailTest extends AbstractUnitTest
 
         $userProvider = $this->mockUserProvider($user);
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class)
+            ->shouldReceive('get')
+            ->with(
+                "lighthouse-sanctum::exception.must_verify_email_not_implemented",
+                ["mustVerifyEmailClass" => "Illuminate\Contracts\Auth\MustVerifyEmail"]
+            )
+            ->andReturn('User must implement "Illuminate\Contracts\Auth\MustVerifyEmail".')
+            ->getMock();
+
         $mutation = new VerifyEmail(
             $this->mockAuthManager($userProvider),
             $this->mockConfig(),
             Mockery::mock(ValidationFactory::class),
             Mockery::mock(EmailVerificationServiceInterface::class),
+            $translator
         );
 
         $mutation(null, [
@@ -177,12 +207,24 @@ class VerifyEmailTest extends AbstractUnitTest
             ->andReturnTrue()
             ->getMock();
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class)
+            ->shouldReceive('get')
+            ->with(
+                "lighthouse-sanctum::exception.validation_exception",
+                ["path" => "foo.bar"]
+            )
+            ->andReturn('Validation failed for the field [foo.bar].')
+            ->getMock();
+
         $mutation = new VerifyEmail(
             $this->mockAuthManager($userProvider),
             $config,
             $this->mockValidator(false),
             Mockery::mock(EmailVerificationServiceInterface::class),
+            $translator
         );
+
 
         $resolveInfo = Mockery::mock(ResolveInfo::class);
         $resolveInfo->path = ['foo', 'bar'];
@@ -219,7 +261,7 @@ class VerifyEmailTest extends AbstractUnitTest
         /** @var Validator|MockInterface $validator */
         $validator = Mockery::mock(Validator::class)
             ->shouldReceive('fails')
-            ->andReturn(! $isValid)
+            ->andReturn(!$isValid)
             ->getMock();
 
         /** @var ValidationFactory|MockInterface $factory */

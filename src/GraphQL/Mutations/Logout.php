@@ -19,10 +19,11 @@ class Logout
     protected AuthFactory $authFactory;
     protected Translator $translator;
 
+
     public function __construct(AuthFactory $authFactory, Translator $translator)
     {
         $this->authFactory = $authFactory;
-        $this->translator  = $translator;
+        $this->translator=$translator;
     }
 
     /**
@@ -36,7 +37,7 @@ class Logout
         $user = $this->getAuthenticatedUser();
 
         if (! $user instanceof HasApiTokens) {
-            throw new HasApiTokensException($user);
+            throw new HasApiTokensException($user, $this->translator);
         }
 
         /** @var PersonalAccessToken $personalAccessToken */
@@ -45,7 +46,7 @@ class Logout
 
         return [
             'status'  => 'TOKEN_REVOKED',
-            'message' => $this->translator->get('Your session has been terminated'),
+            'message' => $this->translator->get("lighthouse-sanctum::message.token_revoked"),
         ];
     }
 

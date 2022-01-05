@@ -222,7 +222,9 @@ class ResendEmailVerificationTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field ResendEmailVerificationInput.email of required type String! was not provided.');
+        ')->assertGraphQLErrorMessage(
+            'Field ResendEmailVerificationInput.email of required type String! was not provided.'
+        );
     }
 
     /**
@@ -238,7 +240,9 @@ class ResendEmailVerificationTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "resendEmailVerification" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage(
+            'Field "resendEmailVerification" argument "input" requires type String!, found 12345.'
+        );
     }
 
     /**
@@ -295,7 +299,9 @@ class ResendEmailVerificationTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "resendEmailVerification" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage(
+            'Field "resendEmailVerification" argument "input" requires type String!, found 12345.'
+        );
     }
 
     /**

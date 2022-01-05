@@ -13,6 +13,7 @@ use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksUserProvider;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Foundation\Auth\User;
 use Laravel\Sanctum\NewAccessToken;
 use Mockery;
@@ -40,11 +41,15 @@ class RegisterTest extends AbstractUnitTest
 
         $userProvider = $this->mockUserProvider($user);
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class);
+
         $mutation = new Register(
             $this->mockAuthManager($userProvider),
             $this->mockConfig(),
             $this->mockHasher(),
             Mockery::mock(EmailVerificationServiceInterface::class),
+            $translator
         );
 
         $result = $mutation(null, [
@@ -79,11 +84,15 @@ class RegisterTest extends AbstractUnitTest
 
         $userProvider = $this->mockUserProvider($user);
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class);
+
         $mutation = new Register(
             $this->mockAuthManager($userProvider),
             $this->mockConfig(),
             $this->mockHasher(),
             Mockery::mock(EmailVerificationServiceInterface::class),
+            $translator
         );
 
         $result = $mutation(null, [
@@ -124,11 +133,15 @@ class RegisterTest extends AbstractUnitTest
             ->with('custom-url')
             ->getMock();
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class);
+
         $mutation = new Register(
             $this->mockAuthManager($userProvider),
             $this->mockConfig(),
             $this->mockHasher(),
             $verificationService,
+            $translator
         );
 
         $result = $mutation(null, [
@@ -155,11 +168,15 @@ class RegisterTest extends AbstractUnitTest
         static::expectException(RuntimeException::class);
         static::expectExceptionMessage('User provider not found.');
 
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class);
+
         $mutation = new Register(
             $this->mockAuthManager(null),
             $this->mockConfig(),
             $this->mockHasher(),
             Mockery::mock(EmailVerificationServiceInterface::class),
+            $translator
         );
 
         $mutation(null, [
@@ -178,15 +195,29 @@ class RegisterTest extends AbstractUnitTest
         $user = $this->mockUser(User::class);
 
         static::expectException(HasApiTokensException::class);
-        static::expectExceptionMessage('"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
+        static::expectExceptionMessage(
+            '"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".'
+        );
 
         $userProvider = $this->mockUserProvider($user);
+
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class)
+            ->shouldReceive('get')
+            ->with(
+                'lighthouse-sanctum::exception.has_api_tokens_exception',
+                ['userClass' => get_class($user), 'apiTokenClass' => 'Laravel\Sanctum\Contracts\HasApiTokens']
+            )
+            ->andReturn(
+                '"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".'
+            )->getMock();
 
         $mutation = new Register(
             $this->mockAuthManager($userProvider),
             $this->mockConfig(),
             $this->mockHasher(),
             Mockery::mock(EmailVerificationServiceInterface::class),
+            $translator
         );
 
         $mutation(null, [

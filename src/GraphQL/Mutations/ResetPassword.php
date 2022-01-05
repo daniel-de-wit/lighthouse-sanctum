@@ -17,17 +17,18 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 class ResetPassword
 {
     protected PasswordBroker $passwordBroker;
-    protected Translator $translator;
     protected ResetPasswordServiceInterface $resetPasswordService;
+    protected Translator $translator;
+
 
     public function __construct(
         PasswordBroker $passwordBroker,
-        Translator $translator,
-        ResetPasswordServiceInterface $resetPasswordService
+        ResetPasswordServiceInterface $resetPasswordService,
+        Translator $translator
     ) {
         $this->passwordBroker       = $passwordBroker;
-        $this->translator           = $translator;
         $this->resetPasswordService = $resetPasswordService;
+        $this->translator           = $translator;
     }
 
     /**
@@ -52,14 +53,15 @@ class ResetPassword
         if ($response === PasswordBroker::PASSWORD_RESET) {
             return [
                 'status'  => 'PASSWORD_RESET',
-                'message' => $this->translator->get($response),
+                'message' => $this->translator->get("lighthouse-sanctum::".$response),
             ];
         }
 
         throw new GraphQLValidationException(
-            $this->translator->get($response),
+            $this->translator->get("lighthouse-sanctum::".$response),
             $this->getInvalidField($response),
             $resolveInfo,
+            $this->translator
         );
     }
 
@@ -67,10 +69,10 @@ class ResetPassword
     {
         switch ($response) {
             case PasswordBroker::INVALID_USER:
-                return 'email';
+                return $this->translator->get("lighthouse-sanctum::passwords.attributes.email");
 
             case PasswordBroker::INVALID_TOKEN:
-                return 'token';
+                return $this->translator->get("lighthouse-sanctum::passwords.attributes.token");
 
             default:
                 return '';

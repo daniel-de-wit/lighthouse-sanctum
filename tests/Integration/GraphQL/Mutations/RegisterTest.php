@@ -376,7 +376,9 @@ class RegisterTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field RegisterInput.password_confirmation of required type String! was not provided.');
+        ')->assertGraphQLErrorMessage(
+            'Field RegisterInput.password_confirmation of required type String! was not provided.'
+        );
     }
 
     /**

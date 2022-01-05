@@ -10,6 +10,7 @@ use DanielDeWit\LighthouseSanctum\Contracts\Services\SignatureServiceInterface;
 use DanielDeWit\LighthouseSanctum\Traits\HasUserModel;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 
@@ -19,11 +20,14 @@ class EmailVerificationService implements EmailVerificationServiceInterface
 
     protected SignatureServiceInterface $signatureService;
     protected int $expiresIn;
+    protected Translator $translator;
 
-    public function __construct(SignatureServiceInterface $signatureService, int $expiresIn)
+
+    public function __construct(SignatureServiceInterface $signatureService, int $expiresIn, Translator $translator)
     {
         $this->signatureService = $signatureService;
         $this->expiresIn        = $expiresIn;
+        $this->translator       = $translator;
     }
 
     public function transformUrl(MustVerifyEmail $user, string $url): string
@@ -88,7 +92,9 @@ class EmailVerificationService implements EmailVerificationServiceInterface
      */
     public function throwAuthenticationException(): void
     {
-        throw new AuthenticationException('The provided input is incorrect.');
+        throw new AuthenticationException(
+            $this->translator->get("lighthouse-sanctum::exception.authentication_incorrect_input")
+        );
     }
 
     /**

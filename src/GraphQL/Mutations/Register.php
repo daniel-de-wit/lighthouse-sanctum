@@ -13,6 +13,7 @@ use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Laravel\Sanctum\Contracts\HasApiTokens;
@@ -25,17 +26,20 @@ class Register
     protected Config $config;
     protected Hasher $hash;
     protected EmailVerificationServiceInterface $emailVerificationService;
+    protected Translator $translator;
 
     public function __construct(
         AuthManager $authManager,
         Config $config,
         Hasher $hash,
-        EmailVerificationServiceInterface $emailVerificationService
+        EmailVerificationServiceInterface $emailVerificationService,
+        Translator $translator
     ) {
         $this->authManager              = $authManager;
         $this->config                   = $config;
         $this->hash                     = $hash;
         $this->emailVerificationService = $emailVerificationService;
+        $this->translator               = $translator;
     }
 
     /**
@@ -68,7 +72,7 @@ class Register
         }
 
         if (! $user instanceof HasApiTokens) {
-            throw new HasApiTokensException($user);
+            throw new HasApiTokensException($user, $this->translator);
         }
 
         return [

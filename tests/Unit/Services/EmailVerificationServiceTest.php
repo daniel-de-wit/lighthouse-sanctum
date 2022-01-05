@@ -10,6 +10,7 @@ use DanielDeWit\LighthouseSanctum\Services\EmailVerificationService;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Mockery;
 use Mockery\MockInterface;
@@ -29,7 +30,17 @@ class EmailVerificationServiceTest extends AbstractUnitTest
         parent::setUp();
 
         $this->signatureService = Mockery::mock(SignatureServiceInterface::class);
-        $this->service          = new EmailVerificationService($this->signatureService, 60);
+
+
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class)
+            ->shouldReceive('get')
+            ->with('lighthouse-sanctum::exception.authentication_incorrect_input')
+            ->andReturn('The provided input is incorrect.')->getMock();
+
+
+
+        $this->service = new EmailVerificationService($this->signatureService, 60, $translator);
     }
 
     /**

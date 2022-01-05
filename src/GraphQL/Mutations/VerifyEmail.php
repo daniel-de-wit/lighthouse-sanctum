@@ -11,6 +11,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Nuwave\Lighthouse\Exceptions\ValidationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -24,17 +25,21 @@ class VerifyEmail
     protected Config $config;
     protected ValidationFactory $validationFactory;
     protected EmailVerificationServiceInterface $emailVerificationService;
+    protected Translator $translator;
+
 
     public function __construct(
         AuthManager $authManager,
         Config $config,
         ValidationFactory $validationFactory,
-        EmailVerificationServiceInterface $emailVerificationService
+        EmailVerificationServiceInterface $emailVerificationService,
+        Translator $translator
     ) {
         $this->authManager              = $authManager;
         $this->config                   = $config;
         $this->validationFactory        = $validationFactory;
         $this->emailVerificationService = $emailVerificationService;
+        $this->translator               = $translator;
     }
 
     /**
@@ -56,7 +61,10 @@ class VerifyEmail
         }
 
         if (! $user instanceof MustVerifyEmail) {
-            throw new RuntimeException('User must implement "' . MustVerifyEmail::class . '".');
+            throw new RuntimeException($this->translator->get(
+                "lighthouse-sanctum::exception.must_verify_email_not_implemented",
+                ["mustVerifyEmailClass"=>MustVerifyEmail::class]
+            ));
         }
 
         if ($this->config->get('lighthouse-sanctum.use_signed_email_verification_url') === true) {
@@ -92,7 +100,10 @@ class VerifyEmail
         ]);
 
         if ($validator->fails()) {
-            throw new ValidationException("Validation failed for the field [$path].", $validator);
+            throw new ValidationException($this->translator->get(
+                "lighthouse-sanctum::exception.validation_exception",
+                ["path"=>$path]
+            ), $validator);
         }
     }
 

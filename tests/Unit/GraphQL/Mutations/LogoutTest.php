@@ -39,7 +39,7 @@ class LogoutTest extends AbstractUnitTest
         /** @var Translator|MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
-            ->with('Your session has been terminated')
+            ->with('lighthouse-sanctum::message.token_revoked')
             ->andReturn('Translated string!')
             ->getMock();
 
@@ -74,9 +74,23 @@ class LogoutTest extends AbstractUnitTest
         $user = Mockery::mock(User::class);
 
         static::expectException(HasApiTokensException::class);
-        static::expectExceptionMessage('"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
+        static::expectExceptionMessage(
+            '"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".'
+        );
 
-        $mutation = new Logout($this->mockAuthFactory($user), Mockery::mock(Translator::class));
+        /** @var Translator|MockInterface $translator */
+        $translator = Mockery::mock(Translator::class)
+            ->shouldReceive('get')
+            ->with(
+                'lighthouse-sanctum::exception.has_api_tokens_exception',
+                ['userClass' => get_class($user), 'apiTokenClass' => 'Laravel\Sanctum\Contracts\HasApiTokens']
+            )
+            ->andReturn(
+                '"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".'
+            )->getMock();
+
+
+        $mutation = new Logout($this->mockAuthFactory($user), $translator);
 
         $mutation(null, []);
     }

@@ -58,7 +58,10 @@ class EmailVerificationServiceTest extends AbstractIntegrationTest
             'email' => 'user@example.com',
         ]);
 
-        $url = $this->service->transformUrl($user, 'https://mysite.com/verify-email/__ID__/__HASH__/__EXPIRES__/__SIGNATURE__');
+        $url = $this->service->transformUrl(
+            $user,
+            'https://mysite.com/verify-email/__ID__/__HASH__/__EXPIRES__/__SIGNATURE__'
+        );
 
         $signature = hash_hmac('sha256', serialize([
             'id'      => 12345,
@@ -66,7 +69,10 @@ class EmailVerificationServiceTest extends AbstractIntegrationTest
             'expires' => 1609480800,
         ]), $this->app['config']->get('app.key'));
 
-        static::assertSame('https://mysite.com/verify-email/12345/' . sha1('user@example.com') . '/1609480800/' . $signature, $url);
+        static::assertSame(
+            'https://mysite.com/verify-email/12345/' . sha1('user@example.com') . '/1609480800/' . $signature,
+            $url
+        );
     }
 
     /**
@@ -110,7 +116,10 @@ class EmailVerificationServiceTest extends AbstractIntegrationTest
             'expires' => 1609480800,
         ]), $this->app['config']->get('app.key'));
 
-        static::assertSame('https://mysite.com/verify-email/12345/' . sha1('user@example.com') . '/1609480800/' . $signature, $url);
+        static::assertSame(
+            'https://mysite.com/verify-email/12345/' . sha1('user@example.com') . '/1609480800/' . $signature,
+            $url
+        );
     }
 
     /**
