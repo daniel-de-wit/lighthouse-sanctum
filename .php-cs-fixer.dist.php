@@ -7,7 +7,7 @@ $finder = PhpCsFixer\Finder::create()
 
 $config = require __DIR__ . '/.php_cs.common.php';
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setFinder($finder)
     ->setRules($config)
     ->setRiskyAllowed(true)
