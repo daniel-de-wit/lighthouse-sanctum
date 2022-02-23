@@ -28,22 +28,28 @@ class ForgotPassword
     /**
      * @param mixed $_
      * @param array<string, mixed> $args
-     * @return array<string, string|array>
+     * @return array<string, string>
      * @throws Exception
      */
     public function __invoke($_, array $args): array
     {
         if (isset($args['reset_password_url'])) {
-            $this->resetPasswordService->setResetPasswordUrl($args['reset_password_url']['url']);
+            /** @var array<string, string> $resetPasswordUrl */
+            $resetPasswordUrl = $args['reset_password_url'];
+
+            $this->resetPasswordService->setResetPasswordUrl($resetPasswordUrl['url']);
         }
 
         $this->passwordBroker->sendResetLink([
             'email' => $args['email'],
         ]);
 
+        /** @var string $message */
+        $message = $this->translator->get('An email has been sent');
+
         return [
             'status'  => 'EMAIL_SENT',
-            'message' => $this->translator->get('An email has been sent'),
+            'message' => $message,
         ];
     }
 }

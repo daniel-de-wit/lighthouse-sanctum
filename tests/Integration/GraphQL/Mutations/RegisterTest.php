@@ -95,6 +95,7 @@ class RegisterTest extends AbstractIntegrationTest
         Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user) {
             $url = call_user_func($notification::$createUrlCallback, $user);
 
+            /** @var int|string $id */
             $id   = $user->getKey();
             $hash = sha1('foo@bar.com');
 
@@ -152,13 +153,14 @@ class RegisterTest extends AbstractIntegrationTest
         Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user) {
             $url = call_user_func($notification::$createUrlCallback, $user);
 
+            /** @var int|string $id */
             $id        = $user->getKey();
             $hash      = sha1('foo@bar.com');
             $signature = hash_hmac('sha256', serialize([
                 'id'      => $id,
                 'hash'    => $hash,
                 'expires' => 1609480800,
-            ]), $this->app['config']->get('app.key'));
+            ]), $this->getAppKey());
 
             return $url === "https://mysite.com/verify-email/{$id}/{$hash}/1609480800/{$signature}";
         });

@@ -67,7 +67,7 @@ class VerifyEmailTest extends AbstractIntegrationTest
             'id'      => 123,
             'hash'    => sha1('john.doe@gmail.com'),
             'expires' => 1609480800,
-        ]), $this->app['config']->get('app.key'));
+        ]), $this->getAppKey());
 
         $this->graphQL(/** @lang GraphQL */ '
             mutation {
@@ -154,7 +154,7 @@ class VerifyEmailTest extends AbstractIntegrationTest
             'id'      => 123,
             'hash'    => sha1('john.doe@gmail.com'),
             'expires' => 1609480800,
-        ]), $this->app['config']->get('app.key'));
+        ]), $this->getAppKey());
 
         $this->graphQL(/** @lang GraphQL */ '
             mutation {
@@ -190,7 +190,7 @@ class VerifyEmailTest extends AbstractIntegrationTest
             'id'      => 123,
             'hash'    => sha1('john.doe@gmail.com'),
             'expires' => 1609476200,
-        ]), $this->app['config']->get('app.key'));
+        ]), $this->getAppKey());
 
         $this->graphQL(/** @lang GraphQL */ '
             mutation {

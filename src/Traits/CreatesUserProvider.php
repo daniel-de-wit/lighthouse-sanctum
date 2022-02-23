@@ -17,6 +17,7 @@ trait CreatesUserProvider
 
     protected function createUserProvider(): UserProvider
     {
+        /** @var string $provider */
         $provider = $this->getConfig()->get('lighthouse-sanctum.provider');
 
         $userProvider = $this->getAuthManager()->createUserProvider($provider);

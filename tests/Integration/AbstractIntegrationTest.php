@@ -54,4 +54,12 @@ abstract class AbstractIntegrationTest extends TestCase
     {
         return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . $path;
     }
+
+    protected function getAppKey(): string
+    {
+        /** @var string $appKey */
+        $appKey = $this->app['config']->get('app.key');
+
+        return $appKey;
+    }
 }

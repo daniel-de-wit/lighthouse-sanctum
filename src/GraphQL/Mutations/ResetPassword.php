@@ -35,7 +35,7 @@ class ResetPassword
      * @param array<string, mixed> $args
      * @param GraphQLContext $context
      * @param ResolveInfo $resolveInfo
-     * @return array<string, string|array>
+     * @return array<string, string>
      * @throws Exception
      */
     public function __invoke($_, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
@@ -45,19 +45,23 @@ class ResetPassword
             'password_confirmation',
         ]);
 
+        /** @var string $response */
         $response = $this->passwordBroker->reset($credentials, function (Authenticatable $user, string $password) {
             $this->resetPasswordService->resetPassword($user, $password);
         });
 
+        /** @var string $message */
+        $message = $this->translator->get($response);
+
         if ($response === PasswordBroker::PASSWORD_RESET) {
             return [
                 'status'  => 'PASSWORD_RESET',
-                'message' => $this->translator->get($response),
+                'message' => $message,
             ];
         }
 
         throw new GraphQLValidationException(
-            $this->translator->get($response),
+            $message,
             $this->getInvalidField($response),
             $resolveInfo,
         );
