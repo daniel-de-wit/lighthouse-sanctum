@@ -31,8 +31,7 @@
         "orchestra/testbench-core": "^v6.23.1",
         "phpstan/phpstan-mockery": "^0.12.13",
         "phpstan/phpstan-phpunit": "^0.12.18",
-        "phpunit/phpunit": "^9.5",
-        "thecodingmachine/phpstan-safe-rule": "^1.0"
+        "phpunit/phpunit": "^9.5"
     },
     "config": {
         "sort-packages": true
