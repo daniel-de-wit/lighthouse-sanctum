@@ -10,6 +10,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Notifications\NotificationServiceProvider;
 use Laravel\Sanctum\SanctumServiceProvider;
+use Nuwave\Lighthouse\Auth\AuthServiceProvider;
 use Nuwave\Lighthouse\LighthouseServiceProvider;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
 use Nuwave\Lighthouse\Validation\ValidationServiceProvider;
@@ -27,6 +28,7 @@ abstract class AbstractIntegrationTest extends TestCase
     protected function getPackageProviders($app): array
     {
         return [
+            AuthServiceProvider::class,
             LighthouseSanctumServiceProvider::class,
             LighthouseServiceProvider::class,
             NotificationServiceProvider::class,
