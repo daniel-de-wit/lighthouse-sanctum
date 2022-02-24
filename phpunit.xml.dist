@@ -11,6 +11,7 @@
          failOnRisky="true"
          failOnWarning="true"
          verbose="true"
+         convertDeprecationsToExceptions="false"
 >
     <testsuites>
         <testsuite name="Integration">
