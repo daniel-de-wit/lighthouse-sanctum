@@ -1,15 +1,14 @@
 {
     "name": "daniel-de-wit/lighthouse-sanctum",
-    "type": "library",
     "description": "Laravel Sanctum support for Laravel Lighthouse.",
+    "license": "MIT",
+    "type": "library",
     "keywords": [
         "daniel-de-wit",
         "laravel-sanctum",
         "lighthouse",
         "lighthouse-sanctum"
     ],
-    "homepage": "https://github.com/daniel-de-wit/lighthouse-sanctum",
-    "license": "MIT",
     "authors": [
         {
             "name": "Daniel de Wit",
@@ -17,6 +16,7 @@
             "role": "Developer"
         }
     ],
+    "homepage": "https://github.com/daniel-de-wit/lighthouse-sanctum",
     "require": {
         "php": "^8.0.2",
         "laravel/framework": "^9.0",
@@ -35,16 +35,6 @@
         "phpunit/phpunit": "^9.5",
         "thecodingmachine/safe": "^2.0"
     },
-    "config": {
-        "sort-packages": true
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "DanielDeWit\\LighthouseSanctum\\Providers\\LighthouseSanctumServiceProvider"
-            ]
-        }
-    },
     "autoload": {
         "psr-4": {
             "DanielDeWit\\LighthouseSanctum\\": "src"
@@ -53,6 +43,16 @@
     "autoload-dev": {
         "psr-4": {
             "DanielDeWit\\LighthouseSanctum\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DanielDeWit\\LighthouseSanctum\\Providers\\LighthouseSanctumServiceProvider"
+            ]
         }
     },
     "scripts": {
