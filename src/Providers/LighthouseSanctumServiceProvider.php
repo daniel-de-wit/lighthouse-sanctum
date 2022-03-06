@@ -24,17 +24,23 @@ class LighthouseSanctumServiceProvider extends ServiceProvider
             /** @var Config $config */
             $config = $container->make(Config::class);
 
-            return new SignatureService($config->get('app.key'));
+            /** @var string $appKey */
+            $appKey = $config->get('app.key');
+
+            return new SignatureService($appKey);
         });
 
         $this->app->singleton(EmailVerificationServiceInterface::class, function (Container $container) {
             /** @var Config $config */
             $config = $container->make(Config::class);
 
-            return new EmailVerificationService(
-                $container->make(SignatureServiceInterface::class),
-                $config->get('auth.verification.expire', 60),
-            );
+            /** @var SignatureServiceInterface $signatureService */
+            $signatureService = $container->make(SignatureServiceInterface::class);
+
+            /** @var int $expiresIn */
+            $expiresIn = $config->get('auth.verification.expire', 60);
+
+            return new EmailVerificationService($signatureService, $expiresIn);
         });
     }
 

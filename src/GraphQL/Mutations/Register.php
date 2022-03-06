@@ -56,7 +56,10 @@ class Register
 
         if ($user instanceof MustVerifyEmail) {
             if (isset($args['verification_url'])) {
-                $this->emailVerificationService->setVerificationUrl($args['verification_url']['url']);
+                /** @var array<string, string> $verificationUrl */
+                $verificationUrl = $args['verification_url'];
+
+                $this->emailVerificationService->setVerificationUrl($verificationUrl['url']);
             }
 
             $user->sendEmailVerificationNotification();

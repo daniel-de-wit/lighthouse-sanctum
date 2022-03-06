@@ -44,6 +44,9 @@ class UserHasApiTokens extends User implements HasApiTokensContract
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * @return UserHasApiTokensFactory
+     */
     protected static function newFactory(): Factory
     {
         return new UserHasApiTokensFactory();

@@ -1,15 +1,14 @@
 {
     "name": "daniel-de-wit/lighthouse-sanctum",
-    "type": "library",
     "description": "Laravel Sanctum support for Laravel Lighthouse.",
+    "license": "MIT",
+    "type": "library",
     "keywords": [
         "daniel-de-wit",
         "laravel-sanctum",
         "lighthouse",
         "lighthouse-sanctum"
     ],
-    "homepage": "https://github.com/daniel-de-wit/lighthouse-sanctum",
-    "license": "MIT",
     "authors": [
         {
             "name": "Daniel de Wit",
@@ -17,32 +16,24 @@
             "role": "Developer"
         }
     ],
+    "homepage": "https://github.com/daniel-de-wit/lighthouse-sanctum",
     "require": {
-        "php": "^7.4 || ^8.0",
-        "laravel/framework": "^8.36.2",
-        "laravel/sanctum": "^2.10",
+        "php": "^8.0.2",
+        "laravel/framework": "^9.0",
+        "laravel/sanctum": "^2.14",
         "nuwave/lighthouse": "^5.5"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.18",
-        "mockery/mockery": "^1.3.3",
-        "nunomaduro/larastan": "^0.7.2",
-        "orchestra/testbench": "^6.5",
-        "orchestra/testbench-core": "^v6.23.1",
-        "phpstan/phpstan-mockery": "^0.12.13",
-        "phpstan/phpstan-phpunit": "^0.12.18",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "mockery/mockery": "^1.5",
+        "nunomaduro/larastan": "^1.0 || ^2.0",
+        "orchestra/testbench": "^6.0 || ^7.0",
+        "orchestra/testbench-core": "^6.26 || ^7.0",
+        "phpoption/phpoption": "^1.8",
+        "phpstan/phpstan-mockery": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
         "phpunit/phpunit": "^9.5",
-        "thecodingmachine/phpstan-safe-rule": "^1.0"
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "DanielDeWit\\LighthouseSanctum\\Providers\\LighthouseSanctumServiceProvider"
-            ]
-        }
+        "thecodingmachine/safe": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -54,11 +45,21 @@
             "DanielDeWit\\LighthouseSanctum\\Tests\\": "tests"
         }
     },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DanielDeWit\\LighthouseSanctum\\Providers\\LighthouseSanctumServiceProvider"
+            ]
+        }
+    },
     "scripts": {
         "analyze": "vendor/phpstan/phpstan/phpstan analyse",
         "check-style": [
-            "php-cs-fixer fix --diff --diff-format=udiff --dry-run",
-            "php-cs-fixer fix --diff --diff-format=udiff --dry-run --config=.php_cs.tests.php"
+            "php-cs-fixer fix --diff --dry-run",
+            "php-cs-fixer fix --diff --dry-run --config=.php_cs.tests.php"
         ],
         "coverage": "vendor/bin/phpunit",
         "fix-style": [

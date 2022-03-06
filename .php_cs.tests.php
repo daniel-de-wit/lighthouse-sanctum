@@ -15,7 +15,7 @@ $config = array_merge(
     ]
 );
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setFinder($finder)
     ->setRules($config)
     ->setRiskyAllowed(true)

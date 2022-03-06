@@ -105,7 +105,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTest
                 'id'      => 123,
                 'hash'    => $hash,
                 'expires' => 1609480800,
-            ]), $this->app['config']->get('app.key'));
+            ]), $this->getAppKey());
 
             return $url === "https://mysite.com/verify-email/123/{$hash}/1609480800/{$signature}";
         });

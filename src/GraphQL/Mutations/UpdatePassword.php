@@ -34,7 +34,7 @@ class UpdatePassword
 
     /**
      * @param mixed $_
-     * @param array<string, mixed> $args
+     * @param array<string, string> $args
      * @param GraphQLContext $context
      * @param ResolveInfo $resolveInfo
      * @return array<string, string>
@@ -66,6 +66,7 @@ class UpdatePassword
     protected function currentPasswordMustBeTheSame(Authenticatable $user, string $currentPassword): void
     {
         if (! $this->hasher->check($currentPassword, $user->getAuthPassword())) {
+            /** @var string $message */
             $message = $this->translator->get('validation.same', [
                 'attribute' => 'current_password',
                 'other'     => 'user password',
@@ -83,6 +84,7 @@ class UpdatePassword
     protected function newPasswordMustBeDifferent(Authenticatable $user, string $newPassword): void
     {
         if ($this->hasher->check($newPassword, $user->getAuthPassword())) {
+            /** @var string $message */
             $message = $this->translator->get('validation.different', [
                 'attribute' => 'password',
                 'other'     => 'user password',

@@ -20,10 +20,10 @@ class EmailVerificationServiceTest extends AbstractIntegrationTest
     {
         parent::setUp();
 
-        $this->service = new EmailVerificationService(
-            $this->app->make(SignatureServiceInterface::class),
-            60,
-        );
+        /** @var SignatureServiceInterface $signatureService */
+        $signatureService = $this->app->make(SignatureServiceInterface::class);
+
+        $this->service = new EmailVerificationService($signatureService, 60);
     }
 
     /**
@@ -64,7 +64,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTest
             'id'      => 12345,
             'hash'    => sha1('user@example.com'),
             'expires' => 1609480800,
-        ]), $this->app['config']->get('app.key'));
+        ]), $this->getAppKey());
 
         static::assertSame('https://mysite.com/verify-email/12345/' . sha1('user@example.com') . '/1609480800/' . $signature, $url);
     }
@@ -108,7 +108,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTest
             'id'      => 12345,
             'hash'    => sha1('user@example.com'),
             'expires' => 1609480800,
-        ]), $this->app['config']->get('app.key'));
+        ]), $this->getAppKey());
 
         static::assertSame('https://mysite.com/verify-email/12345/' . sha1('user@example.com') . '/1609480800/' . $signature, $url);
     }

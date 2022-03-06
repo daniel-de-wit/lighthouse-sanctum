@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserMustVerifyEmail extends UserHasApiTokens implements MustVerifyEmail
 {
+    /**
+     * @return UserMustVerifyEmailFactory
+     */
     protected static function newFactory(): Factory
     {
         return new UserMustVerifyEmailFactory();

@@ -28,7 +28,7 @@ class Logout
     /**
      * @param mixed $_
      * @param array<string, mixed> $args
-     * @return array<string, string|array>
+     * @return array<string, string>
      * @throws Exception
      */
     public function __invoke($_, array $args): array
@@ -43,9 +43,12 @@ class Logout
         $personalAccessToken = $user->currentAccessToken();
         $personalAccessToken->delete();
 
+        /** @var string $message */
+        $message = $this->translator->get('Your session has been terminated');
+
         return [
             'status'  => 'TOKEN_REVOKED',
-            'message' => $this->translator->get('Your session has been terminated'),
+            'message' => $message,
         ];
     }
 

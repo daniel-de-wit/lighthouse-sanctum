@@ -24,10 +24,10 @@ class ResetPasswordServiceTest extends AbstractIntegrationTest
 
         $dispatcher = Event::fake([PasswordReset::class]);
 
-        $this->service = new ResetPasswordService(
-            $this->app->make(Hasher::class),
-            $dispatcher,
-        );
+        /** @var Hasher $hasher */
+        $hasher = $this->app->make(Hasher::class);
+
+        $this->service = new ResetPasswordService($hasher, $dispatcher);
     }
 
     /**
