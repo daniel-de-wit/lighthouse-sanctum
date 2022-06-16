@@ -11,6 +11,7 @@ use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksUserProvider;
 use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
 use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Foundation\Auth\User;
 use Laravel\Sanctum\NewAccessToken;
 use Mockery;
@@ -54,6 +55,64 @@ class LoginTest extends AbstractUnitTest
 
         $result = $mutation(null, [
             'email'    => 'foo@bar.com',
+            'password' => 'supersecret',
+        ]);
+
+        static::assertIsArray($result);
+        static::assertCount(1, $result);
+        static::assertSame('1234567890', $result['token']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_logs_a_user_in_using_custom_identification(): void
+    {
+        /** @var Config|MockInterface $config */
+        $config = Mockery::mock(Config::class)
+            ->shouldReceive('get')
+            ->with('lighthouse-sanctum.provider')
+            ->andReturn('sanctum-provider')
+            ->getMock()
+            ->shouldReceive('get')
+            ->with('lighthouse-sanctum.identification.user_identifier_field_name', 'email')
+            ->andReturn('custom_key')
+            ->getMock();
+
+        $token = Mockery::mock(NewAccessToken::class);
+        $token->plainTextToken = '1234567890';
+
+        /** @var UserHasApiTokens|MockInterface $user */
+        $user = Mockery::mock(UserHasApiTokens::class)
+            ->shouldReceive('createToken')
+            ->with('default')
+            ->andReturn($token)
+            ->getMock();
+
+        /** @var UserProvider|MockInterface $userProvider */
+        $userProvider = Mockery::mock(UserProvider::class)
+            ->shouldReceive('retrieveByCredentials')
+            ->with([
+                'custom_key'  => 'foo@bar.com',
+                'password' => 'supersecret',
+            ])
+            ->andReturn($user)
+            ->getMock()
+            ->shouldReceive('validateCredentials')
+            ->with($user, [
+                'custom_key'  => 'foo@bar.com',
+                'password' => 'supersecret',
+            ])
+            ->andReturnTrue()
+            ->getMock();
+
+        $mutation = new Login(
+            $this->mockAuthManager($userProvider),
+            $config,
+        );
+
+        $result = $mutation(null, [
+            'custom_key'  => 'foo@bar.com',
             'password' => 'supersecret',
         ]);
 

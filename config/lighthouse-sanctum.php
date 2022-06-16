@@ -26,4 +26,15 @@ return [
     |
     */
     'use_signed_email_verification_url' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Identification
+    |--------------------------------------------------------------------------
+    |
+    | Configure the credential fields by which the user will be identified.
+    | Default: email
+    */
+
+    'user_identifier_field_name' => 'email',
 ];

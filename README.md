@@ -18,6 +18,7 @@ Add [Laravel Sanctum](https://github.com/laravel/sanctum) support to [Lighthouse
     - [Email Verification](#email-verification)
     - [Forgot Password](#forgot-password)
     - [Reset Password](#reset-password)
+- [Custom Identification](#custom-identification)
 
 ## Requirements
 
@@ -133,6 +134,8 @@ Apply the Authorization header on subsequent calls using the token
 ```json
   "Authorization": "Bearer 1|lJo1cMhrW9tIUuGwlV1EPjKnvfZKzvgpGgplbwX9"
 ```
+
+(Using something other than email? See [Custom Identification](#custom-identification))
 
 ### Logout
 
@@ -294,6 +297,33 @@ mutation {
     }
 }
 ```
+
+### Custom Identification
+
+You can customize which fields are used for authenticating users.
+
+For example, using `username` instead of the default `email`.
+```php
+/*
+|--------------------------------------------------------------------------
+| Identification
+|--------------------------------------------------------------------------
+|
+| Configure the credential fields by which the user will be identified.
+| Default: email
+*/
+
+'user_identifier_field_name' => 'username',
+```
+
+Update the GraphQL schema accordingly
+
+```graphql
+input LoginInput {
+    username: String! @rules(apply: ["required"])
+}
+```
+
 
 ## Testing
 
