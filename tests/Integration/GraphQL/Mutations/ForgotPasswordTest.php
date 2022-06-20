@@ -46,6 +46,7 @@ class ForgotPasswordTest extends AbstractIntegrationTest
 
         Notification::assertSentTo($user, function (ResetPassword $notification) use ($user) {
             static::assertIsCallable($notification::$createUrlCallback);
+
             $url = call_user_func($notification::$createUrlCallback, $user, $notification->token);
 
             return $url === "https://my-front-end.com/reset-password?email=john.doe@gmail.com&token={$notification->token}";
