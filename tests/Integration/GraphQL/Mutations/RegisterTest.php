@@ -93,6 +93,8 @@ class RegisterTest extends AbstractIntegrationTest
         $user = UserMustVerifyEmail::first();
 
         Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user) {
+            static::assertIsCallable($notification::$createUrlCallback);
+
             $url = call_user_func($notification::$createUrlCallback, $user);
 
             /** @var int|string $id */
@@ -151,6 +153,8 @@ class RegisterTest extends AbstractIntegrationTest
         $user = UserMustVerifyEmail::first();
 
         Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user) {
+            static::assertIsCallable($notification::$createUrlCallback);
+
             $url = call_user_func($notification::$createUrlCallback, $user);
 
             /** @var int|string $id */
