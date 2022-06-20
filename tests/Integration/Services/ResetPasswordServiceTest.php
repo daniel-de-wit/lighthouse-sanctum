@@ -61,6 +61,7 @@ class ResetPasswordServiceTest extends AbstractIntegrationTest
 
         $this->service->setResetPasswordUrl('https://mysite.com/reset-password/__EMAIL__/__TOKEN__');
 
+        /** @phpstan-ignore-next-line */
         $url = call_user_func(ResetPassword::$createUrlCallback, $user, $token);
 
         static::assertSame('https://mysite.com/reset-password/user@example.com/token123', $url);

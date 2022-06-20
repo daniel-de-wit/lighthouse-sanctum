@@ -17,10 +17,13 @@ class UserHasApiTokens extends User implements HasApiTokensContract
     use HasFactory;
     use Notifiable;
 
+    /**
+     * @var string
+     */
     protected $table = 'users';
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
@@ -30,7 +33,7 @@ class UserHasApiTokens extends User implements HasApiTokensContract
     ];
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',

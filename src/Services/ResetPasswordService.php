@@ -37,7 +37,8 @@ class ResetPasswordService implements ResetPasswordServiceInterface
 
     public function setResetPasswordUrl(string $url): void
     {
-        ResetPasswordNotification::createUrlUsing(function (CanResetPassword $notifiable, string $token) use ($url) {
+        /** @phpstan-ignore-next-line */
+        ResetPasswordNotification::createUrlUsing(function (CanResetPassword $notifiable, string $token) use ($url): string {
             return $this->transformUrl($notifiable, $token, $url);
         });
     }

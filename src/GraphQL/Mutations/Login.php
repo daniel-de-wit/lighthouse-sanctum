@@ -36,8 +36,11 @@ class Login
     {
         $userProvider = $this->createUserProvider();
 
+        $identificationKey = $this->getConfig()
+            ->get('lighthouse-sanctum.identification.user_identifier_field_name', 'email');
+
         $user = $userProvider->retrieveByCredentials([
-            'email'    => $args['email'],
+            $identificationKey => $args[$identificationKey],
             'password' => $args['password'],
         ]);
 
