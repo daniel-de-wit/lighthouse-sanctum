@@ -40,7 +40,7 @@ trait MocksUserProvider
             ->andReturn('sanctum-provider')
             ->getMock()
             ->shouldReceive('get')
-            ->with('lighthouse-sanctum.identification.user_identifier_field_name', 'email')
+            ->with('lighthouse-sanctum.user_identifier_field_name', 'email')
             ->andReturn('email')
             ->getMock()
         ;
