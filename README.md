@@ -103,6 +103,24 @@ Make sure the following middleware is enabled for Lighthouse:
     ],
 ```
 
+Configure Lighthouse to use the Sanctum guard:
+
+```php
+// File: ./config/lighthouse.php
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Guard
+    |--------------------------------------------------------------------------
+    |
+    | The guard to use for authenticating GraphQL requests, if needed.
+    | This setting is used whenever Lighthouse looks for an authenticated user, for example in directives
+    | such as `@guard` and when applying the `AttemptAuthentication` middleware.
+    |
+    */
+
+    'guard' => 'sanctum',
+```
+
 ## Usage
 
 - [Login](#login)
