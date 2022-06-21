@@ -75,7 +75,7 @@ class LoginTest extends AbstractUnitTest
             ->andReturn('sanctum-provider')
             ->getMock()
             ->shouldReceive('get')
-            ->with('lighthouse-sanctum.identification.user_identifier_field_name', 'email')
+            ->with('lighthouse-sanctum.user_identifier_field_name', 'email')
             ->andReturn('custom_key')
             ->getMock();
 
