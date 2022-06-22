@@ -5,9 +5,12 @@ includes:
     - vendor/phpstan/phpstan-phpunit/rules.neon
 
 parameters:
-  level: 8
+  level: max
   paths:
     - src
     - tests
-  ignoreErrors:
-    - '#Call to an undefined method Illuminate\\Testing\\TestResponse::assertGraphQLErrorMessage\(\).#'
+  stubFiles:
+    - vendor/nuwave/lighthouse/_ide_helper.php
+    - stubs/Illuminate/Auth/Notifications/ResetPassword.stub
+    - stubs/Illuminate/Auth/Notifications/Notification.stub
+    - stubs/Illuminate/Contracts/Auth/CanResetPassword.stub
