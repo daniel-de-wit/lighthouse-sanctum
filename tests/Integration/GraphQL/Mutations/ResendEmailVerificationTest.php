@@ -50,6 +50,8 @@ class ResendEmailVerificationTest extends AbstractIntegrationTest
         static::assertSame('EMAIL_SENT', $response->json('data.resendEmailVerification.status'));
 
         Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user) {
+            static::assertIsCallable($notification::$createUrlCallback);
+
             $url = call_user_func($notification::$createUrlCallback, $user);
 
             $hash = sha1('foo@bar.com');
@@ -98,6 +100,8 @@ class ResendEmailVerificationTest extends AbstractIntegrationTest
         static::assertSame('EMAIL_SENT', $response->json('data.resendEmailVerification.status'));
 
         Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user) {
+            static::assertIsCallable($notification::$createUrlCallback);
+
             $url = call_user_func($notification::$createUrlCallback, $user);
 
             $hash      = sha1('foo@bar.com');

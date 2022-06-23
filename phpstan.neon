@@ -9,8 +9,8 @@ parameters:
   paths:
     - src
     - tests
-  ignoreErrors:
-    -
-      message: '#Parameter \#1 \$(function|callback) of function call_user_func expects callable\(\): mixed, Closure\|null given\.#'
-      path: tests
-    - '#Call to an undefined method Illuminate\\Testing\\TestResponse::assertGraphQLErrorMessage\(\).#'
+  stubFiles:
+    - vendor/nuwave/lighthouse/_ide_helper.php
+    - stubs/Illuminate/Auth/Notifications/ResetPassword.stub
+    - stubs/Illuminate/Auth/Notifications/Notification.stub
+    - stubs/Illuminate/Contracts/Auth/CanResetPassword.stub

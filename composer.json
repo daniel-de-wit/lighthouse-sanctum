@@ -21,7 +21,7 @@
         "php": "^8.0.2",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
-        "nuwave/lighthouse": "^5.5"
+        "nuwave/lighthouse": "^5.55.1"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
@@ -56,6 +56,9 @@
         }
     },
     "scripts": {
+        "post-autoload-dump": [
+            "@php ./vendor/bin/testbench package:discover --ansi"
+        ],
         "analyze": "vendor/phpstan/phpstan/phpstan analyse",
         "check-style": [
             "php-cs-fixer fix --diff --dry-run",

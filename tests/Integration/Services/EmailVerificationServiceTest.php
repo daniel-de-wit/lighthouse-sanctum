@@ -82,6 +82,8 @@ class EmailVerificationServiceTest extends AbstractIntegrationTest
 
         $this->service->setVerificationUrl('https://mysite.com/verify-email/__ID__/__HASH__');
 
+        static::assertIsCallable(VerifyEmail::$createUrlCallback);
+
         $url = call_user_func(VerifyEmail::$createUrlCallback, $user);
 
         static::assertSame('https://mysite.com/verify-email/12345/' . sha1('user@example.com'), $url);
@@ -101,6 +103,8 @@ class EmailVerificationServiceTest extends AbstractIntegrationTest
         ]);
 
         $this->service->setVerificationUrl('https://mysite.com/verify-email/__ID__/__HASH__/__EXPIRES__/__SIGNATURE__');
+
+        static::assertIsCallable(VerifyEmail::$createUrlCallback);
 
         $url = call_user_func(VerifyEmail::$createUrlCallback, $user);
 
