@@ -11,7 +11,7 @@
 /.editorconfig          export-ignore
 /stubs                  export-ignore
 /phpstan.neon           export-ignore
-/.php_cs_tests.php      export-ignore
+/.php_cs.tests.php      export-ignore
 /.php_cs.common.php     export-ignore
 /.php-cs-fixer.dist.php export-ignore
 /.coveralls.yml         export-ignore
