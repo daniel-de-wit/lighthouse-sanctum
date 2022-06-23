@@ -6,11 +6,15 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
+use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokensIdentifiedByUsername;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Support\Facades\Hash;
+use Nuwave\Lighthouse\Testing\UsesTestSchema;
 
 class LoginTest extends AbstractIntegrationTest
 {
+    use UsesTestSchema;
+
     /**
      * @test
      */
@@ -25,6 +29,59 @@ class LoginTest extends AbstractIntegrationTest
             mutation {
                 login(input: {
                     email: "foo@bar.com",
+                    password: "supersecret"
+                }) {
+                    token
+                }
+            }
+        ')->assertJsonStructure([
+            'data' => [
+                'login' => [
+                    'token',
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_logs_a_user_in_using_custom_user_identifier(): void
+    {
+        $this->setUpTestSchema();
+
+        $this->app['config']->set('auth.providers.users.model', UserHasApiTokensIdentifiedByUsername::class);
+        $this->app['config']->set('lighthouse-sanctum.user_identifier_field_name', 'username');
+
+        $this->loadMigrationsFrom('./tests/stubs/migrations');
+
+        UserHasApiTokensIdentifiedByUsername::factory()->create([
+            'username' => 'john.doe',
+            'password' => Hash::make('supersecret'),
+        ]);
+
+        $this->schema = /** @lang GraphQL */ '
+            type Query
+
+            type AccessToken {
+                token: String!
+            }
+
+            input LoginInput {
+                username: String!
+                password: String!
+            }
+
+            extend type Mutation {
+                login(input: LoginInput @spread): AccessToken!
+                    @field(resolver: "DanielDeWit\\\\LighthouseSanctum\\\\GraphQL\\\\Mutations\\\\Login")
+            }
+        ';
+
+        $this->graphQL(/** @lang GraphQL */ '
+            mutation {
+                login(input: {
+                    username: "john.doe",
                     password: "supersecret"
                 }) {
                     token
