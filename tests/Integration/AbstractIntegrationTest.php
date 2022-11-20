@@ -22,6 +22,11 @@ abstract class AbstractIntegrationTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * @var Application
+     */
+    protected $app;
+
+    /**
      * @param Application $app
      * @return string[]
      */
