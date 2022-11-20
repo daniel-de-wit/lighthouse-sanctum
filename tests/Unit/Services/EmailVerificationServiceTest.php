@@ -131,6 +131,7 @@ class EmailVerificationServiceTest extends AbstractUnitTest
         /** @var MustVerifyEmail|MockInterface $user */
         $user = Mockery::mock(MustVerifyEmail::class)
             ->shouldReceive('getEmailForVerification')
+            ->once()
             ->andReturn($email)
             ->getMock();
 

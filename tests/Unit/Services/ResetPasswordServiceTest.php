@@ -23,14 +23,17 @@ class ResetPasswordServiceTest extends AbstractUnitTest
         /** @var User|MockInterface $user */
         $user = Mockery::mock(User::class)
             ->shouldReceive('setAttribute')
+            ->once()
             ->with('password', 'some-hash')
             ->getMock()
             ->shouldReceive('save')
+            ->once()
             ->getMock();
 
         /** @var Hasher|MockInterface $hasher */
         $hasher = Mockery::mock(Hasher::class)
             ->shouldReceive('make')
+            ->once()
             ->with('some-password')
             ->andReturn('some-hash')
             ->getMock();
@@ -38,6 +41,7 @@ class ResetPasswordServiceTest extends AbstractUnitTest
         /** @var Dispatcher|MockInterface $dispatcher */
         $dispatcher = Mockery::mock(Dispatcher::class)
             ->shouldReceive('dispatch')
+            ->once()
             ->withArgs(function (PasswordReset $event) use ($user) {
                 return $event->user === $user;
             })
