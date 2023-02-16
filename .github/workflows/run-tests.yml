@@ -10,7 +10,6 @@ jobs:
             matrix:
                 os: [ubuntu-latest]
                 php: [8.0, 8.1, 8.2]
-                dependency-version: [prefer-lowest, prefer-stable]
 
         name: P${{ matrix.php }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
@@ -37,7 +36,7 @@ jobs:
                   echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
             - name: Install dependencies
-              run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
+              run: composer update --prefer-stable --prefer-dist --no-interaction
 
             - name: Execute tests
               run: composer test
