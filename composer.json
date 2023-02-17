@@ -4,7 +4,6 @@
     "license": "MIT",
     "type": "library",
     "keywords": [
-        "daniel-de-wit",
         "laravel-sanctum",
         "lighthouse",
         "lighthouse-sanctum"
@@ -12,14 +11,13 @@
     "authors": [
         {
             "name": "Daniel de Wit",
-            "email": "daniel@danieldewit.nl",
-            "role": "Developer"
+            "email": "daniel@danieldewit.nl"
         }
     ],
     "homepage": "https://github.com/daniel-de-wit/lighthouse-sanctum",
     "require": {
-        "php": "^8.0.2",
-        "laravel/framework": "^9.0",
+        "php": "^8.0.2 || ^8.1.0 || ^8.2.0",
+        "laravel/framework": "^9.0 || ^10.0",
         "laravel/sanctum": "^2.14 || ^3.0",
         "nuwave/lighthouse": "^5.55.1"
     },
@@ -27,7 +25,7 @@
         "friendsofphp/php-cs-fixer": "^3.0",
         "mockery/mockery": "^1.5",
         "nunomaduro/larastan": "^1.0 || ^2.0",
-        "orchestra/testbench": "^6.0 || ^7.0",
+        "orchestra/testbench": "^6.0 || ^7.0 || ^8.0",
         "orchestra/testbench-core": "^6.26 || ^7.0",
         "phpoption/phpoption": "^1.8",
         "phpstan/phpstan-mockery": "^1.0",
