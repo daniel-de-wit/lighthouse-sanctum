@@ -343,6 +343,32 @@ input LoginInput {
 }
 ```
 
+## Docker
+
+Develop locally using [Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/).
+
+#### Setup
+This will build the Docker image and prepare the container.
+
+```bash
+make setup
+```
+ - CLI: `make app`
+ - Destroy: `make destroy`
+
+#### CLI
+Enter the container with shell to start developing.
+
+```bash
+make app
+```
+
+#### Destroy
+Shutdown and remove the container.
+
+```bash
+make app
+```
 
 ## Testing
 

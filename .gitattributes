@@ -3,6 +3,7 @@
 
 # Ignore all test and documentation with "export-ignore".
 /.github                export-ignore
+/docker                 export-ignore
 /stubs                  export-ignore
 /tests                  export-ignore
 /.coveralls.yml         export-ignore
@@ -12,5 +13,7 @@
 /.php-cs-fixer.dist.php export-ignore
 /.php_cs.common.php     export-ignore
 /.php_cs.tests.php      export-ignore
+/docker-compose.yml     export-ignore
+/Makefile               export-ignore
 /phpstan.neon           export-ignore
 /phpunit.xml.dist       export-ignore
