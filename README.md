@@ -70,7 +70,7 @@ class User extends Authenticatable implements HasApiTokensContract
 This package relies on [API Token Authentication](https://laravel.com/docs/8.x/sanctum#api-token-authentication), which uses stateless Bearer tokens to authenticate requests.
 
 By default, [Laravel Sanctum](https://laravel.com/docs/8.x/sanctum) assumes that requests made from localhost should use the stateful [Spa Authentication](https://laravel.com/docs/8.x/sanctum#spa-authentication) instead.
-To disable this behaviour, remove any lines in your sanctum configuration:
+To disable this behaviour, remove any lines within the stateful section of your sanctum configuration:
 
 ```php
 // File: ./config/sanctum.php
