@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  app:
+    build: docker
+    volumes:
+      - .:/var/www/html:cached

@@ -1,11 +1,11 @@
 # Lighthouse Sanctum
 
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/daniel-de-wit/lighthouse-sanctum/run-tests?label=tests)](https://github.com/daniel-de-wit/lighthouse-sanctum/actions?query=workflow%3Arun-tests+branch%3Amaster)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/daniel-de-wit/lighthouse-sanctum/.github/workflows/run-tests.yml?branch=master)](https://github.com/daniel-de-wit/lighthouse-sanctum/actions/workflows/run-tests.yml?query=workflow%3Arun-tests+branch%3Amaster)
 [![Coverage Status](https://coveralls.io/repos/github/daniel-de-wit/lighthouse-sanctum/badge.svg?branch=master)](https://coveralls.io/github/daniel-de-wit/lighthouse-sanctum?branch=master)
 [![PHPStan](https://img.shields.io/badge/PHPStan-enabled-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/daniel-de-wit/lighthouse-sanctum.svg?style=flat-square)](https://packagist.org/packages/daniel-de-wit/lighthouse-sanctum)
-[![Total Downloads](https://img.shields.io/packagist/dt/daniel-de-wit/lighthouse-sanctum.svg?style=flat-square)](https://packagist.org/packages/daniel-de-wit/lighthouse-sanctum)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/daniel-de-wit/lighthouse-sanctum.svg)](https://packagist.org/packages/daniel-de-wit/lighthouse-sanctum)
+[![Total Downloads](https://img.shields.io/packagist/dt/daniel-de-wit/lighthouse-sanctum.svg)](https://packagist.org/packages/daniel-de-wit/lighthouse-sanctum)
 
 Add [Laravel Sanctum](https://github.com/laravel/sanctum) support to [Lighthouse](https://github.com/nuwave/lighthouse)
 
@@ -22,7 +22,7 @@ Add [Laravel Sanctum](https://github.com/laravel/sanctum) support to [Lighthouse
 
 ## Requirements
 
-- [laravel/laravel:^9.0](https://github.com/laravel/laravel)
+- [laravel/laravel:^9.0 || ^10.0](https://github.com/laravel/laravel)
 - [laravel/sanctum:^2.0 || ^3.0](https://github.com/laravel/sanctum)
 - [nuwave/lighthouse:^5.55.1](https://github.com/nuwave/lighthouse)
 
@@ -70,7 +70,7 @@ class User extends Authenticatable implements HasApiTokensContract
 This package relies on [API Token Authentication](https://laravel.com/docs/8.x/sanctum#api-token-authentication), which uses stateless Bearer tokens to authenticate requests.
 
 By default, [Laravel Sanctum](https://laravel.com/docs/8.x/sanctum) assumes that requests made from localhost should use the stateful [Spa Authentication](https://laravel.com/docs/8.x/sanctum#spa-authentication) instead.
-To disable this behaviour, remove any lines in your sanctum configuration:
+To disable this behaviour, remove any lines within the stateful section of your sanctum configuration:
 
 ```php
 // File: ./config/sanctum.php
@@ -343,6 +343,32 @@ input LoginInput {
 }
 ```
 
+## Docker
+
+Develop locally using [Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/).
+
+#### Setup
+This will build the Docker image and prepare the container.
+
+```bash
+make setup
+```
+ - CLI: `make app`
+ - Destroy: `make destroy`
+
+#### CLI
+Enter the container with shell to start developing.
+
+```bash
+make app
+```
+
+#### Destroy
+Shutdown and remove the container.
+
+```bash
+make app
+```
 
 ## Testing
 
