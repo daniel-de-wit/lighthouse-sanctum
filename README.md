@@ -215,14 +215,15 @@ mutation {
 
 ### Email Verification
 
+The verification_url provided at `register` or `resendEmailVerification` contains the `id` and `hash` for the mutation:
+
 ```graphql
 mutation {
   verifyEmail(input: {
     id: "1"
     hash: "af269947ed80d4a7bc3f78a6dfd05ec369373f9d"
   }) {
-    name
-    email
+    status
   }
 }
 ```
@@ -237,21 +238,44 @@ mutation {
     expires: 1619775828
     signature: "e923636f1093c414aab39f846e9d7a372beefa7b628b28179197e539c56aa0f0"
   }) {
-    name
-    email
+    status
   }
 }
 ```
 
 ### Resend Email Verification Link
 
+Use default Laravel email verification notification.
+
 ```graphql
 mutation {
     resendEmailVerification(input: {
         email: "john.doe@gmail.com",
-        verification_url: {
-            url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__"
-# Signed:   url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__&expires=__EXPIRES__&signature=__SIGNATURE__"
+    }) {
+        status
+    }
+}
+```
+
+Or use the custom verification flow by uncommenting the `verification_url` argument within the `ResendEmailVerificationInput`:
+
+```graphql
+input ResendEmailVerificationInput {
+    email: String! @rules(apply: ["email"])
+    verification_url: VerificationUrlInput!
+}
+```
+
+Example mutation:
+
+```graphql
+mutation {
+    resendEmailVerification(input: {
+        email: "john.doe@gmail.com",
+         verification_url: {
+             url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__"
+             # or use signed url:
+             # url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__&expires=__EXPIRES__&signature=__SIGNATURE__"
         }
     }) {
         status
