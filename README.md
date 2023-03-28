@@ -215,14 +215,26 @@ mutation {
 
 ### Email Verification
 
+By default, Laravel will send newly registered users an email verification notification if the `MustVerifyEmail` [contract is applied on the User model](https://laravel.com/docs/9.x/verification#model-preparation).
+This uses [routing and views](https://laravel.com/docs/9.x/verification#verification-routing) to complete the verification process.
+
+To facilitate consumers of the GraphQL API with a custom email verification flow, update `RegisterInput` by uncommenting the `verification_url` argument.
+
+```graphql
+input RegisterInput {
+    verification_url: VerificationUrlInput!
+}
+```
+
+Now the verification notification button will redirect users to a custom front-end that can extract the required parameters for the `verifyEmail` mutation.
+
 ```graphql
 mutation {
   verifyEmail(input: {
     id: "1"
     hash: "af269947ed80d4a7bc3f78a6dfd05ec369373f9d"
   }) {
-    name
-    email
+    status
   }
 }
 ```
@@ -237,21 +249,44 @@ mutation {
     expires: 1619775828
     signature: "e923636f1093c414aab39f846e9d7a372beefa7b628b28179197e539c56aa0f0"
   }) {
-    name
-    email
+    status
   }
 }
 ```
 
 ### Resend Email Verification Link
 
+Use default Laravel email verification notification.
+
 ```graphql
 mutation {
     resendEmailVerification(input: {
         email: "john.doe@gmail.com",
-        verification_url: {
-            url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__"
-# Signed:   url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__&expires=__EXPIRES__&signature=__SIGNATURE__"
+    }) {
+        status
+    }
+}
+```
+
+Or use the custom verification flow by uncommenting the `verification_url` argument within the `ResendEmailVerificationInput`:
+
+```graphql
+input ResendEmailVerificationInput {
+    email: String! @rules(apply: ["email"])
+    verification_url: VerificationUrlInput!
+}
+```
+
+Example mutation:
+
+```graphql
+mutation {
+    resendEmailVerification(input: {
+        email: "john.doe@gmail.com",
+         verification_url: {
+             url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__"
+             # or use signed url:
+             # url: "https://my-front-end.com/verify-email?id=__ID__&token=__HASH__&expires=__EXPIRES__&signature=__SIGNATURE__"
         }
     }) {
         status
@@ -263,7 +298,28 @@ mutation {
 
 Sends a reset password notification.
 
-Optionally use custom reset url using both `__EMAIL__` and `__TOKEN__` placeholders.
+```graphql
+mutation {
+    forgotPassword(input: {
+        email: "john.doe@gmail.com"
+    }) {
+        status
+        message
+    }
+}
+```
+
+To facilitate consumers of the GraphQL API with a custom reset password flow, update `ForgotPasswordInput` by uncommenting the `reset_password_url` argument.
+
+```graphql
+input ForgotPasswordInput {
+    email: String! @rules(apply: ["email"])
+    reset_password_url: ResetPasswordUrlInput!
+}
+```
+
+Now the reset password notification button will redirect users to a custom front-end that can extract the required parameters for the `resetPassword` mutation.
+Use custom reset url using both `__EMAIL__` and `__TOKEN__` placeholders.
 
 ```graphql
 mutation {

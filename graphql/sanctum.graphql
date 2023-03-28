@@ -63,7 +63,7 @@ input VerifyEmailInput {
 
 input ResendEmailVerificationInput {
     email: String! @rules(apply: ["email"])
-    verification_url: VerificationUrlInput
+    # verification_url: VerificationUrlInput!
 }
 
 input RegisterInput {
@@ -71,7 +71,7 @@ input RegisterInput {
     email: String! @rules(apply: ["bail", "email", "unique:users,email"])
     password: String! @rules(apply: ["confirmed"])
     password_confirmation: String!
-    verification_url: VerificationUrlInput
+    # verification_url: VerificationUrlInput!
 }
 
 """
@@ -91,7 +91,7 @@ input VerificationUrlInput {
 
 input ForgotPasswordInput {
     email: String! @rules(apply: ["email"])
-    reset_password_url: ResetPasswordUrlInput
+    # reset_password_url: ResetPasswordUrlInput!
 }
 
 """
