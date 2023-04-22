@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
 use Carbon\Carbon;
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Notification;
 
-class RegisterTest extends AbstractIntegrationTest
+class RegisterTest extends AbstractIntegrationTestCase
 {
     /**
      * @test
@@ -206,7 +206,7 @@ class RegisterTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "register" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -245,7 +245,7 @@ class RegisterTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "register" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -269,7 +269,7 @@ class RegisterTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [register].')
             ->assertGraphQLValidationError(
                 'input.email',
-                'The input.email must be a valid email address.',
+                'The input.email field must be a valid email address.',
             );
     }
 
@@ -338,7 +338,7 @@ class RegisterTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "register" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -362,7 +362,7 @@ class RegisterTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [register].')
             ->assertGraphQLValidationError(
                 'input.password',
-                'The input.password confirmation does not match.',
+                'The input.password field confirmation does not match.',
             );
     }
 
@@ -402,7 +402,7 @@ class RegisterTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "register" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -446,7 +446,7 @@ class RegisterTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "register" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -473,7 +473,7 @@ class RegisterTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [register].')
             ->assertGraphQLValidationError(
                 'input.verification_url.url',
-                'The input.verification url.url must be a valid URL.',
+                'The input.verification url.url field must be a valid URL.',
             );
     }
 }

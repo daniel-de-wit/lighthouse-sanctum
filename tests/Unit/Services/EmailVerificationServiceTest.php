@@ -8,14 +8,14 @@ use Carbon\Carbon;
 use DanielDeWit\LighthouseSanctum\Contracts\Services\SignatureServiceInterface;
 use DanielDeWit\LighthouseSanctum\Services\EmailVerificationService;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Mockery;
 use Mockery\MockInterface;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 
-class EmailVerificationServiceTest extends AbstractUnitTest
+class EmailVerificationServiceTest extends AbstractUnitTestCase
 {
     protected EmailVerificationService $service;
 

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
 
-class UpdatePasswordTest extends AbstractIntegrationTest
+class UpdatePasswordTest extends AbstractIntegrationTestCase
 {
     /**
      * @test
@@ -81,7 +81,7 @@ class UpdatePasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [updatePassword].')
             ->assertGraphQLValidationError(
                 'input.current_password',
-                'The current_password and user password must match.',
+                'The current_password field must match user password.',
             );
     }
 
@@ -106,7 +106,7 @@ class UpdatePasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [updatePassword].')
             ->assertGraphQLValidationError(
                 'input.password',
-                'The password and user password must be different.',
+                'The password field and user password must be different.',
             );
     }
 
@@ -146,7 +146,7 @@ class UpdatePasswordTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "updatePassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -185,7 +185,7 @@ class UpdatePasswordTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "updatePassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -209,7 +209,7 @@ class UpdatePasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [updatePassword].')
             ->assertGraphQLValidationError(
                 'input.password',
-                'The input.password confirmation does not match.',
+                'The input.password field confirmation does not match.',
             );
     }
 
@@ -249,7 +249,7 @@ class UpdatePasswordTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "updatePassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     protected function actAsUser(): UserHasApiTokens

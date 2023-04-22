@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\Services;
 
 use DanielDeWit\LighthouseSanctum\Services\ResetPasswordService;
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Auth\Events\PasswordReset;
@@ -14,7 +14,7 @@ use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Event;
 
-class ResetPasswordServiceTest extends AbstractIntegrationTest
+class ResetPasswordServiceTest extends AbstractIntegrationTestCase
 {
     protected ResetPasswordService $service;
 

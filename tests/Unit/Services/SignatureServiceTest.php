@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Unit\Services;
 
 use DanielDeWit\LighthouseSanctum\Services\SignatureService;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
 
-class SignatureServiceTest extends AbstractUnitTest
+class SignatureServiceTest extends AbstractUnitTestCase
 {
     protected SignatureService $service;
 

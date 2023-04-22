@@ -7,7 +7,7 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 use DanielDeWit\LighthouseSanctum\Exceptions\GraphQLValidationException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\UpdatePassword;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksAuthFactory;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Translation\Translator;
@@ -17,7 +17,7 @@ use Mockery\MockInterface;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use RuntimeException;
 
-class UpdatePasswordTest extends AbstractUnitTest
+class UpdatePasswordTest extends AbstractUnitTestCase
 {
     use MocksAuthFactory;
 

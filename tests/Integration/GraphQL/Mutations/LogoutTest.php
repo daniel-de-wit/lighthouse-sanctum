@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use Laravel\Sanctum\Sanctum;
 
-class LogoutTest extends AbstractIntegrationTest
+class LogoutTest extends AbstractIntegrationTestCase
 {
     /**
      * @test

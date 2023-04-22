@@ -9,7 +9,7 @@ use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\Login;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksUserProvider;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Foundation\Auth\User;
@@ -19,7 +19,7 @@ use Mockery\MockInterface;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 use RuntimeException;
 
-class LoginTest extends AbstractUnitTest
+class LoginTest extends AbstractUnitTestCase
 {
     use MocksUserProvider;
 

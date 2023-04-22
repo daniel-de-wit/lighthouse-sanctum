@@ -9,13 +9,13 @@ use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\ResendEmailVerification;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksUserProvider;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Foundation\Auth\User;
 use Mockery;
 use Mockery\MockInterface;
 
-class ResendEmailVerificationTest extends AbstractUnitTest
+class ResendEmailVerificationTest extends AbstractUnitTestCase
 {
     use MocksUserProvider;
 

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Event;
 
-class ResetPasswordTest extends AbstractIntegrationTest
+class ResetPasswordTest extends AbstractIntegrationTestCase
 {
     /**
      * @test
@@ -52,7 +52,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
             'data' => [
                 'resetPassword' => [
                     'status'  => 'PASSWORD_RESET',
-                    'message' => 'Your password has been reset!',
+                    'message' => 'Your password has been reset.',
                 ],
             ],
         ]);
@@ -101,7 +101,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
                     message
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "resetPassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -125,7 +125,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [resetPassword].')
             ->assertGraphQLValidationError(
                 'input.email',
-                'The input.email must be a valid email address.',
+                'The input.email field must be a valid email address.',
             );
     }
 
@@ -187,7 +187,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
                     message
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "resetPassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -252,7 +252,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
                     message
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "resetPassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -276,7 +276,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [resetPassword].')
             ->assertGraphQLValidationError(
                 'input.password',
-                'The input.password confirmation does not match.',
+                'The input.password field confirmation does not match.',
             );
     }
 
@@ -316,6 +316,6 @@ class ResetPasswordTest extends AbstractIntegrationTest
                     message
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "resetPassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 }

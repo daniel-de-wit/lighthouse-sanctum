@@ -6,13 +6,13 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\ForgotPassword;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Translation\Translator;
 use Mockery;
 use Mockery\MockInterface;
 
-class ForgotPasswordTest extends AbstractUnitTest
+class ForgotPasswordTest extends AbstractUnitTestCase
 {
     /**
      * @test

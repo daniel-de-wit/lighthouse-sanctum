@@ -8,7 +8,7 @@ use Closure;
 use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
 use DanielDeWit\LighthouseSanctum\Exceptions\GraphQLValidationException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\ResetPassword;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Translation\Translator;
@@ -17,7 +17,7 @@ use Mockery;
 use Mockery\MockInterface;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class ResetPasswordTest extends AbstractUnitTest
+class ResetPasswordTest extends AbstractUnitTestCase
 {
     /**
      * @test

@@ -8,7 +8,7 @@ use DanielDeWit\LighthouseSanctum\Contracts\Services\EmailVerificationServiceInt
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\VerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksUserProvider;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Config\Repository as Config;
@@ -21,7 +21,7 @@ use Nuwave\Lighthouse\Exceptions\ValidationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use RuntimeException;
 
-class VerifyEmailTest extends AbstractUnitTest
+class VerifyEmailTest extends AbstractUnitTestCase
 {
     use MocksUserProvider;
 

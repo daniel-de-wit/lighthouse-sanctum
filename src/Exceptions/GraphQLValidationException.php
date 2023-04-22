@@ -5,20 +5,16 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Exceptions;
 
 use Exception;
+use GraphQL\Error\ClientAware;
+use GraphQL\Error\ProvidesExtensions;
 use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Exceptions\RendersErrorsExtensions;
 
-class GraphQLValidationException extends Exception implements RendersErrorsExtensions
+class GraphQLValidationException extends Exception implements ClientAware, ProvidesExtensions
 {
     protected string $validationMessage;
     protected string $field;
 
-    /**
-     * @param string $message
-     * @param string $field
-     * @param string|ResolveInfo $path
-     */
-    public function __construct(string $message, string $field, $path)
+    public function __construct(string $message, string $field, string|ResolveInfo $path)
     {
         $this->validationMessage = $message;
         $this->field             = $field;
@@ -35,12 +31,10 @@ class GraphQLValidationException extends Exception implements RendersErrorsExten
         return true;
     }
 
-    public function getCategory(): string
-    {
-        return 'validation';
-    }
-
-    public function extensionsContent(): array
+    /**
+     * @return array<string, array<string, array<int, string>>>
+     */
+    public function getExtensions(): array
     {
         return [
             'validation' => [

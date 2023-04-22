@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
 use Carbon\Carbon;
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 
-class VerifyEmailTest extends AbstractIntegrationTest
+class VerifyEmailTest extends AbstractIntegrationTestCase
 {
     /**
      * @test
@@ -266,7 +266,7 @@ class VerifyEmailTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "verifyEmail" argument "input" requires type ID!, found true.');
+        ')->assertGraphQLErrorMessage('ID cannot represent a non-string and non-integer value: true');
     }
 
     /**
@@ -299,7 +299,7 @@ class VerifyEmailTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "verifyEmail" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -359,7 +359,7 @@ class VerifyEmailTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "verifyEmail" argument "input" requires type Int, found true.');
+        ')->assertGraphQLErrorMessage('Int cannot represent non-integer value: true');
     }
 
     /**
@@ -419,6 +419,6 @@ class VerifyEmailTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "verifyEmail" argument "input" requires type String, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 }

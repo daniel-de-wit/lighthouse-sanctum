@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
 use Carbon\Carbon;
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Notification;
 
-class ResendEmailVerificationTest extends AbstractIntegrationTest
+class ResendEmailVerificationTest extends AbstractIntegrationTestCase
 {
     /**
      * @test
@@ -242,7 +242,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "resendEmailVerification" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -262,7 +262,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [resendEmailVerification].')
             ->assertGraphQLValidationError(
                 'input.email',
-                'The input.email must be a valid email address.',
+                'The input.email field must be a valid email address.',
             );
     }
 
@@ -299,7 +299,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "resendEmailVerification" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     /**
@@ -322,7 +322,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [resendEmailVerification].')
             ->assertGraphQLValidationError(
                 'input.verification_url.url',
-                'The input.verification url.url must be a valid URL.',
+                'The input.verification url.url field must be a valid URL.',
             );
     }
 }

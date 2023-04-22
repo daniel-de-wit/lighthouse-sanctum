@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Unit\Services;
 
 use DanielDeWit\LighthouseSanctum\Services\ResetPasswordService;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -13,7 +13,7 @@ use Illuminate\Foundation\Auth\User;
 use Mockery;
 use Mockery\MockInterface;
 
-class ResetPasswordServiceTest extends AbstractUnitTest
+class ResetPasswordServiceTest extends AbstractUnitTestCase
 {
     /**
      * @test

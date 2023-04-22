@@ -8,7 +8,7 @@ use DanielDeWit\LighthouseSanctum\Exceptions\HasApiTokensException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\Logout;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksAuthFactory;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Foundation\Auth\User;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -16,7 +16,7 @@ use Mockery;
 use Mockery\MockInterface;
 use RuntimeException;
 
-class LogoutTest extends AbstractUnitTest
+class LogoutTest extends AbstractUnitTestCase
 {
     use MocksAuthFactory;
 

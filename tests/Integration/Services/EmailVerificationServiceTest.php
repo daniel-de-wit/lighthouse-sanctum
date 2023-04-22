@@ -7,12 +7,12 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Integration\Services;
 use Carbon\Carbon;
 use DanielDeWit\LighthouseSanctum\Contracts\Services\SignatureServiceInterface;
 use DanielDeWit\LighthouseSanctum\Services\EmailVerificationService;
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 
-class EmailVerificationServiceTest extends AbstractIntegrationTest
+class EmailVerificationServiceTest extends AbstractIntegrationTestCase
 {
     protected EmailVerificationService $service;
 
