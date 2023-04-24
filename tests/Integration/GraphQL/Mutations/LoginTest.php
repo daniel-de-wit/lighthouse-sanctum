@@ -31,7 +31,7 @@ class LoginTest extends AbstractIntegrationTestCase
                     token
                 }
             }
-        ')->dump()->assertJsonStructure([
+        ')->assertJsonStructure([
             'data' => [
                 'login' => [
                     'token',
