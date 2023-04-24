@@ -17,7 +17,6 @@
     "homepage": "https://github.com/daniel-de-wit/lighthouse-sanctum",
     "require": {
         "php": "^8.1",
-        "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.0",
         "nuwave/lighthouse": "^v6.0"
     },
