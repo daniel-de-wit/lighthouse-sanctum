@@ -11,9 +11,7 @@ use Laravel\Sanctum\Sanctum;
 
 class UpdatePasswordTest extends AbstractIntegrationTestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_the_password(): void
     {
         $user = $this->actAsUser();
@@ -41,9 +39,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
         static::assertTrue(Hash::check('secret', $user->getAuthPassword()));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_user_is_unauthenticated(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -60,9 +56,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
             ->assertGraphQLErrorMessage('Unauthenticated.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_current_password_is_not_the_same(): void
     {
         $this->actAsUser();
@@ -85,9 +79,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
             );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_new_password_is_not_different(): void
     {
         $this->actAsUser();
@@ -110,9 +102,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
             );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_current_password_field_is_missing(): void
     {
         $this->actAsUser();
@@ -129,9 +119,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field UpdatePasswordInput.current_password of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_current_password_field_is_not_a_string(): void
     {
         $this->actAsUser();
@@ -149,9 +137,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_field_is_missing(): void
     {
         $this->actAsUser();
@@ -168,9 +154,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field UpdatePasswordInput.password of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_field_is_not_a_string(): void
     {
         $this->actAsUser();
@@ -188,9 +172,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_field_is_not_confirmed(): void
     {
         $this->actAsUser();
@@ -213,9 +195,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
             );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_confirmation_field_is_missing(): void
     {
         $this->actAsUser();
@@ -232,9 +212,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field UpdatePasswordInput.password_confirmation of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_confirmation_field_is_not_a_string(): void
     {
         $this->actAsUser();

@@ -30,9 +30,7 @@ class ResetPasswordServiceTest extends AbstractIntegrationTestCase
         $this->service = new ResetPasswordService($hasher, $dispatcher);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_transforms_a_reset_password_url(): void
     {
         /** @var UserMustVerifyEmail $user */
@@ -47,9 +45,7 @@ class ResetPasswordServiceTest extends AbstractIntegrationTestCase
         static::assertSame('https://mysite.com/reset-password/user@example.com/token123', $url);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sets_the_reset_password_url(): void
     {
         /** @var UserMustVerifyEmail $user */
@@ -68,9 +64,7 @@ class ResetPasswordServiceTest extends AbstractIntegrationTestCase
         static::assertSame('https://mysite.com/reset-password/user@example.com/token123', $url);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_resets_a_password(): void
     {
         /** @var Hasher $hasher */

@@ -26,9 +26,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
         $this->service = new EmailVerificationService($signatureService, 60);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_transforms_a_verification_url(): void
     {
         /** @var UserMustVerifyEmail $user */
@@ -45,9 +43,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
         static::assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com'), $url);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_transforms_a_signed_verification_url(): void
     {
         Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
@@ -69,9 +65,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
         static::assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com').'/1609480800/'.$signature, $url);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sets_the_verification_url(): void
     {
         /** @var UserMustVerifyEmail $user */
@@ -89,9 +83,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
         static::assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com'), $url);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sets_the_signed_verification_url(): void
     {
         Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
@@ -117,9 +109,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
         static::assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com').'/1609480800/'.$signature, $url);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_hash_is_incorrect(): void
     {
         static::expectException(AuthenticationException::class);
@@ -130,9 +120,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
         $this->service->verify($user, 'foobar');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_expires_is_less_than_now(): void
     {
         static::expectException(AuthenticationException::class);
@@ -145,9 +133,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
         $this->service->verifySigned($user, 'foobar', 1609476200, 'signature');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_signature_is_invalid(): void
     {
         static::expectException(AuthenticationException::class);

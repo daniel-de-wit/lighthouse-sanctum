@@ -13,10 +13,9 @@ use Mockery\MockInterface;
 trait MocksAuthFactory
 {
     /**
-     * @param  Authenticatable|MockInterface|null  $user
      * @return AuthFactory|MockInterface
      */
-    protected function mockAuthFactory($user = null)
+    protected function mockAuthFactory(\Illuminate\Contracts\Auth\Authenticatable|\Mockery\MockInterface|null $user = null): AuthFactory|\Mockery\MockInterface
     {
         /** @var Guard|MockInterface $guard */
         $guard = Mockery::mock(Guard::class)

@@ -10,9 +10,7 @@ use Laravel\Sanctum\Sanctum;
 
 class LogoutTest extends AbstractIntegrationTestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_logs_a_user_out(): void
     {
         Sanctum::actingAs(UserHasApiTokens::factory()->create());
@@ -34,9 +32,7 @@ class LogoutTest extends AbstractIntegrationTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_user_is_unauthenticated(): void
     {
         $this->graphQL(/** @lang GraphQL */ '

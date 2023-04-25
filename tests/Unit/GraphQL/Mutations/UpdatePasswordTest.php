@@ -21,9 +21,7 @@ class UpdatePasswordTest extends AbstractUnitTestCase
 {
     use MocksAuthFactory;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_the_password(): void
     {
         /** @var User|MockInterface $user */
@@ -76,9 +74,7 @@ class UpdatePasswordTest extends AbstractUnitTestCase
         static::assertSame('PASSWORD_UPDATED', $result['status']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_no_user_is_found_by_the_guard(): void
     {
         static::expectException(RuntimeException::class);
@@ -98,9 +94,7 @@ class UpdatePasswordTest extends AbstractUnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_current_password_is_different(): void
     {
         static::expectException(GraphQLValidationException::class);
@@ -149,9 +143,7 @@ class UpdatePasswordTest extends AbstractUnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_new_password_is_the_same(): void
     {
         static::expectException(GraphQLValidationException::class);
@@ -205,10 +197,7 @@ class UpdatePasswordTest extends AbstractUnitTestCase
         );
     }
 
-    /**
-     * @return ResolveInfo|MockInterface
-     */
-    protected function mockResolveInfo()
+    protected function mockResolveInfo(): \GraphQL\Type\Definition\ResolveInfo|\Mockery\MockInterface
     {
         /** @var ResolveInfo|MockInterface $resolveInfo */
         $resolveInfo = Mockery::mock(ResolveInfo::class);

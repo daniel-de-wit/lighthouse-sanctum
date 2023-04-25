@@ -19,9 +19,7 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class ResetPasswordTest extends AbstractUnitTestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_resets_a_password(): void
     {
         /** @var User|MockInterface $user */
@@ -74,9 +72,7 @@ class ResetPasswordTest extends AbstractUnitTestCase
         static::assertSame('response-translation', $result['message']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_reset_failed(): void
     {
         static::expectException(GraphQLValidationException::class);
@@ -85,13 +81,11 @@ class ResetPasswordTest extends AbstractUnitTestCase
         /** @var PasswordBroker|MockInterface $passwordBroker */
         $passwordBroker = Mockery::mock(PasswordBroker::class)
             ->shouldReceive('reset')
-            ->withArgs(function (array $credentials, Closure $callback) {
-                return empty(array_diff($credentials, [
-                    'email'    => 'foo@bar.com',
-                    'token'    => '1234567890',
-                    'password' => 'supersecret',
-                ]));
-            })
+            ->withArgs(fn(array $credentials, Closure $callback) => empty(array_diff($credentials, [
+                'email'    => 'foo@bar.com',
+                'token'    => '1234567890',
+                'password' => 'supersecret',
+            ])))
             ->andReturn('some-error')
             ->getMock();
 

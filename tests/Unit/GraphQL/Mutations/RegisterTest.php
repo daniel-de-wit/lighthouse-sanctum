@@ -23,9 +23,7 @@ class RegisterTest extends AbstractUnitTestCase
 {
     use MocksUserProvider;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_registers_a_user(): void
     {
         $token                 = Mockery::mock(NewAccessToken::class);
@@ -60,9 +58,7 @@ class RegisterTest extends AbstractUnitTestCase
         static::assertSame('1234567890', $result['token']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sends_an_email_verification_notification(): void
     {
         $token                 = Mockery::mock(NewAccessToken::class);
@@ -99,9 +95,7 @@ class RegisterTest extends AbstractUnitTestCase
         static::assertNull($result['token']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sends_an_email_verification_notification_with_a_custom_url(): void
     {
         $token                 = Mockery::mock(NewAccessToken::class);
@@ -147,9 +141,7 @@ class RegisterTest extends AbstractUnitTestCase
         static::assertNull($result['token']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_user_provider_is_not_found(): void
     {
         static::expectException(RuntimeException::class);
@@ -170,15 +162,13 @@ class RegisterTest extends AbstractUnitTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_user_does_not_have_the_has_api_tokens_trait(): void
     {
         $user = $this->mockUser(User::class);
 
         static::expectException(HasApiTokensException::class);
-        static::expectExceptionMessage('"'.get_class($user).'" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
+        static::expectExceptionMessage('"'.$user::class.'" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
 
         $userProvider = $this->mockUserProvider($user);
 
@@ -197,10 +187,7 @@ class RegisterTest extends AbstractUnitTestCase
         ]);
     }
 
-    /**
-     * @return Hasher|MockInterface
-     */
-    protected function mockHasher()
+    protected function mockHasher(): \Illuminate\Contracts\Hashing\Hasher|\Mockery\MockInterface
     {
         /** @var Hasher|MockInterface $hasher */
         $hasher = Mockery::mock(Hasher::class)
@@ -212,10 +199,7 @@ class RegisterTest extends AbstractUnitTestCase
         return $hasher;
     }
 
-    /**
-     * @return UserProvider|MockInterface
-     */
-    protected function mockUserProvider(?User $user)
+    protected function mockUserProvider(?User $user): \Illuminate\Contracts\Auth\UserProvider|\Mockery\MockInterface
     {
         /** @var UserProvider|MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)

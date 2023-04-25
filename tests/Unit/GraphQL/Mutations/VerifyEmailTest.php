@@ -25,9 +25,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
 {
     use MocksUserProvider;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_verifies_an_email(): void
     {
         /** @var UserMustVerifyEmail|MockInterface $user */
@@ -67,9 +65,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
         static::assertSame('VERIFIED', $result['status']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_verifies_an_email_with_a_signature(): void
     {
         /** @var UserMustVerifyEmail|MockInterface $user */
@@ -114,9 +110,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
         static::assertSame('VERIFIED', $result['status']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_user_provider_is_not_found(): void
     {
         static::expectException(RuntimeException::class);
@@ -135,9 +129,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
         ], Mockery::mock(GraphQLContext::class), Mockery::mock(ResolveInfo::class));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_user_does_not_implement_the_must_verify_email_interface(): void
     {
         $user = Mockery::mock(User::class);
@@ -160,9 +152,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
         ], Mockery::mock(GraphQLContext::class), Mockery::mock(ResolveInfo::class));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_required_signed_arguments_are_missing(): void
     {
         static::expectException(ValidationException::class);
@@ -195,10 +185,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
         ], Mockery::mock(GraphQLContext::class), $resolveInfo);
     }
 
-    /**
-     * @return UserProvider|MockInterface
-     */
-    protected function mockUserProvider(?User $user)
+    protected function mockUserProvider(?User $user): \Illuminate\Contracts\Auth\UserProvider|\Mockery\MockInterface
     {
         /** @var UserProvider|MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)
@@ -213,7 +200,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
     /**
      * @return ValidationFactory|MockInterface
      */
-    protected function mockValidator(bool $isValid = true)
+    protected function mockValidator(bool $isValid = true): ValidationFactory|\Mockery\MockInterface
     {
         /** @var Validator|MockInterface $validator */
         $validator = Mockery::mock(Validator::class)

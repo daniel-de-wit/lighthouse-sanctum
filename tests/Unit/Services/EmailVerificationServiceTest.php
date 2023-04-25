@@ -32,9 +32,7 @@ class EmailVerificationServiceTest extends AbstractUnitTestCase
         $this->service          = new EmailVerificationService($this->signatureService, 60);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_hash_is_incorrect(): void
     {
         static::expectException(AuthenticationException::class);
@@ -46,9 +44,7 @@ class EmailVerificationServiceTest extends AbstractUnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_does_nothing_if_the_hash_is_correct(): void
     {
         $this->service->verify(
@@ -57,9 +53,7 @@ class EmailVerificationServiceTest extends AbstractUnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_expires_is_less_than_now(): void
     {
         static::expectException(AuthenticationException::class);
@@ -75,9 +69,7 @@ class EmailVerificationServiceTest extends AbstractUnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_signature_is_invalid(): void
     {
         static::expectException(AuthenticationException::class);
@@ -111,9 +103,7 @@ class EmailVerificationServiceTest extends AbstractUnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception(): void
     {
         static::expectException(AuthenticationException::class);
@@ -122,10 +112,7 @@ class EmailVerificationServiceTest extends AbstractUnitTestCase
         $this->service->throwAuthenticationException();
     }
 
-    /**
-     * @return MustVerifyEmail|MockInterface
-     */
-    protected function mockUser(string $email)
+    protected function mockUser(string $email): \Illuminate\Contracts\Auth\MustVerifyEmail|\Mockery\MockInterface
     {
         /** @var MustVerifyEmail|MockInterface $user */
         $user = Mockery::mock(MustVerifyEmail::class)

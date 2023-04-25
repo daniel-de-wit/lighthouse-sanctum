@@ -14,9 +14,7 @@ use Mockery\MockInterface;
 
 class ForgotPasswordTest extends AbstractUnitTestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sends_a_reset_password_notification(): void
     {
         /** @var PasswordBroker|MockInterface $passwordBroker */
@@ -50,9 +48,7 @@ class ForgotPasswordTest extends AbstractUnitTestCase
         static::assertSame('translation', $result['message']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sends_a_reset_password_notification_with_a_custom_url(): void
     {
         /** @var PasswordBroker|MockInterface $passwordBroker */

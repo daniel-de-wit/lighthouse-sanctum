@@ -19,9 +19,7 @@ class ResendEmailVerificationTest extends AbstractUnitTestCase
 {
     use MocksUserProvider;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_resends_an_email_verification_notification(): void
     {
         /** @var UserMustVerifyEmail|MockInterface $user */
@@ -47,9 +45,7 @@ class ResendEmailVerificationTest extends AbstractUnitTestCase
         static::assertSame('EMAIL_SENT', $result['status']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sends_an_email_verification_notification_with_a_custom_url(): void
     {
         /** @var UserMustVerifyEmail|MockInterface $user */
@@ -84,9 +80,7 @@ class ResendEmailVerificationTest extends AbstractUnitTestCase
         static::assertSame('EMAIL_SENT', $result['status']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_does_not_resend_an_email_verification_notification_if_email_verification_is_not_used(): void
     {
         /** @var UserHasApiTokens|MockInterface $user */
@@ -109,9 +103,7 @@ class ResendEmailVerificationTest extends AbstractUnitTestCase
         static::assertSame('EMAIL_SENT', $result['status']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_does_not_resend_an_email_verification_notification_if_the_email_is_already_verified(): void
     {
         /** @var UserMustVerifyEmail|MockInterface $user */
@@ -137,10 +129,7 @@ class ResendEmailVerificationTest extends AbstractUnitTestCase
         static::assertSame('EMAIL_SENT', $result['status']);
     }
 
-    /**
-     * @return UserProvider|MockInterface
-     */
-    protected function mockUserProvider(?User $user)
+    protected function mockUserProvider(?User $user): \Illuminate\Contracts\Auth\UserProvider|\Mockery\MockInterface
     {
         /** @var UserProvider|MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)

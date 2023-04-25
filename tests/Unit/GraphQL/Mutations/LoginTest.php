@@ -23,9 +23,7 @@ class LoginTest extends AbstractUnitTestCase
 {
     use MocksUserProvider;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_logs_a_user_in(): void
     {
         $token                 = Mockery::mock(NewAccessToken::class);
@@ -63,9 +61,7 @@ class LoginTest extends AbstractUnitTestCase
         static::assertSame('1234567890', $result['token']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_logs_a_user_in_using_custom_identification(): void
     {
         /** @var Config|MockInterface $config */
@@ -121,9 +117,7 @@ class LoginTest extends AbstractUnitTestCase
         static::assertSame('1234567890', $result['token']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_user_provider_is_not_found(): void
     {
         static::expectException(RuntimeException::class);
@@ -140,9 +134,7 @@ class LoginTest extends AbstractUnitTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_credentials_are_incorrect(): void
     {
         static::expectException(AuthenticationException::class);
@@ -161,9 +153,7 @@ class LoginTest extends AbstractUnitTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_password_is_incorrect(): void
     {
         static::expectException(AuthenticationException::class);
@@ -202,15 +192,13 @@ class LoginTest extends AbstractUnitTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_user_does_not_have_the_has_api_tokens_trait(): void
     {
         $user = Mockery::mock(User::class);
 
         static::expectException(HasApiTokensException::class);
-        static::expectExceptionMessage('"'.get_class($user).'" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
+        static::expectExceptionMessage('"'.$user::class.'" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
 
         $userProvider = $this->mockUserProvider($user);
         $userProvider
@@ -233,9 +221,7 @@ class LoginTest extends AbstractUnitTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_users_email_is_not_verified(): void
     {
         static::expectException(AuthenticationException::class);
@@ -268,10 +254,7 @@ class LoginTest extends AbstractUnitTestCase
         ]);
     }
 
-    /**
-     * @return UserProvider|MockInterface
-     */
-    protected function mockUserProvider(?User $user)
+    protected function mockUserProvider(?User $user): \Illuminate\Contracts\Auth\UserProvider|\Mockery\MockInterface
     {
         /** @var UserProvider|MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)
