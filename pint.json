@@ -1,0 +1,9 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "declare_strict_types": true,
+        "binary_operator_spaces": {
+            "default": "align_single_space_minimal"
+        }
+    }
+}
