@@ -17,6 +17,7 @@ class Logout
     use HasAuthenticatedUser;
 
     protected AuthFactory $authFactory;
+
     protected Translator $translator;
 
     public function __construct(AuthFactory $authFactory, Translator $translator)
@@ -26,9 +27,10 @@ class Logout
     }
 
     /**
-     * @param mixed $_
-     * @param array<string, mixed> $args
+     * @param  mixed  $_
+     * @param  array<string, mixed>  $args
      * @return array<string, string>
+     *
      * @throws Exception
      */
     public function __invoke($_, array $args): array

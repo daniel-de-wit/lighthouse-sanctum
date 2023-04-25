@@ -21,8 +21,11 @@ class UpdatePassword
     use HasUserModel;
 
     protected AuthFactory $authFactory;
+
     protected Hasher $hasher;
+
     protected Translator $translator;
+
     protected ResolveInfo $resolveInfo;
 
     public function __construct(AuthFactory $authFactory, Hasher $hasher, Translator $translator)
@@ -33,11 +36,10 @@ class UpdatePassword
     }
 
     /**
-     * @param mixed $_
-     * @param array<string, string> $args
-     * @param GraphQLContext $context
-     * @param ResolveInfo $resolveInfo
+     * @param  mixed  $_
+     * @param  array<string, string>  $args
      * @return array<string, string>
+     *
      * @throws Exception
      */
     public function __invoke($_, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
@@ -59,8 +61,6 @@ class UpdatePassword
     }
 
     /**
-     * @param Authenticatable $user
-     * @param string $currentPassword
      * @throws GraphQLValidationException
      */
     protected function currentPasswordMustBeTheSame(Authenticatable $user, string $currentPassword): void
@@ -77,8 +77,6 @@ class UpdatePassword
     }
 
     /**
-     * @param Authenticatable $user
-     * @param string $newPassword
      * @throws GraphQLValidationException
      */
     protected function newPasswordMustBeDifferent(Authenticatable $user, string $newPassword): void

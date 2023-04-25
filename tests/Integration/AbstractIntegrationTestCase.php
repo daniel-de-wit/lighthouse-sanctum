@@ -30,7 +30,7 @@ abstract class AbstractIntegrationTestCase extends TestCase
     protected $app;
 
     /**
-     * @param Application $app
+     * @param  Application  $app
      * @return string[]
      */
     protected function getPackageProviders($app): array
@@ -52,7 +52,7 @@ abstract class AbstractIntegrationTestCase extends TestCase
     }
 
     /**
-     * @param Application $app
+     * @param  Application  $app
      */
     protected function defineEnvironment($app): void
     {
@@ -65,7 +65,7 @@ abstract class AbstractIntegrationTestCase extends TestCase
 
     protected function getStubsPath(string $path): string
     {
-        return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . $path;
+        return dirname(__DIR__).DIRECTORY_SEPARATOR.'stubs'.DIRECTORY_SEPARATOR.$path;
     }
 
     protected function getAppKey(): string

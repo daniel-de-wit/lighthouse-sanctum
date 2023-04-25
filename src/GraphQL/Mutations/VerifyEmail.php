@@ -21,8 +21,11 @@ class VerifyEmail
     use CreatesUserProvider;
 
     protected AuthManager $authManager;
+
     protected Config $config;
+
     protected ValidationFactory $validationFactory;
+
     protected EmailVerificationServiceInterface $emailVerificationService;
 
     public function __construct(
@@ -38,11 +41,10 @@ class VerifyEmail
     }
 
     /**
-     * @param mixed $_
-     * @param array<string, string|int> $args
-     * @param GraphQLContext $context
-     * @param ResolveInfo $resolveInfo
+     * @param  mixed  $_
+     * @param  array<string, string|int>  $args
      * @return array<string, string>
+     *
      * @throws Exception
      */
     public function __invoke($_, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
@@ -56,7 +58,7 @@ class VerifyEmail
         }
 
         if (! $user instanceof MustVerifyEmail) {
-            throw new RuntimeException('User must implement "' . MustVerifyEmail::class . '".');
+            throw new RuntimeException('User must implement "'.MustVerifyEmail::class.'".');
         }
 
         if ($this->config->get('lighthouse-sanctum.use_signed_email_verification_url') === true) {
@@ -80,8 +82,8 @@ class VerifyEmail
     }
 
     /**
-     * @param array<string, string|int> $args
-     * @param string                    $path
+     * @param  array<string, string|int>  $args
+     *
      * @throws ValidationException
      */
     protected function validateRequiredSignedArguments(array $args, string $path): void

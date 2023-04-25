@@ -89,7 +89,7 @@ class ForgotPasswordTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 forgotPassword(input: {
                     reset_password_url: {
@@ -108,7 +108,7 @@ class ForgotPasswordTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 forgotPassword(input: {
                     email: 12345
@@ -128,7 +128,7 @@ class ForgotPasswordTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 forgotPassword(input: {
                     email: "foobar"
@@ -153,7 +153,7 @@ class ForgotPasswordTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_reset_password_url_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 forgotPassword(input: {
                     email: "foo@bar.com"
@@ -171,7 +171,7 @@ class ForgotPasswordTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_reset_password_url_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 forgotPassword(input: {
                     email: "foo@bar.com"
@@ -191,7 +191,7 @@ class ForgotPasswordTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_reset_password_url_field_is_not_a_url(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 forgotPassword(input: {
                     email: "foo@bar.com"

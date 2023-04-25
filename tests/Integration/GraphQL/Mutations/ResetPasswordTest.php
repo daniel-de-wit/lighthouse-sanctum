@@ -40,7 +40,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
             mutation {
                 resetPassword(input: {
                     email: "foo@bar.com",
-                    token: "' . $token . '",
+                    token: "'.$token.'",
                     password: "supersecret",
                     password_confirmation: "supersecret"
                 }) {

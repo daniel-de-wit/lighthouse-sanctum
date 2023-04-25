@@ -13,7 +13,7 @@ use Mockery\MockInterface;
 trait MocksAuthFactory
 {
     /**
-     * @param Authenticatable|MockInterface|null $user
+     * @param  Authenticatable|MockInterface|null  $user
      * @return AuthFactory|MockInterface
      */
     protected function mockAuthFactory($user = null)

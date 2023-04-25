@@ -28,7 +28,7 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
             mutation {
                 verifyEmail(input: {
                     id: 123,
-                    hash: "' . sha1('john.doe@gmail.com') . '"
+                    hash: "'.sha1('john.doe@gmail.com').'"
                 }) {
                     status
                 }
@@ -73,9 +73,9 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
             mutation {
                 verifyEmail(input: {
                     id: 123,
-                    hash: "' . sha1('john.doe@gmail.com') . '",
+                    hash: "'.sha1('john.doe@gmail.com').'",
                     expires: 1609480800,
-                    signature: "' . $signature . '"
+                    signature: "'.$signature.'"
                 }) {
                     status
                 }
@@ -160,9 +160,9 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
             mutation {
                 verifyEmail(input: {
                     id: 123,
-                    hash: "' . sha1('john.doe@gmail.com') . '"
+                    hash: "'.sha1('john.doe@gmail.com').'"
                     expires: 456,
-                    signature: "' . $signature . '"
+                    signature: "'.$signature.'"
                 }) {
                     status
                 }
@@ -196,9 +196,9 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
             mutation {
                 verifyEmail(input: {
                     id: 123,
-                    hash: "' . sha1('john.doe@gmail.com') . '"
+                    hash: "'.sha1('john.doe@gmail.com').'"
                     expires: 1609476200,
-                    signature: "' . $signature . '"
+                    signature: "'.$signature.'"
                 }) {
                     status
                 }
@@ -226,7 +226,7 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
             mutation {
                 verifyEmail(input: {
                     id: 123,
-                    hash: "' . sha1('john.doe@gmail.com') . '"
+                    hash: "'.sha1('john.doe@gmail.com').'"
                     expires: 1609480800,
                     signature: "1234567890"
                 }) {

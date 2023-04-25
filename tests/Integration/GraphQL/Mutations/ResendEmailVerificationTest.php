@@ -28,7 +28,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
             'email_verified_at' => null,
         ]);
 
-        $response = $this->graphQL(/** @lang GraphQL */'
+        $response = $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 resendEmailVerification(input: {
                     email: "foo@bar.com",
@@ -78,7 +78,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
             'email_verified_at' => null,
         ]);
 
-        $response = $this->graphQL(/** @lang GraphQL */'
+        $response = $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 resendEmailVerification(input: {
                     email: "foo@bar.com",
@@ -124,7 +124,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
 
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
 
-        $response = $this->graphQL(/** @lang GraphQL */'
+        $response = $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 resendEmailVerification(input: {
                     email: "foo@bar.com",
@@ -159,7 +159,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
             'email_verified_at' => null,
         ]);
 
-        $response = $this->graphQL(/** @lang GraphQL */'
+        $response = $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 resendEmailVerification(input: {
                     email: "foo@bar.com",
@@ -194,7 +194,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
             'email_verified_at' => Carbon::now(),
         ]);
 
-        $response = $this->graphQL(/** @lang GraphQL */'
+        $response = $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 resendEmailVerification(input: {
                     email: "foo@bar.com",
@@ -220,7 +220,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 resendEmailVerification(input: {}) {
                     status
@@ -234,7 +234,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 resendEmailVerification(input: {
                     email: 12345
@@ -250,7 +250,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 resendEmailVerification(input: {
                     email: "foobar"
@@ -271,7 +271,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_verification_url_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 resendEmailVerification(input: {
                     email: "foo@bar.com",
@@ -288,7 +288,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_verification_url_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 resendEmailVerification(input: {
                     email: "foo@bar.com",
@@ -307,7 +307,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_verification_url_field_is_not_a_url(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 resendEmailVerification(input: {
                     email: "foo@bar.com",

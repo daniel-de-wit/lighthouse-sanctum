@@ -12,6 +12,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 class GraphQLValidationException extends Exception implements ClientAware, ProvidesExtensions
 {
     protected string $validationMessage;
+
     protected string $field;
 
     public function __construct(string $message, string $field, string|ResolveInfo $path)

@@ -99,7 +99,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
             $verificationService,
         );
 
-        $resolveInfo = Mockery::mock(ResolveInfo::class);
+        $resolveInfo       = Mockery::mock(ResolveInfo::class);
         $resolveInfo->path = ['foo', 'bar'];
 
         $result = $mutation(null, [
@@ -184,7 +184,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
             Mockery::mock(EmailVerificationServiceInterface::class),
         );
 
-        $resolveInfo = Mockery::mock(ResolveInfo::class);
+        $resolveInfo       = Mockery::mock(ResolveInfo::class);
         $resolveInfo->path = ['foo', 'bar'];
 
         $mutation(null, [
@@ -211,7 +211,6 @@ class VerifyEmailTest extends AbstractUnitTestCase
     }
 
     /**
-     * @param bool $isValid
      * @return ValidationFactory|MockInterface
      */
     protected function mockValidator(bool $isValid = true)

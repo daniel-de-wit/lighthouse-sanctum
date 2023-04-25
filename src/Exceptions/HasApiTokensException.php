@@ -12,11 +12,11 @@ use Laravel\Sanctum\Contracts\HasApiTokens;
 class HasApiTokensException extends Exception
 {
     /**
-     * @param Authenticatable|Model $user
+     * @param  Authenticatable|Model  $user
      */
     public function __construct($user)
     {
-        $message = '"' . get_class($user) . '" must implement "' . HasApiTokens::class . '".';
+        $message = '"'.get_class($user).'" must implement "'.HasApiTokens::class.'".';
 
         parent::__construct($message);
     }

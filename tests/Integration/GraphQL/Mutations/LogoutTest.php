@@ -17,7 +17,7 @@ class LogoutTest extends AbstractIntegrationTestCase
     {
         Sanctum::actingAs(UserHasApiTokens::factory()->create());
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 logout {
                     status
@@ -39,7 +39,7 @@ class LogoutTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_user_is_unauthenticated(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 logout {
                     status
@@ -47,6 +47,6 @@ class LogoutTest extends AbstractIntegrationTestCase
                 }
             }
         ')
-        ->assertGraphQLErrorMessage('Unauthenticated.');
+            ->assertGraphQLErrorMessage('Unauthenticated.');
     }
 }

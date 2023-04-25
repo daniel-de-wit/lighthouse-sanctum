@@ -15,7 +15,9 @@ class ResendEmailVerification
     use CreatesUserProvider;
 
     protected AuthManager $authManager;
+
     protected Config $config;
+
     protected EmailVerificationServiceInterface $emailVerificationService;
 
     public function __construct(
@@ -29,8 +31,8 @@ class ResendEmailVerification
     }
 
     /**
-     * @param mixed $_
-     * @param array<string, mixed> $args
+     * @param  mixed  $_
+     * @param  array<string, mixed>  $args
      * @return array<string, string>
      */
     public function __invoke($_, array $args): array

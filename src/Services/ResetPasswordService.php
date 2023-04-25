@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 class ResetPasswordService implements ResetPasswordServiceInterface
 {
     protected Hasher $hash;
+
     protected Dispatcher $dispatcher;
 
     public function __construct(Hasher $hash, Dispatcher $dispatcher)

@@ -18,7 +18,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     {
         $user = $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -46,7 +46,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_user_is_unauthenticated(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -67,7 +67,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "otherpass",
@@ -92,7 +92,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -117,7 +117,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     password: "secret",
@@ -136,7 +136,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: 12345,
@@ -156,7 +156,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -175,7 +175,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -195,7 +195,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -220,7 +220,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -239,7 +239,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",

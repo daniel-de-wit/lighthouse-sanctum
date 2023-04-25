@@ -18,7 +18,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_registers_a_user(): void
     {
-        $response = $this->graphQL(/** @lang GraphQL */'
+        $response = $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -57,7 +57,7 @@ class RegisterTest extends AbstractIntegrationTestCase
 
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
 
-        $response = $this->graphQL(/** @lang GraphQL */'
+        $response = $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -117,7 +117,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
         $this->app['config']->set('lighthouse-sanctum.use_signed_email_verification_url', true);
 
-        $response = $this->graphQL(/** @lang GraphQL */'
+        $response = $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -175,7 +175,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_name_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     email: "foo@bar.com",
@@ -194,7 +194,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_name_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: 12345,
@@ -214,7 +214,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -233,7 +233,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -253,7 +253,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -282,7 +282,7 @@ class RegisterTest extends AbstractIntegrationTestCase
             'email' => 'foo@bar.com',
         ]);
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -307,7 +307,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_password_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -326,7 +326,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_password_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -346,7 +346,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_password_field_is_not_confirmed(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -371,7 +371,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_password_confirmation_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -390,7 +390,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_password_confirmation_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -410,7 +410,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_verification_url_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -431,7 +431,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_verification_url_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",
@@ -454,7 +454,7 @@ class RegisterTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_verification_url_field_is_not_a_url(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 register(input: {
                     name: "Foo Bar",

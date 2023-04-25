@@ -15,8 +15,7 @@ interface ResetPasswordServiceInterface
     public function setResetPasswordUrl(string $url): void;
 
     /**
-     * @param Authenticatable|Model $user
-     * @param string $password
+     * @param  Authenticatable|Model  $user
      */
     public function resetPassword($user, string $password): void;
 }

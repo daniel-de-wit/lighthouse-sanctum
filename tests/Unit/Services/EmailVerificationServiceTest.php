@@ -123,7 +123,6 @@ class EmailVerificationServiceTest extends AbstractUnitTestCase
     }
 
     /**
-     * @param string $email
      * @return MustVerifyEmail|MockInterface
      */
     protected function mockUser(string $email)

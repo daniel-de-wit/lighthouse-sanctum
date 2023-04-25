@@ -42,8 +42,7 @@ trait MocksUserProvider
             ->shouldReceive('get')
             ->with('lighthouse-sanctum.user_identifier_field_name', 'email')
             ->andReturn('email')
-            ->getMock()
-        ;
+            ->getMock();
 
         return $config;
     }

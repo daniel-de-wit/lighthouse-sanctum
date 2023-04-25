@@ -12,7 +12,9 @@ use Illuminate\Contracts\Translation\Translator;
 class ForgotPassword
 {
     protected PasswordBroker $passwordBroker;
+
     protected ResetPasswordServiceInterface $resetPasswordService;
+
     protected Translator $translator;
 
     public function __construct(
@@ -26,9 +28,10 @@ class ForgotPassword
     }
 
     /**
-     * @param mixed $_
-     * @param array<string, mixed> $args
+     * @param  mixed  $_
+     * @param  array<string, mixed>  $args
      * @return array<string, string>
+     *
      * @throws Exception
      */
     public function __invoke($_, array $args): array

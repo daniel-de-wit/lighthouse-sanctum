@@ -14,17 +14,11 @@ interface EmailVerificationServiceInterface
     public function setVerificationUrl(string $url): void;
 
     /**
-     * @param MustVerifyEmail $user
-     * @param string          $hash
      * @throws AuthenticationException
      */
     public function verify(MustVerifyEmail $user, string $hash): void;
 
     /**
-     * @param MustVerifyEmail $user
-     * @param string          $hash
-     * @param int             $expires
-     * @param string          $signature
      * @throws AuthenticationException
      */
     public function verifySigned(MustVerifyEmail $user, string $hash, int $expires, string $signature): void;

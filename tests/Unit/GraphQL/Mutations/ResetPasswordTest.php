@@ -107,7 +107,7 @@ class ResetPasswordTest extends AbstractUnitTestCase
             ->shouldNotReceive('resetPassword')
             ->getMock();
 
-        $resolveInfo = Mockery::mock(ResolveInfo::class);
+        $resolveInfo       = Mockery::mock(ResolveInfo::class);
         $resolveInfo->path = ['some', 'dotted', 'path'];
 
         $mutation = new ResetPassword(

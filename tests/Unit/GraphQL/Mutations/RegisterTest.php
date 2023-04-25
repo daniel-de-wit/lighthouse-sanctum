@@ -28,7 +28,7 @@ class RegisterTest extends AbstractUnitTestCase
      */
     public function it_registers_a_user(): void
     {
-        $token = Mockery::mock(NewAccessToken::class);
+        $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
         /** @var UserHasApiTokens|MockInterface $user */
@@ -65,7 +65,7 @@ class RegisterTest extends AbstractUnitTestCase
      */
     public function it_sends_an_email_verification_notification(): void
     {
-        $token = Mockery::mock(NewAccessToken::class);
+        $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
         /** @var UserMustVerifyEmail|MockInterface $user */
@@ -104,7 +104,7 @@ class RegisterTest extends AbstractUnitTestCase
      */
     public function it_sends_an_email_verification_notification_with_a_custom_url(): void
     {
-        $token = Mockery::mock(NewAccessToken::class);
+        $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
         /** @var UserMustVerifyEmail|MockInterface $user */
@@ -178,7 +178,7 @@ class RegisterTest extends AbstractUnitTestCase
         $user = $this->mockUser(User::class);
 
         static::expectException(HasApiTokensException::class);
-        static::expectExceptionMessage('"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
+        static::expectExceptionMessage('"'.get_class($user).'" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
 
         $userProvider = $this->mockUserProvider($user);
 
@@ -228,7 +228,8 @@ class RegisterTest extends AbstractUnitTestCase
 
     /**
      * @template T of User
-     * @param class-string<T> $class
+     *
+     * @param  class-string<T>  $class
      * @return T|MockInterface
      */
     protected function mockUser(string $class)

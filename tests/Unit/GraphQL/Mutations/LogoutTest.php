@@ -74,7 +74,7 @@ class LogoutTest extends AbstractUnitTestCase
         $user = Mockery::mock(User::class);
 
         static::expectException(HasApiTokensException::class);
-        static::expectExceptionMessage('"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
+        static::expectExceptionMessage('"'.get_class($user).'" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
 
         $mutation = new Logout($this->mockAuthFactory($user), Mockery::mock(Translator::class));
 

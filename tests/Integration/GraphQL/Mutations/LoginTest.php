@@ -22,7 +22,7 @@ class LoginTest extends AbstractIntegrationTestCase
             'password' => Hash::make('supersecret'),
         ]);
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foo@bar.com",
@@ -98,7 +98,7 @@ class LoginTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_credentials_are_incorrect(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foo@bar.com",
@@ -120,7 +120,7 @@ class LoginTest extends AbstractIntegrationTestCase
             'password' => Hash::make('supersecret'),
         ]);
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foo@bar.com",
@@ -145,7 +145,7 @@ class LoginTest extends AbstractIntegrationTestCase
             'email_verified_at' => null,
         ]);
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foo@bar.com",
@@ -162,7 +162,7 @@ class LoginTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     password: "supersecret"
@@ -178,7 +178,7 @@ class LoginTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: 12345
@@ -195,7 +195,7 @@ class LoginTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foobar"
@@ -217,7 +217,7 @@ class LoginTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_password_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foo@bar.com"
@@ -233,7 +233,7 @@ class LoginTest extends AbstractIntegrationTestCase
      */
     public function it_returns_an_error_if_the_password_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foobar"

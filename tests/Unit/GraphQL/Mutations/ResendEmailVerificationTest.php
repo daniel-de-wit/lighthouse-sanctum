@@ -75,8 +75,8 @@ class ResendEmailVerificationTest extends AbstractUnitTestCase
         );
 
         $result = $mutation(null, [
-            'email' => 'foo@bar.com',
-            'verification_url'      => [
+            'email'            => 'foo@bar.com',
+            'verification_url' => [
                 'url' => 'custom-url',
             ],
         ]);

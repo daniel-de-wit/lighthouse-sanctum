@@ -42,7 +42,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
             'https://mysite.com/verify-email/__ID__/__HASH__'
         );
 
-        static::assertSame('https://mysite.com/verify-email/12345/' . sha1('user@example.com'), $url);
+        static::assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com'), $url);
     }
 
     /**
@@ -66,7 +66,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
             'expires' => 1609480800,
         ]), $this->getAppKey());
 
-        static::assertSame('https://mysite.com/verify-email/12345/' . sha1('user@example.com') . '/1609480800/' . $signature, $url);
+        static::assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com').'/1609480800/'.$signature, $url);
     }
 
     /**
@@ -86,7 +86,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
 
         $url = call_user_func(VerifyEmail::$createUrlCallback, $user);
 
-        static::assertSame('https://mysite.com/verify-email/12345/' . sha1('user@example.com'), $url);
+        static::assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com'), $url);
     }
 
     /**
@@ -114,7 +114,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
             'expires' => 1609480800,
         ]), $this->getAppKey());
 
-        static::assertSame('https://mysite.com/verify-email/12345/' . sha1('user@example.com') . '/1609480800/' . $signature, $url);
+        static::assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com').'/1609480800/'.$signature, $url);
     }
 
     /**

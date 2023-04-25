@@ -28,7 +28,7 @@ class LoginTest extends AbstractUnitTestCase
      */
     public function it_logs_a_user_in(): void
     {
-        $token = Mockery::mock(NewAccessToken::class);
+        $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
         /** @var UserHasApiTokens|MockInterface $user */
@@ -79,7 +79,7 @@ class LoginTest extends AbstractUnitTestCase
             ->andReturn('custom_key')
             ->getMock();
 
-        $token = Mockery::mock(NewAccessToken::class);
+        $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
         /** @var UserHasApiTokens|MockInterface $user */
@@ -93,15 +93,15 @@ class LoginTest extends AbstractUnitTestCase
         $userProvider = Mockery::mock(UserProvider::class)
             ->shouldReceive('retrieveByCredentials')
             ->with([
-                'custom_key'  => 'foo@bar.com',
-                'password' => 'supersecret',
+                'custom_key' => 'foo@bar.com',
+                'password'   => 'supersecret',
             ])
             ->andReturn($user)
             ->getMock()
             ->shouldReceive('validateCredentials')
             ->with($user, [
-                'custom_key'  => 'foo@bar.com',
-                'password' => 'supersecret',
+                'custom_key' => 'foo@bar.com',
+                'password'   => 'supersecret',
             ])
             ->andReturnTrue()
             ->getMock();
@@ -112,8 +112,8 @@ class LoginTest extends AbstractUnitTestCase
         );
 
         $result = $mutation(null, [
-            'custom_key'  => 'foo@bar.com',
-            'password' => 'supersecret',
+            'custom_key' => 'foo@bar.com',
+            'password'   => 'supersecret',
         ]);
 
         static::assertIsArray($result);
@@ -210,7 +210,7 @@ class LoginTest extends AbstractUnitTestCase
         $user = Mockery::mock(User::class);
 
         static::expectException(HasApiTokensException::class);
-        static::expectExceptionMessage('"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
+        static::expectExceptionMessage('"'.get_class($user).'" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
 
         $userProvider = $this->mockUserProvider($user);
         $userProvider
