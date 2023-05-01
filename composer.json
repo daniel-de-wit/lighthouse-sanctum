@@ -65,6 +65,7 @@
         "check-style": "php-cs-fixer fix --diff --dry-run",
         "coverage": "vendor/bin/phpunit",
         "fix-style": "php-cs-fixer fix",
-        "test": "vendor/bin/phpunit --no-coverage"
+        "test": "vendor/bin/phpunit --no-coverage",
+        "rector": "vendor/bin/rector"
     }
 }
