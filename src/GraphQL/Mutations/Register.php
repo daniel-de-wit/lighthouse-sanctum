@@ -21,34 +21,17 @@ class Register
 {
     use CreatesUserProvider;
 
-    protected AuthManager $authManager;
-
-    protected Config $config;
-
-    protected Hasher $hash;
-
-    protected EmailVerificationServiceInterface $emailVerificationService;
-
-    public function __construct(
-        AuthManager $authManager,
-        Config $config,
-        Hasher $hash,
-        EmailVerificationServiceInterface $emailVerificationService
-    ) {
-        $this->authManager              = $authManager;
-        $this->config                   = $config;
-        $this->hash                     = $hash;
-        $this->emailVerificationService = $emailVerificationService;
+    public function __construct(protected AuthManager $authManager, protected Config $config, protected Hasher $hash, protected EmailVerificationServiceInterface $emailVerificationService)
+    {
     }
 
     /**
-     * @param  mixed  $_
      * @param  array<string, mixed>  $args
      * @return array<string, string|null>
      *
      * @throws Exception
      */
-    public function __invoke($_, array $args): array
+    public function __invoke(mixed $_, array $args): array
     {
         /** @var EloquentUserProvider $userProvider */
         $userProvider = $this->createUserProvider();

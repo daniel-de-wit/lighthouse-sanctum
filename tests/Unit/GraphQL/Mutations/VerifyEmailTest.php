@@ -185,7 +185,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
         ], Mockery::mock(GraphQLContext::class), $resolveInfo);
     }
 
-    protected function mockUserProvider(?User $user): \Illuminate\Contracts\Auth\UserProvider|\Mockery\MockInterface
+    protected function mockUserProvider(?User $user): UserProvider|MockInterface
     {
         /** @var UserProvider|MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)
@@ -197,10 +197,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
         return $userProvider;
     }
 
-    /**
-     * @return ValidationFactory|MockInterface
-     */
-    protected function mockValidator(bool $isValid = true): ValidationFactory|\Mockery\MockInterface
+    protected function mockValidator(bool $isValid = true): ValidationFactory|MockInterface
     {
         /** @var Validator|MockInterface $validator */
         $validator = Mockery::mock(Validator::class)

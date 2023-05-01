@@ -254,7 +254,7 @@ class LoginTest extends AbstractUnitTestCase
         ]);
     }
 
-    protected function mockUserProvider(?User $user): \Illuminate\Contracts\Auth\UserProvider|\Mockery\MockInterface
+    protected function mockUserProvider(?User $user): UserProvider|MockInterface
     {
         /** @var UserProvider|MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)

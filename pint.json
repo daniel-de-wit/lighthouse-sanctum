@@ -4,6 +4,9 @@
         "declare_strict_types": true,
         "binary_operator_spaces": {
             "default": "align_single_space_minimal"
+        },
+        "list_syntax": {
+            "syntax": "long"
         }
     }
 }

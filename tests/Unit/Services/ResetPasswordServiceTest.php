@@ -40,7 +40,7 @@ class ResetPasswordServiceTest extends AbstractUnitTestCase
         $dispatcher = Mockery::mock(Dispatcher::class)
             ->shouldReceive('dispatch')
             ->once()
-            ->withArgs(fn(PasswordReset $event) => $event->user === $user)
+            ->withArgs(fn (PasswordReset $event) => $event->user === $user)
             ->getMock();
 
         $service = new ResetPasswordService($hasher, $dispatcher);

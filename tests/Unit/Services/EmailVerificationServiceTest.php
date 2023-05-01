@@ -112,7 +112,7 @@ class EmailVerificationServiceTest extends AbstractUnitTestCase
         $this->service->throwAuthenticationException();
     }
 
-    protected function mockUser(string $email): \Illuminate\Contracts\Auth\MustVerifyEmail|\Mockery\MockInterface
+    protected function mockUser(string $email): MustVerifyEmail|MockInterface
     {
         /** @var MustVerifyEmail|MockInterface $user */
         $user = Mockery::mock(MustVerifyEmail::class)

@@ -20,34 +20,17 @@ class VerifyEmail
 {
     use CreatesUserProvider;
 
-    protected AuthManager $authManager;
-
-    protected Config $config;
-
-    protected ValidationFactory $validationFactory;
-
-    protected EmailVerificationServiceInterface $emailVerificationService;
-
-    public function __construct(
-        AuthManager $authManager,
-        Config $config,
-        ValidationFactory $validationFactory,
-        EmailVerificationServiceInterface $emailVerificationService
-    ) {
-        $this->authManager              = $authManager;
-        $this->config                   = $config;
-        $this->validationFactory        = $validationFactory;
-        $this->emailVerificationService = $emailVerificationService;
+    public function __construct(protected AuthManager $authManager, protected Config $config, protected ValidationFactory $validationFactory, protected EmailVerificationServiceInterface $emailVerificationService)
+    {
     }
 
     /**
-     * @param  mixed  $_
      * @param  array<string, string|int>  $args
      * @return array<string, string>
      *
      * @throws Exception
      */
-    public function __invoke($_, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
+    public function __invoke(mixed $_, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
     {
         $userProvider = $this->createUserProvider();
 

@@ -12,10 +12,7 @@ use Mockery\MockInterface;
 
 trait MocksAuthFactory
 {
-    /**
-     * @return AuthFactory|MockInterface
-     */
-    protected function mockAuthFactory(\Illuminate\Contracts\Auth\Authenticatable|\Mockery\MockInterface|null $user = null): AuthFactory|\Mockery\MockInterface
+    protected function mockAuthFactory(Authenticatable|MockInterface|null $user = null): AuthFactory|MockInterface
     {
         /** @var Guard|MockInterface $guard */
         $guard = Mockery::mock(Guard::class)

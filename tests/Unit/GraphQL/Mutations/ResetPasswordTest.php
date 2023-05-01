@@ -81,7 +81,7 @@ class ResetPasswordTest extends AbstractUnitTestCase
         /** @var PasswordBroker|MockInterface $passwordBroker */
         $passwordBroker = Mockery::mock(PasswordBroker::class)
             ->shouldReceive('reset')
-            ->withArgs(fn(array $credentials, Closure $callback) => empty(array_diff($credentials, [
+            ->withArgs(fn (array $credentials, Closure $callback) => empty(array_diff($credentials, [
                 'email'    => 'foo@bar.com',
                 'token'    => '1234567890',
                 'password' => 'supersecret',

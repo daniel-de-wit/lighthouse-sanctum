@@ -16,7 +16,7 @@ class HasApiTokensException extends Exception
      */
     public function __construct($user)
     {
-        $message = '"'.get_class($user).'" must implement "'.HasApiTokens::class.'".';
+        $message = '"'.$user::class.'" must implement "'.HasApiTokens::class.'".';
 
         parent::__construct($message);
     }

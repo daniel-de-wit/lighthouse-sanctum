@@ -187,7 +187,7 @@ class RegisterTest extends AbstractUnitTestCase
         ]);
     }
 
-    protected function mockHasher(): \Illuminate\Contracts\Hashing\Hasher|\Mockery\MockInterface
+    protected function mockHasher(): Hasher|MockInterface
     {
         /** @var Hasher|MockInterface $hasher */
         $hasher = Mockery::mock(Hasher::class)
@@ -199,7 +199,7 @@ class RegisterTest extends AbstractUnitTestCase
         return $hasher;
     }
 
-    protected function mockUserProvider(?User $user): \Illuminate\Contracts\Auth\UserProvider|\Mockery\MockInterface
+    protected function mockUserProvider(?User $user): UserProvider|MockInterface
     {
         /** @var UserProvider|MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)

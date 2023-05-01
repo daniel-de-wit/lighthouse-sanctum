@@ -17,14 +17,11 @@ class EmailVerificationService implements EmailVerificationServiceInterface
 {
     use HasUserModel;
 
-    protected SignatureServiceInterface $signatureService;
-
-    protected int $expiresIn;
-
-    public function __construct(SignatureServiceInterface $signatureService, int $expiresIn)
-    {
-        $this->signatureService = $signatureService;
-        $this->expiresIn        = $expiresIn;
+    public function __construct(
+        protected SignatureServiceInterface $signatureService,
+        protected int $expiresIn,
+    ) {
+        //
     }
 
     public function transformUrl(MustVerifyEmail $user, string $url): string
@@ -41,9 +38,7 @@ class EmailVerificationService implements EmailVerificationServiceInterface
 
     public function setVerificationUrl(string $url): void
     {
-        VerifyEmail::createUrlUsing(function (MustVerifyEmail $user) use ($url) {
-            return $this->transformUrl($user, $url);
-        });
+        VerifyEmail::createUrlUsing(fn (MustVerifyEmail $user) => $this->transformUrl($user, $url));
     }
 
     /**
@@ -73,7 +68,7 @@ class EmailVerificationService implements EmailVerificationServiceInterface
                 'hash'    => $hash,
                 'expires' => $expires,
             ], $signature);
-        } catch (InvalidSignatureException $exception) {
+        } catch (InvalidSignatureException) {
             $this->throwAuthenticationException();
         }
     }

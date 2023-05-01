@@ -197,7 +197,7 @@ class UpdatePasswordTest extends AbstractUnitTestCase
         );
     }
 
-    protected function mockResolveInfo(): \GraphQL\Type\Definition\ResolveInfo|\Mockery\MockInterface
+    protected function mockResolveInfo(): ResolveInfo|MockInterface
     {
         /** @var ResolveInfo|MockInterface $resolveInfo */
         $resolveInfo = Mockery::mock(ResolveInfo::class);

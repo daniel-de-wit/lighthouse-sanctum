@@ -13,7 +13,7 @@ use Mockery\MockInterface;
 
 trait MocksUserProvider
 {
-    protected function mockAuthManager(?UserProvider $userProvider): \Illuminate\Auth\AuthManager|\Mockery\MockInterface
+    protected function mockAuthManager(?UserProvider $userProvider): AuthManager|MockInterface
     {
         /** @var AuthManager|MockInterface $authManager */
         $authManager = Mockery::mock(AuthManager::class)
@@ -25,10 +25,7 @@ trait MocksUserProvider
         return $authManager;
     }
 
-    /**
-     * @return Config|MockInterface
-     */
-    protected function mockConfig(): Config|\Mockery\MockInterface
+    protected function mockConfig(): Config|MockInterface
     {
         /** @var Config|MockInterface $config */
         $config = Mockery::mock(Config::class)
@@ -44,5 +41,5 @@ trait MocksUserProvider
         return $config;
     }
 
-    abstract protected function mockUserProvider(?User $user): \Illuminate\Contracts\Auth\UserProvider|\Mockery\MockInterface;
+    abstract protected function mockUserProvider(?User $user): UserProvider|MockInterface;
 }

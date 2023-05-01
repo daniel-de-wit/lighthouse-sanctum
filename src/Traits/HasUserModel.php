@@ -10,11 +10,9 @@ use RuntimeException;
 trait HasUserModel
 {
     /**
-     * @param  mixed  $user
-     *
      * @throws RuntimeException
      */
-    protected function getModelFromUser($user): Model
+    protected function getModelFromUser(mixed $user): Model
     {
         if (! $user instanceof Model) {
             throw new RuntimeException('The user class must extend "'.Model::class.'".');

@@ -16,30 +16,17 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class ResetPassword
 {
-    protected PasswordBroker $passwordBroker;
-
-    protected Translator $translator;
-
-    protected ResetPasswordServiceInterface $resetPasswordService;
-
-    public function __construct(
-        PasswordBroker $passwordBroker,
-        Translator $translator,
-        ResetPasswordServiceInterface $resetPasswordService
-    ) {
-        $this->passwordBroker       = $passwordBroker;
-        $this->translator           = $translator;
-        $this->resetPasswordService = $resetPasswordService;
+    public function __construct(protected PasswordBroker $passwordBroker, protected Translator $translator, protected ResetPasswordServiceInterface $resetPasswordService)
+    {
     }
 
     /**
-     * @param  mixed  $_
      * @param  array<string, mixed>  $args
      * @return array<string, string>
      *
      * @throws Exception
      */
-    public function __invoke($_, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
+    public function __invoke(mixed $_, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
     {
         $credentials = Arr::except($args, [
             'directive',
@@ -70,15 +57,10 @@ class ResetPassword
 
     protected function getInvalidField(string $response): string
     {
-        switch ($response) {
-            case PasswordBroker::INVALID_USER:
-                return 'email';
-
-            case PasswordBroker::INVALID_TOKEN:
-                return 'token';
-
-            default:
-                return '';
-        }
+        return match ($response) {
+            PasswordBroker::INVALID_USER  => 'email',
+            PasswordBroker::INVALID_TOKEN => 'token',
+            default                       => '',
+        };
     }
 }

@@ -11,15 +11,9 @@ use GraphQL\Type\Definition\ResolveInfo;
 
 class GraphQLValidationException extends Exception implements ClientAware, ProvidesExtensions
 {
-    protected string $validationMessage;
-
-    protected string $field;
-
-    public function __construct(string $message, string $field, string|ResolveInfo $path)
-    {
-        $this->validationMessage = $message;
-        $this->field             = $field;
-
+    public function __construct(
+        protected string $validationMessage, protected string $field, string|ResolveInfo $path,
+    ) {
         if ($path instanceof ResolveInfo) {
             $path = implode('.', $path->path);
         }
