@@ -21,8 +21,12 @@ class Register
 {
     use CreatesUserProvider;
 
-    public function __construct(protected AuthManager $authManager, protected Config $config, protected Hasher $hash, protected EmailVerificationServiceInterface $emailVerificationService)
-    {
+    public function __construct(
+        protected AuthManager $authManager,
+        protected Config $config,
+        protected Hasher $hash,
+        protected EmailVerificationServiceInterface $emailVerificationService,
+    ) {
     }
 
     /**

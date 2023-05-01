@@ -20,8 +20,12 @@ class VerifyEmail
 {
     use CreatesUserProvider;
 
-    public function __construct(protected AuthManager $authManager, protected Config $config, protected ValidationFactory $validationFactory, protected EmailVerificationServiceInterface $emailVerificationService)
-    {
+    public function __construct(
+        protected AuthManager $authManager,
+        protected Config $config,
+        protected ValidationFactory $validationFactory,
+        protected EmailVerificationServiceInterface $emailVerificationService,
+    ) {
     }
 
     /**

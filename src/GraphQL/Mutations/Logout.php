@@ -16,8 +16,10 @@ class Logout
 {
     use HasAuthenticatedUser;
 
-    public function __construct(protected AuthFactory $authFactory, protected Translator $translator)
-    {
+    public function __construct(
+        protected AuthFactory $authFactory,
+        protected Translator $translator,
+    ) {
     }
 
     /**

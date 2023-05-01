@@ -22,8 +22,11 @@ class UpdatePassword
 
     protected ResolveInfo $resolveInfo;
 
-    public function __construct(protected AuthFactory $authFactory, protected Hasher $hasher, protected Translator $translator)
-    {
+    public function __construct(
+        protected AuthFactory $authFactory,
+        protected Hasher $hasher,
+        protected Translator $translator,
+    ) {
     }
 
     /**

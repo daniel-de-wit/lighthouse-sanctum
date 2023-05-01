@@ -16,8 +16,11 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class ResetPassword
 {
-    public function __construct(protected PasswordBroker $passwordBroker, protected Translator $translator, protected ResetPasswordServiceInterface $resetPasswordService)
-    {
+    public function __construct(
+        protected PasswordBroker $passwordBroker,
+        protected Translator $translator,
+        protected ResetPasswordServiceInterface $resetPasswordService,
+    ) {
     }
 
     /**

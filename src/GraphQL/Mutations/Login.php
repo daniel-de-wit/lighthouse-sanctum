@@ -17,8 +17,10 @@ class Login
 {
     use CreatesUserProvider;
 
-    public function __construct(protected AuthManager $authManager, protected Config $config)
-    {
+    public function __construct(
+        protected AuthManager $authManager,
+        protected Config $config,
+    ) {
     }
 
     /**
