@@ -18,7 +18,7 @@ class ResetPasswordServiceTest extends AbstractUnitTestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function it_resets_a_password(): void
     {
-        /** @var User|MockInterface $user */
+        /** @var User&MockInterface $user */
         $user = Mockery::mock(User::class)
             ->shouldReceive('setAttribute')
             ->once()
@@ -28,7 +28,7 @@ class ResetPasswordServiceTest extends AbstractUnitTestCase
             ->once()
             ->getMock();
 
-        /** @var Hasher|MockInterface $hasher */
+        /** @var Hasher&MockInterface $hasher */
         $hasher = Mockery::mock(Hasher::class)
             ->shouldReceive('make')
             ->once()
@@ -36,7 +36,7 @@ class ResetPasswordServiceTest extends AbstractUnitTestCase
             ->andReturn('some-hash')
             ->getMock();
 
-        /** @var Dispatcher|MockInterface $dispatcher */
+        /** @var Dispatcher&MockInterface $dispatcher */
         $dispatcher = Mockery::mock(Dispatcher::class)
             ->shouldReceive('dispatch')
             ->once()

@@ -28,12 +28,12 @@ class VerifyEmailTest extends AbstractUnitTestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function it_verifies_an_email(): void
     {
-        /** @var UserMustVerifyEmail|MockInterface $user */
+        /** @var UserMustVerifyEmail&MockInterface $user */
         $user = Mockery::mock(UserMustVerifyEmail::class)
             ->shouldReceive('markEmailAsVerified')
             ->getMock();
 
-        /** @var EmailVerificationServiceInterface|MockInterface $verificationService */
+        /** @var EmailVerificationServiceInterface&MockInterface $verificationService */
         $verificationService = Mockery::mock(EmailVerificationServiceInterface::class)
             ->shouldReceive('verify')
             ->with($user, '1234567890')
@@ -41,7 +41,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
 
         $userProvider = $this->mockUserProvider($user);
 
-        /** @var Config|MockInterface $config */
+        /** @var Config&MockInterface $config */
         $config = $this->mockConfig()
             ->shouldReceive('get')
             ->with('lighthouse-sanctum.use_signed_email_verification_url')
@@ -68,12 +68,12 @@ class VerifyEmailTest extends AbstractUnitTestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function it_verifies_an_email_with_a_signature(): void
     {
-        /** @var UserMustVerifyEmail|MockInterface $user */
+        /** @var UserMustVerifyEmail&MockInterface $user */
         $user = Mockery::mock(UserMustVerifyEmail::class)
             ->shouldReceive('markEmailAsVerified')
             ->getMock();
 
-        /** @var EmailVerificationServiceInterface|MockInterface $verificationService */
+        /** @var EmailVerificationServiceInterface&MockInterface $verificationService */
         $verificationService = Mockery::mock(EmailVerificationServiceInterface::class)
             ->shouldReceive('verifySigned')
             ->with($user, '1234567890', 60, 'signature')
@@ -81,7 +81,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
 
         $userProvider = $this->mockUserProvider($user);
 
-        /** @var Config|MockInterface $config */
+        /** @var Config&MockInterface $config */
         $config = $this->mockConfig()
             ->shouldReceive('get')
             ->with('lighthouse-sanctum.use_signed_email_verification_url')
@@ -160,7 +160,7 @@ class VerifyEmailTest extends AbstractUnitTestCase
 
         $userProvider = $this->mockUserProvider(Mockery::mock(UserMustVerifyEmail::class));
 
-        /** @var Config|MockInterface $config */
+        /** @var Config&MockInterface $config */
         $config = $this->mockConfig()
             ->shouldReceive('get')
             ->with('lighthouse-sanctum.use_signed_email_verification_url')
@@ -185,9 +185,9 @@ class VerifyEmailTest extends AbstractUnitTestCase
         ], Mockery::mock(GraphQLContext::class), $resolveInfo);
     }
 
-    protected function mockUserProvider(?User $user): UserProvider|MockInterface
+    protected function mockUserProvider(?User $user): UserProvider&MockInterface
     {
-        /** @var UserProvider|MockInterface $userProvider */
+        /** @var UserProvider&MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)
             ->shouldReceive('retrieveById')
             ->with(123)
@@ -197,15 +197,15 @@ class VerifyEmailTest extends AbstractUnitTestCase
         return $userProvider;
     }
 
-    protected function mockValidator(bool $isValid = true): ValidationFactory|MockInterface
+    protected function mockValidator(bool $isValid = true): ValidationFactory&MockInterface
     {
-        /** @var Validator|MockInterface $validator */
+        /** @var Validator&MockInterface $validator */
         $validator = Mockery::mock(Validator::class)
             ->shouldReceive('fails')
             ->andReturn(! $isValid)
             ->getMock();
 
-        /** @var ValidationFactory|MockInterface $factory */
+        /** @var ValidationFactory&MockInterface $factory */
         $factory = Mockery::mock(ValidationFactory::class)
             ->shouldReceive('make')
             ->with([

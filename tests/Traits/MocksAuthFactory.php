@@ -12,15 +12,15 @@ use Mockery\MockInterface;
 
 trait MocksAuthFactory
 {
-    protected function mockAuthFactory(Authenticatable|MockInterface|null $user = null): AuthFactory|MockInterface
+    protected function mockAuthFactory((Authenticatable&MockInterface)|null $user = null): AuthFactory&MockInterface
     {
-        /** @var Guard|MockInterface $guard */
+        /** @var Guard&MockInterface $guard */
         $guard = Mockery::mock(Guard::class)
             ->shouldReceive('user')
             ->andReturn($user)
             ->getMock();
 
-        /** @var AuthFactory|MockInterface $authFactory */
+        /** @var AuthFactory&MockInterface $authFactory */
         $authFactory = Mockery::mock(AuthFactory::class)
             ->shouldReceive('guard')
             ->with('sanctum')

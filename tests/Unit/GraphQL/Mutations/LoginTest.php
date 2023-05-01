@@ -29,7 +29,7 @@ class LoginTest extends AbstractUnitTestCase
         $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
-        /** @var UserHasApiTokens|MockInterface $user */
+        /** @var UserHasApiTokens&MockInterface $user */
         $user = Mockery::mock(UserHasApiTokens::class)
             ->shouldReceive('createToken')
             ->with('default')
@@ -64,7 +64,7 @@ class LoginTest extends AbstractUnitTestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function it_logs_a_user_in_using_custom_identification(): void
     {
-        /** @var Config|MockInterface $config */
+        /** @var Config&MockInterface $config */
         $config = Mockery::mock(Config::class)
             ->shouldReceive('get')
             ->with('lighthouse-sanctum.provider')
@@ -78,14 +78,14 @@ class LoginTest extends AbstractUnitTestCase
         $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
-        /** @var UserHasApiTokens|MockInterface $user */
+        /** @var UserHasApiTokens&MockInterface $user */
         $user = Mockery::mock(UserHasApiTokens::class)
             ->shouldReceive('createToken')
             ->with('default')
             ->andReturn($token)
             ->getMock();
 
-        /** @var UserProvider|MockInterface $userProvider */
+        /** @var UserProvider&MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)
             ->shouldReceive('retrieveByCredentials')
             ->with([
@@ -159,10 +159,10 @@ class LoginTest extends AbstractUnitTestCase
         static::expectException(AuthenticationException::class);
         static::expectExceptionMessage('The provided credentials are incorrect.');
 
-        /** @var UserHasApiTokens|MockInterface $user */
+        /** @var UserHasApiTokens&MockInterface $user */
         $user = Mockery::mock(UserHasApiTokens::class);
 
-        /** @var UserProvider|MockInterface $userProvider */
+        /** @var UserProvider&MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)
             ->shouldReceive('retrieveByCredentials')
             ->with([
@@ -227,7 +227,7 @@ class LoginTest extends AbstractUnitTestCase
         static::expectException(AuthenticationException::class);
         static::expectExceptionMessage('Your email address is not verified.');
 
-        /** @var UserMustVerifyEmail|MockInterface $user */
+        /** @var UserMustVerifyEmail&MockInterface $user */
         $user = Mockery::mock(UserMustVerifyEmail::class)
             ->shouldReceive('hasVerifiedEmail')
             ->andReturnFalse()
@@ -254,9 +254,9 @@ class LoginTest extends AbstractUnitTestCase
         ]);
     }
 
-    protected function mockUserProvider(?User $user): UserProvider|MockInterface
+    protected function mockUserProvider(?User $user): UserProvider&MockInterface
     {
-        /** @var UserProvider|MockInterface $userProvider */
+        /** @var UserProvider&MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)
             ->shouldReceive('retrieveByCredentials')
             ->with([

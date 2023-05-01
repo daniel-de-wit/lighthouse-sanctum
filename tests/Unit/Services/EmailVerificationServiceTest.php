@@ -19,10 +19,7 @@ class EmailVerificationServiceTest extends AbstractUnitTestCase
 {
     protected EmailVerificationService $service;
 
-    /**
-     * @var SignatureServiceInterface|MockInterface
-     */
-    protected $signatureService;
+    protected SignatureServiceInterface&MockInterface $signatureService;
 
     protected function setUp(): void
     {
@@ -77,7 +74,7 @@ class EmailVerificationServiceTest extends AbstractUnitTestCase
 
         Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
 
-        /** @var UserMustVerifyEmail|MockInterface $user */
+        /** @var UserMustVerifyEmail&MockInterface $user */
         $user = Mockery::mock(UserMustVerifyEmail::class)
             ->shouldReceive('getEmailForVerification')
             ->andReturn('user@example.com')
@@ -112,9 +109,9 @@ class EmailVerificationServiceTest extends AbstractUnitTestCase
         $this->service->throwAuthenticationException();
     }
 
-    protected function mockUser(string $email): MustVerifyEmail|MockInterface
+    protected function mockUser(string $email): MustVerifyEmail&MockInterface
     {
-        /** @var MustVerifyEmail|MockInterface $user */
+        /** @var MustVerifyEmail&MockInterface $user */
         $user = Mockery::mock(MustVerifyEmail::class)
             ->shouldReceive('getEmailForVerification')
             ->once()

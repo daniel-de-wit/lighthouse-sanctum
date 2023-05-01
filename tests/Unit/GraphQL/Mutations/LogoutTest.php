@@ -23,18 +23,18 @@ class LogoutTest extends AbstractUnitTestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function it_logs_a_user_out(): void
     {
-        /** @var PersonalAccessToken|MockInterface $token */
+        /** @var PersonalAccessToken&MockInterface $token */
         $token = Mockery::mock(PersonalAccessToken::class)
             ->shouldReceive('delete')
             ->getMock();
 
-        /** @var UserHasApiTokens|MockInterface $user */
+        /** @var UserHasApiTokens&MockInterface $user */
         $user = Mockery::mock(UserHasApiTokens::class)
             ->shouldReceive('currentAccessToken')
             ->andReturn($token)
             ->getMock();
 
-        /** @var Translator|MockInterface $translator */
+        /** @var Translator&MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
             ->with('Your session has been terminated')

@@ -29,7 +29,7 @@ class RegisterTest extends AbstractUnitTestCase
         $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
-        /** @var UserHasApiTokens|MockInterface $user */
+        /** @var UserHasApiTokens&MockInterface $user */
         $user = $this->mockUser(UserHasApiTokens::class)
             ->shouldReceive('createToken')
             ->with('default')
@@ -64,7 +64,7 @@ class RegisterTest extends AbstractUnitTestCase
         $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
-        /** @var UserMustVerifyEmail|MockInterface $user */
+        /** @var UserMustVerifyEmail&MockInterface $user */
         $user = $this->mockUser(UserMustVerifyEmail::class)
             ->shouldReceive('sendEmailVerificationNotification')
             ->getMock()
@@ -101,7 +101,7 @@ class RegisterTest extends AbstractUnitTestCase
         $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
-        /** @var UserMustVerifyEmail|MockInterface $user */
+        /** @var UserMustVerifyEmail&MockInterface $user */
         $user = $this->mockUser(UserMustVerifyEmail::class)
             ->shouldReceive('sendEmailVerificationNotification')
             ->getMock()
@@ -112,7 +112,7 @@ class RegisterTest extends AbstractUnitTestCase
 
         $userProvider = $this->mockUserProvider($user);
 
-        /** @var EmailVerificationServiceInterface|MockInterface $verificationService */
+        /** @var EmailVerificationServiceInterface&MockInterface $verificationService */
         $verificationService = Mockery::mock(EmailVerificationServiceInterface::class)
             ->shouldReceive('setVerificationUrl')
             ->with('custom-url')
@@ -187,9 +187,9 @@ class RegisterTest extends AbstractUnitTestCase
         ]);
     }
 
-    protected function mockHasher(): Hasher|MockInterface
+    protected function mockHasher(): Hasher&MockInterface
     {
-        /** @var Hasher|MockInterface $hasher */
+        /** @var Hasher&MockInterface $hasher */
         $hasher = Mockery::mock(Hasher::class)
             ->shouldReceive('make')
             ->with('supersecret')
@@ -199,9 +199,9 @@ class RegisterTest extends AbstractUnitTestCase
         return $hasher;
     }
 
-    protected function mockUserProvider(?User $user): UserProvider|MockInterface
+    protected function mockUserProvider(?User $user): UserProvider&MockInterface
     {
-        /** @var UserProvider|MockInterface $userProvider */
+        /** @var UserProvider&MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)
             ->shouldReceive('createModel')
             ->andReturn($user)
@@ -214,11 +214,11 @@ class RegisterTest extends AbstractUnitTestCase
      * @template T of User
      *
      * @param  class-string<T>  $class
-     * @return T|MockInterface
+     * @return T&MockInterface
      */
     protected function mockUser(string $class)
     {
-        /** @var T|MockInterface $user */
+        /** @var T&MockInterface $user */
         $user = Mockery::mock($class)
             ->shouldReceive('fill')
             ->with([

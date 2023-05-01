@@ -24,7 +24,7 @@ class UpdatePasswordTest extends AbstractUnitTestCase
     #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_the_password(): void
     {
-        /** @var User|MockInterface $user */
+        /** @var User&MockInterface $user */
         $user = Mockery::mock(User::class)
             ->shouldReceive('getAuthPassword')
             ->twice()
@@ -37,7 +37,7 @@ class UpdatePasswordTest extends AbstractUnitTestCase
             ])
             ->getMock();
 
-        /** @var Hasher|MockInterface $hasher */
+        /** @var Hasher&MockInterface $hasher */
         $hasher = Mockery::mock(Hasher::class)
             ->shouldReceive('check')
             ->once()
@@ -100,14 +100,14 @@ class UpdatePasswordTest extends AbstractUnitTestCase
         static::expectException(GraphQLValidationException::class);
         static::expectExceptionMessage('Validation failed for the field [some.path].');
 
-        /** @var User|MockInterface $user */
+        /** @var User&MockInterface $user */
         $user = Mockery::mock(User::class)
             ->shouldReceive('getAuthPassword')
             ->once()
             ->andReturn('password-hash')
             ->getMock();
 
-        /** @var Hasher|MockInterface $hasher */
+        /** @var Hasher&MockInterface $hasher */
         $hasher = Mockery::mock(Hasher::class)
             ->shouldReceive('check')
             ->once()
@@ -115,7 +115,7 @@ class UpdatePasswordTest extends AbstractUnitTestCase
             ->andReturnFalse()
             ->getMock();
 
-        /** @var Translator|MockInterface $translator */
+        /** @var Translator&MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
             ->once()
@@ -149,14 +149,14 @@ class UpdatePasswordTest extends AbstractUnitTestCase
         static::expectException(GraphQLValidationException::class);
         static::expectExceptionMessage('Validation failed for the field [some.path].');
 
-        /** @var User|MockInterface $user */
+        /** @var User&MockInterface $user */
         $user = Mockery::mock(User::class)
             ->shouldReceive('getAuthPassword')
             ->twice()
             ->andReturn('password-hash')
             ->getMock();
 
-        /** @var Hasher|MockInterface $hasher */
+        /** @var Hasher&MockInterface $hasher */
         $hasher = Mockery::mock(Hasher::class)
             ->shouldReceive('check')
             ->once()
@@ -169,7 +169,7 @@ class UpdatePasswordTest extends AbstractUnitTestCase
             ->andReturnTrue()
             ->getMock();
 
-        /** @var Translator|MockInterface $translator */
+        /** @var Translator&MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
             ->once()
@@ -197,9 +197,9 @@ class UpdatePasswordTest extends AbstractUnitTestCase
         );
     }
 
-    protected function mockResolveInfo(): ResolveInfo|MockInterface
+    protected function mockResolveInfo(): ResolveInfo&MockInterface
     {
-        /** @var ResolveInfo|MockInterface $resolveInfo */
+        /** @var ResolveInfo&MockInterface $resolveInfo */
         $resolveInfo = Mockery::mock(ResolveInfo::class);
 
         $resolveInfo->path = ['some', 'path'];
