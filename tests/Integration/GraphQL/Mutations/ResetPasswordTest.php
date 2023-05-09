@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Event;
 
-class ResetPasswordTest extends AbstractIntegrationTest
+class ResetPasswordTest extends AbstractIntegrationTestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_resets_a_password(): void
     {
         Event::fake([PasswordReset::class]);
@@ -40,7 +38,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
             mutation {
                 resetPassword(input: {
                     email: "foo@bar.com",
-                    token: "' . $token . '",
+                    token: "'.$token.'",
                     password: "supersecret",
                     password_confirmation: "supersecret"
                 }) {
@@ -52,7 +50,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
             'data' => [
                 'resetPassword' => [
                     'status'  => 'PASSWORD_RESET',
-                    'message' => 'Your password has been reset!',
+                    'message' => 'Your password has been reset.',
                 ],
             ],
         ]);
@@ -65,9 +63,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
         });
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -84,9 +80,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('Field ResetPasswordInput.email of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -101,12 +95,10 @@ class ResetPasswordTest extends AbstractIntegrationTest
                     message
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "resetPassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -125,13 +117,11 @@ class ResetPasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [resetPassword].')
             ->assertGraphQLValidationError(
                 'input.email',
-                'The input.email must be a valid email address.',
+                'The input.email field must be a valid email address.',
             );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_email_is_not_found(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -151,9 +141,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
             ->assertGraphQLValidationError('input.email', "We can't find a user with that email address.");
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_token_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -170,9 +158,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('Field ResetPasswordInput.token of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_token_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -187,12 +173,10 @@ class ResetPasswordTest extends AbstractIntegrationTest
                     message
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "resetPassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_token_is_not_found(): void
     {
         UserHasApiTokens::factory()->create([
@@ -216,9 +200,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
             ->assertGraphQLValidationError('input.token', 'This password reset token is invalid.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -235,9 +217,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('Field ResetPasswordInput.password of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -252,12 +232,10 @@ class ResetPasswordTest extends AbstractIntegrationTest
                     message
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "resetPassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_field_is_not_confirmed(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -276,13 +254,11 @@ class ResetPasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [resetPassword].')
             ->assertGraphQLValidationError(
                 'input.password',
-                'The input.password confirmation does not match.',
+                'The input.password field confirmation does not match.',
             );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_confirmation_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -299,9 +275,7 @@ class ResetPasswordTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('Field ResetPasswordInput.password_confirmation of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_confirmation_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -316,6 +290,6 @@ class ResetPasswordTest extends AbstractIntegrationTest
                     message
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "resetPassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 }

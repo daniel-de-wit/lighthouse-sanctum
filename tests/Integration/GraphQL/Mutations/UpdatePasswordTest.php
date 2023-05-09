@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
 
-class UpdatePasswordTest extends AbstractIntegrationTest
+class UpdatePasswordTest extends AbstractIntegrationTestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_the_password(): void
     {
         $user = $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -41,12 +39,10 @@ class UpdatePasswordTest extends AbstractIntegrationTest
         static::assertTrue(Hash::check('secret', $user->getAuthPassword()));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_user_is_unauthenticated(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -60,14 +56,12 @@ class UpdatePasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Unauthenticated.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_current_password_is_not_the_same(): void
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "otherpass",
@@ -81,18 +75,16 @@ class UpdatePasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [updatePassword].')
             ->assertGraphQLValidationError(
                 'input.current_password',
-                'The current_password and user password must match.',
+                'The current_password field must match user password.',
             );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_new_password_is_not_different(): void
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -106,18 +98,16 @@ class UpdatePasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [updatePassword].')
             ->assertGraphQLValidationError(
                 'input.password',
-                'The password and user password must be different.',
+                'The password field and user password must be different.',
             );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_current_password_field_is_missing(): void
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     password: "secret",
@@ -129,14 +119,12 @@ class UpdatePasswordTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('Field UpdatePasswordInput.current_password of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_current_password_field_is_not_a_string(): void
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: 12345,
@@ -146,17 +134,15 @@ class UpdatePasswordTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "updatePassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_field_is_missing(): void
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -168,14 +154,12 @@ class UpdatePasswordTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('Field UpdatePasswordInput.password of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_field_is_not_a_string(): void
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -185,17 +169,15 @@ class UpdatePasswordTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "updatePassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_field_is_not_confirmed(): void
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -209,18 +191,16 @@ class UpdatePasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [updatePassword].')
             ->assertGraphQLValidationError(
                 'input.password',
-                'The input.password confirmation does not match.',
+                'The input.password field confirmation does not match.',
             );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_confirmation_field_is_missing(): void
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -232,14 +212,12 @@ class UpdatePasswordTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('Field UpdatePasswordInput.password_confirmation of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_confirmation_field_is_not_a_string(): void
     {
         $this->actAsUser();
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 updatePassword(input: {
                     current_password: "mypass",
@@ -249,7 +227,7 @@ class UpdatePasswordTest extends AbstractIntegrationTest
                     status
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "updatePassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
     protected function actAsUser(): UserHasApiTokens

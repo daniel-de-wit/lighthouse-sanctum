@@ -17,13 +17,11 @@ class EmailVerificationService implements EmailVerificationServiceInterface
 {
     use HasUserModel;
 
-    protected SignatureServiceInterface $signatureService;
-    protected int $expiresIn;
-
-    public function __construct(SignatureServiceInterface $signatureService, int $expiresIn)
-    {
-        $this->signatureService = $signatureService;
-        $this->expiresIn        = $expiresIn;
+    public function __construct(
+        protected SignatureServiceInterface $signatureService,
+        protected int $expiresIn,
+    ) {
+        //
     }
 
     public function transformUrl(MustVerifyEmail $user, string $url): string
@@ -40,14 +38,10 @@ class EmailVerificationService implements EmailVerificationServiceInterface
 
     public function setVerificationUrl(string $url): void
     {
-        VerifyEmail::createUrlUsing(function (MustVerifyEmail $user) use ($url) {
-            return $this->transformUrl($user, $url);
-        });
+        VerifyEmail::createUrlUsing(fn (MustVerifyEmail $user) => $this->transformUrl($user, $url));
     }
 
     /**
-     * @param MustVerifyEmail $user
-     * @param string          $hash
      * @throws AuthenticationException
      */
     public function verify(MustVerifyEmail $user, string $hash): void
@@ -58,10 +52,6 @@ class EmailVerificationService implements EmailVerificationServiceInterface
     }
 
     /**
-     * @param MustVerifyEmail $user
-     * @param string          $hash
-     * @param int             $expires
-     * @param string          $signature
      * @throws AuthenticationException
      */
     public function verifySigned(MustVerifyEmail $user, string $hash, int $expires, string $signature): void
@@ -78,7 +68,7 @@ class EmailVerificationService implements EmailVerificationServiceInterface
                 'hash'    => $hash,
                 'expires' => $expires,
             ], $signature);
-        } catch (InvalidSignatureException $exception) {
+        } catch (InvalidSignatureException) {
             $this->throwAuthenticationException();
         }
     }
@@ -92,7 +82,6 @@ class EmailVerificationService implements EmailVerificationServiceInterface
     }
 
     /**
-     * @param MustVerifyEmail $user
      * @return mixed[]
      */
     protected function createUrlParameters(MustVerifyEmail $user): array

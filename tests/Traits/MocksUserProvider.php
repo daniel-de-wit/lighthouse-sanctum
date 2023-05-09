@@ -13,12 +13,9 @@ use Mockery\MockInterface;
 
 trait MocksUserProvider
 {
-    /**
-     * @return AuthManager|MockInterface
-     */
-    protected function mockAuthManager(?UserProvider $userProvider)
+    protected function mockAuthManager(?UserProvider $userProvider): AuthManager&MockInterface
     {
-        /** @var AuthManager|MockInterface $authManager */
+        /** @var AuthManager&MockInterface $authManager */
         $authManager = Mockery::mock(AuthManager::class)
             ->shouldReceive('createUserProvider')
             ->with('sanctum-provider')
@@ -28,12 +25,9 @@ trait MocksUserProvider
         return $authManager;
     }
 
-    /**
-     * @return Config|MockInterface
-     */
-    protected function mockConfig()
+    protected function mockConfig(): Config&MockInterface
     {
-        /** @var Config|MockInterface $config */
+        /** @var Config&MockInterface $config */
         $config = Mockery::mock(Config::class)
             ->shouldReceive('get')
             ->with('lighthouse-sanctum.provider')
@@ -42,14 +36,10 @@ trait MocksUserProvider
             ->shouldReceive('get')
             ->with('lighthouse-sanctum.user_identifier_field_name', 'email')
             ->andReturn('email')
-            ->getMock()
-        ;
+            ->getMock();
 
         return $config;
     }
 
-    /**
-     * @return UserProvider|MockInterface
-     */
-    abstract protected function mockUserProvider(?User $user);
+    abstract protected function mockUserProvider(?User $user): UserProvider&MockInterface;
 }

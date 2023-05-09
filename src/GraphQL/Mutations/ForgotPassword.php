@@ -11,27 +11,21 @@ use Illuminate\Contracts\Translation\Translator;
 
 class ForgotPassword
 {
-    protected PasswordBroker $passwordBroker;
-    protected ResetPasswordServiceInterface $resetPasswordService;
-    protected Translator $translator;
-
     public function __construct(
-        PasswordBroker $passwordBroker,
-        ResetPasswordServiceInterface $resetPasswordService,
-        Translator $translator
+        protected PasswordBroker $passwordBroker,
+        protected ResetPasswordServiceInterface $resetPasswordService,
+        protected Translator $translator,
     ) {
-        $this->passwordBroker       = $passwordBroker;
-        $this->resetPasswordService = $resetPasswordService;
-        $this->translator           = $translator;
+        //
     }
 
     /**
-     * @param mixed $_
-     * @param array<string, mixed> $args
+     * @param  array<string, mixed>  $args
      * @return array<string, string>
+     *
      * @throws Exception
      */
-    public function __invoke($_, array $args): array
+    public function __invoke(mixed $_, array $args): array
     {
         if (isset($args['reset_password_url'])) {
             /** @var array<string, string> $resetPasswordUrl */

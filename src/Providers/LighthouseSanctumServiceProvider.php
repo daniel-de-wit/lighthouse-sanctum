@@ -55,21 +55,21 @@ class LighthouseSanctumServiceProvider extends ServiceProvider
     protected function publishConfig(): void
     {
         $this->publishes([
-            __DIR__ . '/../../config/lighthouse-sanctum.php' => config_path('lighthouse-sanctum.php'),
+            __DIR__.'/../../config/lighthouse-sanctum.php' => config_path('lighthouse-sanctum.php'),
         ], 'lighthouse-sanctum');
     }
 
     protected function publishSchema(): void
     {
         $this->publishes([
-            __DIR__ . '/../../graphql/sanctum.graphql' => base_path('graphql/sanctum.graphql'),
+            __DIR__.'/../../graphql/sanctum.graphql' => base_path('graphql/sanctum.graphql'),
         ], 'lighthouse-sanctum');
     }
 
     protected function mergeConfig(): void
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../../config/lighthouse-sanctum.php',
+            __DIR__.'/../../config/lighthouse-sanctum.php',
             'lighthouse-sanctum',
         );
     }

@@ -15,13 +15,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class ResetPasswordService implements ResetPasswordServiceInterface
 {
-    protected Hasher $hash;
-    protected Dispatcher $dispatcher;
-
-    public function __construct(Hasher $hash, Dispatcher $dispatcher)
-    {
-        $this->hash       = $hash;
-        $this->dispatcher = $dispatcher;
+    public function __construct(
+        protected Hasher $hash,
+        protected Dispatcher $dispatcher,
+    ) {
     }
 
     public function transformUrl(CanResetPassword $notifiable, string $token, string $url): string
@@ -37,9 +34,7 @@ class ResetPasswordService implements ResetPasswordServiceInterface
 
     public function setResetPasswordUrl(string $url): void
     {
-        ResetPasswordNotification::createUrlUsing(function (CanResetPassword $notifiable, string $token) use ($url): string {
-            return $this->transformUrl($notifiable, $token, $url);
-        });
+        ResetPasswordNotification::createUrlUsing(fn (CanResetPassword $notifiable, string $token): string => $this->transformUrl($notifiable, $token, $url));
     }
 
     public function resetPassword($user, string $password): void

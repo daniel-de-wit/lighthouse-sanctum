@@ -6,20 +6,18 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 
 use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\ForgotPassword;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Translation\Translator;
 use Mockery;
 use Mockery\MockInterface;
 
-class ForgotPasswordTest extends AbstractUnitTest
+class ForgotPasswordTest extends AbstractUnitTestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sends_a_reset_password_notification(): void
     {
-        /** @var PasswordBroker|MockInterface $passwordBroker */
+        /** @var PasswordBroker&MockInterface $passwordBroker */
         $passwordBroker = Mockery::mock(PasswordBroker::class)
             ->shouldReceive('sendResetLink')
             ->with([
@@ -27,7 +25,7 @@ class ForgotPasswordTest extends AbstractUnitTest
             ])
             ->getMock();
 
-        /** @var Translator|MockInterface $translator */
+        /** @var Translator&MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
             ->with('An email has been sent')
@@ -50,12 +48,10 @@ class ForgotPasswordTest extends AbstractUnitTest
         static::assertSame('translation', $result['message']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sends_a_reset_password_notification_with_a_custom_url(): void
     {
-        /** @var PasswordBroker|MockInterface $passwordBroker */
+        /** @var PasswordBroker&MockInterface $passwordBroker */
         $passwordBroker = Mockery::mock(PasswordBroker::class)
             ->shouldReceive('sendResetLink')
             ->with([
@@ -63,13 +59,13 @@ class ForgotPasswordTest extends AbstractUnitTest
             ])
             ->getMock();
 
-        /** @var ResetPasswordServiceInterface|MockInterface $resetService */
+        /** @var ResetPasswordServiceInterface&MockInterface $resetService */
         $resetService = Mockery::mock(ResetPasswordServiceInterface::class)
             ->shouldReceive('setResetPasswordUrl')
             ->with('custom-url')
             ->getMock();
 
-        /** @var Translator|MockInterface $translator */
+        /** @var Translator&MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
             ->with('An email has been sent')

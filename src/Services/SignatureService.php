@@ -9,11 +9,9 @@ use Illuminate\Routing\Exceptions\InvalidSignatureException;
 
 class SignatureService implements SignatureServiceInterface
 {
-    protected string $appKey;
-
-    public function __construct(string $appKey)
-    {
-        $this->appKey = $appKey;
+    public function __construct(
+        protected string $appKey,
+    ) {
     }
 
     public function generate(array $params): string

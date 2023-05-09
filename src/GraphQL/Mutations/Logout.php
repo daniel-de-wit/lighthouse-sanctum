@@ -16,22 +16,19 @@ class Logout
 {
     use HasAuthenticatedUser;
 
-    protected AuthFactory $authFactory;
-    protected Translator $translator;
-
-    public function __construct(AuthFactory $authFactory, Translator $translator)
-    {
-        $this->authFactory = $authFactory;
-        $this->translator  = $translator;
+    public function __construct(
+        protected AuthFactory $authFactory,
+        protected Translator $translator,
+    ) {
     }
 
     /**
-     * @param mixed $_
-     * @param array<string, mixed> $args
+     * @param  array<string, mixed>  $args
      * @return array<string, string>
+     *
      * @throws Exception
      */
-    public function __invoke($_, array $args): array
+    public function __invoke(mixed $_, array $args): array
     {
         $user = $this->getAuthenticatedUser();
 

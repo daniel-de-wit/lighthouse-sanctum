@@ -13,13 +13,16 @@ use Laravel\Sanctum\SanctumServiceProvider;
 use Nuwave\Lighthouse\Auth\AuthServiceProvider;
 use Nuwave\Lighthouse\LighthouseServiceProvider;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
+use Nuwave\Lighthouse\Testing\TestingServiceProvider;
+use Nuwave\Lighthouse\Testing\UsesTestSchema;
 use Nuwave\Lighthouse\Validation\ValidationServiceProvider;
 use Orchestra\Testbench\TestCase;
 
-abstract class AbstractIntegrationTest extends TestCase
+abstract class AbstractIntegrationTestCase extends TestCase
 {
     use MakesGraphQLRequests;
     use RefreshDatabase;
+    use UsesTestSchema;
 
     /**
      * @var Application
@@ -27,8 +30,8 @@ abstract class AbstractIntegrationTest extends TestCase
     protected $app;
 
     /**
-     * @param Application $app
-     * @return string[]
+     * @param  Application  $app
+     * @return array<int, class-string<\Illuminate\Support\ServiceProvider>>
      */
     protected function getPackageProviders($app): array
     {
@@ -36,6 +39,7 @@ abstract class AbstractIntegrationTest extends TestCase
             AuthServiceProvider::class,
             LighthouseSanctumServiceProvider::class,
             LighthouseServiceProvider::class,
+            TestingServiceProvider::class,
             NotificationServiceProvider::class,
             SanctumServiceProvider::class,
             ValidationServiceProvider::class,
@@ -48,18 +52,20 @@ abstract class AbstractIntegrationTest extends TestCase
     }
 
     /**
-     * @param Application $app
+     * @param  Application  $app
      */
     protected function defineEnvironment($app): void
     {
         $app['config']->set('auth.providers.users.model', UserHasApiTokens::class);
-        $app['config']->set('lighthouse.schema.register', $this->getStubsPath('schema.graphql'));
+        $app['config']->set('lighthouse.schema_path', $this->getStubsPath('schema.graphql'));
+        $app['config']->set('lighthouse.schema_cache.enable', false);
+        $app['config']->set('lighthouse.query_cache.enable', false);
         $app['config']->set('lighthouse.guard', 'sanctum');
     }
 
     protected function getStubsPath(string $path): string
     {
-        return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . $path;
+        return dirname(__DIR__).DIRECTORY_SEPARATOR.'stubs'.DIRECTORY_SEPARATOR.$path;
     }
 
     protected function getAppKey(): string

@@ -4,20 +4,15 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokensIdentifiedByUsername;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Support\Facades\Hash;
-use Nuwave\Lighthouse\Testing\UsesTestSchema;
 
-class LoginTest extends AbstractIntegrationTest
+class LoginTest extends AbstractIntegrationTestCase
 {
-    use UsesTestSchema;
-
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_logs_a_user_in(): void
     {
         UserHasApiTokens::factory()->create([
@@ -25,7 +20,7 @@ class LoginTest extends AbstractIntegrationTest
             'password' => Hash::make('supersecret'),
         ]);
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foo@bar.com",
@@ -43,23 +38,9 @@ class LoginTest extends AbstractIntegrationTest
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_logs_a_user_in_using_custom_user_identifier(): void
     {
-        $this->setUpTestSchema();
-
-        $this->app['config']->set('auth.providers.users.model', UserHasApiTokensIdentifiedByUsername::class);
-        $this->app['config']->set('lighthouse-sanctum.user_identifier_field_name', 'username');
-
-        $this->loadMigrationsFrom('./tests/stubs/migrations');
-
-        UserHasApiTokensIdentifiedByUsername::factory()->create([
-            'username' => 'john.doe',
-            'password' => Hash::make('supersecret'),
-        ]);
-
         $this->schema = /** @lang GraphQL */ '
             type Query
 
@@ -77,6 +58,18 @@ class LoginTest extends AbstractIntegrationTest
                     @field(resolver: "DanielDeWit\\\\LighthouseSanctum\\\\GraphQL\\\\Mutations\\\\Login")
             }
         ';
+
+        $this->setUpTestSchema();
+
+        $this->app['config']->set('auth.providers.users.model', UserHasApiTokensIdentifiedByUsername::class);
+        $this->app['config']->set('lighthouse-sanctum.user_identifier_field_name', 'username');
+
+        $this->loadMigrationsFrom('./tests/stubs/migrations');
+
+        UserHasApiTokensIdentifiedByUsername::factory()->create([
+            'username' => 'john.doe',
+            'password' => Hash::make('supersecret'),
+        ]);
 
         $this->graphQL(/** @lang GraphQL */ '
             mutation {
@@ -96,12 +89,10 @@ class LoginTest extends AbstractIntegrationTest
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_credentials_are_incorrect(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foo@bar.com",
@@ -113,9 +104,7 @@ class LoginTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('The provided credentials are incorrect.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_is_incorrect(): void
     {
         UserHasApiTokens::factory()->create([
@@ -123,7 +112,7 @@ class LoginTest extends AbstractIntegrationTest
             'password' => Hash::make('supersecret'),
         ]);
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foo@bar.com",
@@ -135,9 +124,7 @@ class LoginTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('The provided credentials are incorrect.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_email_is_not_verified(): void
     {
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
@@ -148,7 +135,7 @@ class LoginTest extends AbstractIntegrationTest
             'email_verified_at' => null,
         ]);
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foo@bar.com",
@@ -160,12 +147,10 @@ class LoginTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('Your email address is not verified.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     password: "supersecret"
@@ -176,12 +161,10 @@ class LoginTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('Field LoginInput.email of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: 12345
@@ -190,15 +173,13 @@ class LoginTest extends AbstractIntegrationTest
                     token
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "login" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foobar"
@@ -211,16 +192,14 @@ class LoginTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [login].')
             ->assertGraphQLValidationError(
                 'input.email',
-                'The input.email must be a valid email address.',
+                'The input.email field must be a valid email address.',
             );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foo@bar.com"
@@ -231,12 +210,10 @@ class LoginTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('Field LoginInput.password of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_password_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 login(input: {
                     email: "foobar"
@@ -245,6 +222,6 @@ class LoginTest extends AbstractIntegrationTest
                     token
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "login" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 }

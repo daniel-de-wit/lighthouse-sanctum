@@ -20,32 +20,21 @@ class VerifyEmail
 {
     use CreatesUserProvider;
 
-    protected AuthManager $authManager;
-    protected Config $config;
-    protected ValidationFactory $validationFactory;
-    protected EmailVerificationServiceInterface $emailVerificationService;
-
     public function __construct(
-        AuthManager $authManager,
-        Config $config,
-        ValidationFactory $validationFactory,
-        EmailVerificationServiceInterface $emailVerificationService
+        protected AuthManager $authManager,
+        protected Config $config,
+        protected ValidationFactory $validationFactory,
+        protected EmailVerificationServiceInterface $emailVerificationService,
     ) {
-        $this->authManager              = $authManager;
-        $this->config                   = $config;
-        $this->validationFactory        = $validationFactory;
-        $this->emailVerificationService = $emailVerificationService;
     }
 
     /**
-     * @param mixed $_
-     * @param array<string, string|int> $args
-     * @param GraphQLContext $context
-     * @param ResolveInfo $resolveInfo
+     * @param  array<string, string|int>  $args
      * @return array<string, string>
+     *
      * @throws Exception
      */
-    public function __invoke($_, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
+    public function __invoke(mixed $_, array $args, GraphQLContext $context, ResolveInfo $resolveInfo): array
     {
         $userProvider = $this->createUserProvider();
 
@@ -56,7 +45,7 @@ class VerifyEmail
         }
 
         if (! $user instanceof MustVerifyEmail) {
-            throw new RuntimeException('User must implement "' . MustVerifyEmail::class . '".');
+            throw new RuntimeException('User must implement "'.MustVerifyEmail::class.'".');
         }
 
         if ($this->config->get('lighthouse-sanctum.use_signed_email_verification_url') === true) {
@@ -80,8 +69,8 @@ class VerifyEmail
     }
 
     /**
-     * @param array<string, string|int> $args
-     * @param string                    $path
+     * @param  array<string, string|int>  $args
+     *
      * @throws ValidationException
      */
     protected function validateRequiredSignedArguments(array $args, string $path): void

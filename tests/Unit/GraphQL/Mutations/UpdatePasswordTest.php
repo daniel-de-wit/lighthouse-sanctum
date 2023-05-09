@@ -7,7 +7,7 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Unit\GraphQL\Mutations;
 use DanielDeWit\LighthouseSanctum\Exceptions\GraphQLValidationException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\UpdatePassword;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksAuthFactory;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Translation\Translator;
@@ -17,16 +17,14 @@ use Mockery\MockInterface;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use RuntimeException;
 
-class UpdatePasswordTest extends AbstractUnitTest
+class UpdatePasswordTest extends AbstractUnitTestCase
 {
     use MocksAuthFactory;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_updates_the_password(): void
     {
-        /** @var User|MockInterface $user */
+        /** @var User&MockInterface $user */
         $user = Mockery::mock(User::class)
             ->shouldReceive('getAuthPassword')
             ->twice()
@@ -39,7 +37,7 @@ class UpdatePasswordTest extends AbstractUnitTest
             ])
             ->getMock();
 
-        /** @var Hasher|MockInterface $hasher */
+        /** @var Hasher&MockInterface $hasher */
         $hasher = Mockery::mock(Hasher::class)
             ->shouldReceive('check')
             ->once()
@@ -76,9 +74,7 @@ class UpdatePasswordTest extends AbstractUnitTest
         static::assertSame('PASSWORD_UPDATED', $result['status']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_no_user_is_found_by_the_guard(): void
     {
         static::expectException(RuntimeException::class);
@@ -98,22 +94,20 @@ class UpdatePasswordTest extends AbstractUnitTest
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_current_password_is_different(): void
     {
         static::expectException(GraphQLValidationException::class);
         static::expectExceptionMessage('Validation failed for the field [some.path].');
 
-        /** @var User|MockInterface $user */
+        /** @var User&MockInterface $user */
         $user = Mockery::mock(User::class)
             ->shouldReceive('getAuthPassword')
             ->once()
             ->andReturn('password-hash')
             ->getMock();
 
-        /** @var Hasher|MockInterface $hasher */
+        /** @var Hasher&MockInterface $hasher */
         $hasher = Mockery::mock(Hasher::class)
             ->shouldReceive('check')
             ->once()
@@ -121,7 +115,7 @@ class UpdatePasswordTest extends AbstractUnitTest
             ->andReturnFalse()
             ->getMock();
 
-        /** @var Translator|MockInterface $translator */
+        /** @var Translator&MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
             ->once()
@@ -149,22 +143,20 @@ class UpdatePasswordTest extends AbstractUnitTest
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_new_password_is_the_same(): void
     {
         static::expectException(GraphQLValidationException::class);
         static::expectExceptionMessage('Validation failed for the field [some.path].');
 
-        /** @var User|MockInterface $user */
+        /** @var User&MockInterface $user */
         $user = Mockery::mock(User::class)
             ->shouldReceive('getAuthPassword')
             ->twice()
             ->andReturn('password-hash')
             ->getMock();
 
-        /** @var Hasher|MockInterface $hasher */
+        /** @var Hasher&MockInterface $hasher */
         $hasher = Mockery::mock(Hasher::class)
             ->shouldReceive('check')
             ->once()
@@ -177,7 +169,7 @@ class UpdatePasswordTest extends AbstractUnitTest
             ->andReturnTrue()
             ->getMock();
 
-        /** @var Translator|MockInterface $translator */
+        /** @var Translator&MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
             ->once()
@@ -205,12 +197,9 @@ class UpdatePasswordTest extends AbstractUnitTest
         );
     }
 
-    /**
-     * @return ResolveInfo|MockInterface
-     */
-    protected function mockResolveInfo()
+    protected function mockResolveInfo(): ResolveInfo&MockInterface
     {
-        /** @var ResolveInfo|MockInterface $resolveInfo */
+        /** @var ResolveInfo&MockInterface $resolveInfo */
         $resolveInfo = Mockery::mock(ResolveInfo::class);
 
         $resolveInfo->path = ['some', 'path'];

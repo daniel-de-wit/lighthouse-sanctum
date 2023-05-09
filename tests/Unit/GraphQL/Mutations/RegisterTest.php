@@ -10,7 +10,7 @@ use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\Register;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksUserProvider;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Foundation\Auth\User;
@@ -19,19 +19,17 @@ use Mockery;
 use Mockery\MockInterface;
 use RuntimeException;
 
-class RegisterTest extends AbstractUnitTest
+class RegisterTest extends AbstractUnitTestCase
 {
     use MocksUserProvider;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_registers_a_user(): void
     {
-        $token = Mockery::mock(NewAccessToken::class);
+        $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
-        /** @var UserHasApiTokens|MockInterface $user */
+        /** @var UserHasApiTokens&MockInterface $user */
         $user = $this->mockUser(UserHasApiTokens::class)
             ->shouldReceive('createToken')
             ->with('default')
@@ -60,15 +58,13 @@ class RegisterTest extends AbstractUnitTest
         static::assertSame('1234567890', $result['token']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sends_an_email_verification_notification(): void
     {
-        $token = Mockery::mock(NewAccessToken::class);
+        $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
-        /** @var UserMustVerifyEmail|MockInterface $user */
+        /** @var UserMustVerifyEmail&MockInterface $user */
         $user = $this->mockUser(UserMustVerifyEmail::class)
             ->shouldReceive('sendEmailVerificationNotification')
             ->getMock()
@@ -99,15 +95,13 @@ class RegisterTest extends AbstractUnitTest
         static::assertNull($result['token']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sends_an_email_verification_notification_with_a_custom_url(): void
     {
-        $token = Mockery::mock(NewAccessToken::class);
+        $token                 = Mockery::mock(NewAccessToken::class);
         $token->plainTextToken = '1234567890';
 
-        /** @var UserMustVerifyEmail|MockInterface $user */
+        /** @var UserMustVerifyEmail&MockInterface $user */
         $user = $this->mockUser(UserMustVerifyEmail::class)
             ->shouldReceive('sendEmailVerificationNotification')
             ->getMock()
@@ -118,7 +112,7 @@ class RegisterTest extends AbstractUnitTest
 
         $userProvider = $this->mockUserProvider($user);
 
-        /** @var EmailVerificationServiceInterface|MockInterface $verificationService */
+        /** @var EmailVerificationServiceInterface&MockInterface $verificationService */
         $verificationService = Mockery::mock(EmailVerificationServiceInterface::class)
             ->shouldReceive('setVerificationUrl')
             ->with('custom-url')
@@ -147,9 +141,7 @@ class RegisterTest extends AbstractUnitTest
         static::assertNull($result['token']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_user_provider_is_not_found(): void
     {
         static::expectException(RuntimeException::class);
@@ -170,15 +162,13 @@ class RegisterTest extends AbstractUnitTest
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_user_does_not_have_the_has_api_tokens_trait(): void
     {
         $user = $this->mockUser(User::class);
 
         static::expectException(HasApiTokensException::class);
-        static::expectExceptionMessage('"' . get_class($user) . '" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
+        static::expectExceptionMessage('"'.$user::class.'" must implement "Laravel\Sanctum\Contracts\HasApiTokens".');
 
         $userProvider = $this->mockUserProvider($user);
 
@@ -197,12 +187,9 @@ class RegisterTest extends AbstractUnitTest
         ]);
     }
 
-    /**
-     * @return Hasher|MockInterface
-     */
-    protected function mockHasher()
+    protected function mockHasher(): Hasher&MockInterface
     {
-        /** @var Hasher|MockInterface $hasher */
+        /** @var Hasher&MockInterface $hasher */
         $hasher = Mockery::mock(Hasher::class)
             ->shouldReceive('make')
             ->with('supersecret')
@@ -212,12 +199,9 @@ class RegisterTest extends AbstractUnitTest
         return $hasher;
     }
 
-    /**
-     * @return UserProvider|MockInterface
-     */
-    protected function mockUserProvider(?User $user)
+    protected function mockUserProvider(?User $user): UserProvider&MockInterface
     {
-        /** @var UserProvider|MockInterface $userProvider */
+        /** @var UserProvider&MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)
             ->shouldReceive('createModel')
             ->andReturn($user)
@@ -228,12 +212,13 @@ class RegisterTest extends AbstractUnitTest
 
     /**
      * @template T of User
-     * @param class-string<T> $class
-     * @return T|MockInterface
+     *
+     * @param  class-string<T>  $class
+     * @return T&MockInterface
      */
     protected function mockUser(string $class)
     {
-        /** @var T|MockInterface $user */
+        /** @var T&MockInterface $user */
         $user = Mockery::mock($class)
             ->shouldReceive('fill')
             ->with([

@@ -8,7 +8,7 @@ use Closure;
 use DanielDeWit\LighthouseSanctum\Contracts\Services\ResetPasswordServiceInterface;
 use DanielDeWit\LighthouseSanctum\Exceptions\GraphQLValidationException;
 use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\ResetPassword;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Contracts\Translation\Translator;
@@ -17,17 +17,15 @@ use Mockery;
 use Mockery\MockInterface;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class ResetPasswordTest extends AbstractUnitTest
+class ResetPasswordTest extends AbstractUnitTestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_resets_a_password(): void
     {
-        /** @var User|MockInterface $user */
+        /** @var User&MockInterface $user */
         $user = Mockery::mock(User::class);
 
-        /** @var PasswordBroker|MockInterface $passwordBroker */
+        /** @var PasswordBroker&MockInterface $passwordBroker */
         $passwordBroker = Mockery::mock(PasswordBroker::class)
             ->shouldReceive('reset')
             ->withArgs(function (array $credentials, Closure $callback) use ($user) {
@@ -42,14 +40,14 @@ class ResetPasswordTest extends AbstractUnitTest
             ->andReturn('passwords.reset')
             ->getMock();
 
-        /** @var Translator|MockInterface $translator */
+        /** @var Translator&MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
             ->with('passwords.reset')
             ->andReturn('response-translation')
             ->getMock();
 
-        /** @var ResetPasswordServiceInterface|MockInterface $resetPasswordService */
+        /** @var ResetPasswordServiceInterface&MockInterface $resetPasswordService */
         $resetPasswordService = Mockery::mock(ResetPasswordServiceInterface::class)
             ->shouldReceive('resetPassword')
             ->with($user, 'supersecret')
@@ -74,40 +72,36 @@ class ResetPasswordTest extends AbstractUnitTest
         static::assertSame('response-translation', $result['message']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_throws_an_exception_if_the_reset_failed(): void
     {
         static::expectException(GraphQLValidationException::class);
         static::expectExceptionMessage('Validation failed for the field [some.dotted.path].');
 
-        /** @var PasswordBroker|MockInterface $passwordBroker */
+        /** @var PasswordBroker&MockInterface $passwordBroker */
         $passwordBroker = Mockery::mock(PasswordBroker::class)
             ->shouldReceive('reset')
-            ->withArgs(function (array $credentials, Closure $callback) {
-                return empty(array_diff($credentials, [
-                    'email'    => 'foo@bar.com',
-                    'token'    => '1234567890',
-                    'password' => 'supersecret',
-                ]));
-            })
+            ->withArgs(fn (array $credentials, Closure $callback) => empty(array_diff($credentials, [
+                'email'    => 'foo@bar.com',
+                'token'    => '1234567890',
+                'password' => 'supersecret',
+            ])))
             ->andReturn('some-error')
             ->getMock();
 
-        /** @var Translator|MockInterface $translator */
+        /** @var Translator&MockInterface $translator */
         $translator = Mockery::mock(Translator::class)
             ->shouldReceive('get')
             ->with('some-error')
             ->andReturn('error-translation')
             ->getMock();
 
-        /** @var ResetPasswordServiceInterface|MockInterface $resetPasswordService */
+        /** @var ResetPasswordServiceInterface&MockInterface $resetPasswordService */
         $resetPasswordService = Mockery::mock(ResetPasswordServiceInterface::class)
             ->shouldNotReceive('resetPassword')
             ->getMock();
 
-        $resolveInfo = Mockery::mock(ResolveInfo::class);
+        $resolveInfo       = Mockery::mock(ResolveInfo::class);
         $resolveInfo->path = ['some', 'dotted', 'path'];
 
         $mutation = new ResetPassword(

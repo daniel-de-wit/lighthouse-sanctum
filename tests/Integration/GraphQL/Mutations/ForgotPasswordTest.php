@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
 
-class ForgotPasswordTest extends AbstractIntegrationTest
+class ForgotPasswordTest extends AbstractIntegrationTestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sends_a_reset_password_notification(): void
     {
         Notification::fake();
@@ -53,9 +51,7 @@ class ForgotPasswordTest extends AbstractIntegrationTest
         });
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_fails_silently_when_the_email_is_not_found(): void
     {
         Notification::fake();
@@ -84,12 +80,10 @@ class ForgotPasswordTest extends AbstractIntegrationTest
         Notification::assertNothingSent();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 forgotPassword(input: {
                     reset_password_url: {
@@ -103,12 +97,10 @@ class ForgotPasswordTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('Field ForgotPasswordInput.email of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 forgotPassword(input: {
                     email: 12345
@@ -120,15 +112,13 @@ class ForgotPasswordTest extends AbstractIntegrationTest
                     message
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "forgotPassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 forgotPassword(input: {
                     email: "foobar"
@@ -144,16 +134,14 @@ class ForgotPasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [forgotPassword].')
             ->assertGraphQLValidationError(
                 'input.email',
-                'The input.email must be a valid email address.',
+                'The input.email field must be a valid email address.',
             );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_reset_password_url_field_is_missing(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 forgotPassword(input: {
                     email: "foo@bar.com"
@@ -166,12 +154,10 @@ class ForgotPasswordTest extends AbstractIntegrationTest
         ')->assertGraphQLErrorMessage('Field ResetPasswordUrlInput.url of required type String! was not provided.');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_reset_password_url_field_is_not_a_string(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 forgotPassword(input: {
                     email: "foo@bar.com"
@@ -183,15 +169,13 @@ class ForgotPasswordTest extends AbstractIntegrationTest
                     message
                 }
             }
-        ')->assertGraphQLErrorMessage('Field "forgotPassword" argument "input" requires type String!, found 12345.');
+        ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_reset_password_url_field_is_not_a_url(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 forgotPassword(input: {
                     email: "foo@bar.com"
@@ -207,7 +191,7 @@ class ForgotPasswordTest extends AbstractIntegrationTest
             ->assertGraphQLErrorMessage('Validation failed for the field [forgotPassword].')
             ->assertGraphQLValidationError(
                 'input.reset_password_url.url',
-                'The input.reset password url.url must be a valid URL.',
+                'The input.reset password url.url field must be a valid URL.',
             );
     }
 }

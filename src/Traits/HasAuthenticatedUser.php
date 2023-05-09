@@ -13,7 +13,6 @@ trait HasAuthenticatedUser
     abstract protected function getAuthFactory(): AuthFactory;
 
     /**
-     * @return Authenticatable
      * @throws RuntimeException
      */
     protected function getAuthenticatedUser(): Authenticatable

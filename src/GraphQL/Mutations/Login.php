@@ -17,22 +17,19 @@ class Login
 {
     use CreatesUserProvider;
 
-    protected AuthManager $authManager;
-    protected Config $config;
-
-    public function __construct(AuthManager $authManager, Config $config)
-    {
-        $this->authManager = $authManager;
-        $this->config      = $config;
+    public function __construct(
+        protected AuthManager $authManager,
+        protected Config $config,
+    ) {
     }
 
     /**
-     * @param mixed $_
-     * @param array<string, string> $args
+     * @param  array<string, string>  $args
      * @return string[]
+     *
      * @throws Exception
      */
-    public function __invoke($_, array $args): array
+    public function __invoke(mixed $_, array $args): array
     {
         $userProvider = $this->createUserProvider();
 
@@ -41,7 +38,7 @@ class Login
 
         $user = $userProvider->retrieveByCredentials([
             $identificationKey => $args[$identificationKey],
-            'password' => $args['password'],
+            'password'         => $args['password'],
         ]);
 
         if (! $user || ! $userProvider->validateCredentials($user, $args)) {

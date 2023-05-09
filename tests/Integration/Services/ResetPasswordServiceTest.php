@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\Services;
 
 use DanielDeWit\LighthouseSanctum\Services\ResetPasswordService;
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Auth\Events\PasswordReset;
@@ -14,7 +14,7 @@ use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Event;
 
-class ResetPasswordServiceTest extends AbstractIntegrationTest
+class ResetPasswordServiceTest extends AbstractIntegrationTestCase
 {
     protected ResetPasswordService $service;
 
@@ -30,9 +30,7 @@ class ResetPasswordServiceTest extends AbstractIntegrationTest
         $this->service = new ResetPasswordService($hasher, $dispatcher);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_transforms_a_reset_password_url(): void
     {
         /** @var UserMustVerifyEmail $user */
@@ -47,9 +45,7 @@ class ResetPasswordServiceTest extends AbstractIntegrationTest
         static::assertSame('https://mysite.com/reset-password/user@example.com/token123', $url);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sets_the_reset_password_url(): void
     {
         /** @var UserMustVerifyEmail $user */
@@ -68,9 +64,7 @@ class ResetPasswordServiceTest extends AbstractIntegrationTest
         static::assertSame('https://mysite.com/reset-password/user@example.com/token123', $url);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_resets_a_password(): void
     {
         /** @var Hasher $hasher */

@@ -9,22 +9,20 @@ use DanielDeWit\LighthouseSanctum\GraphQL\Mutations\ResendEmailVerification;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use DanielDeWit\LighthouseSanctum\Tests\Traits\MocksUserProvider;
-use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTest;
+use DanielDeWit\LighthouseSanctum\Tests\Unit\AbstractUnitTestCase;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Foundation\Auth\User;
 use Mockery;
 use Mockery\MockInterface;
 
-class ResendEmailVerificationTest extends AbstractUnitTest
+class ResendEmailVerificationTest extends AbstractUnitTestCase
 {
     use MocksUserProvider;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_resends_an_email_verification_notification(): void
     {
-        /** @var UserMustVerifyEmail|MockInterface $user */
+        /** @var UserMustVerifyEmail&MockInterface $user */
         $user = Mockery::mock(UserMustVerifyEmail::class)
             ->shouldReceive('hasVerifiedEmail')
             ->andReturnFalse()
@@ -47,12 +45,10 @@ class ResendEmailVerificationTest extends AbstractUnitTest
         static::assertSame('EMAIL_SENT', $result['status']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_sends_an_email_verification_notification_with_a_custom_url(): void
     {
-        /** @var UserMustVerifyEmail|MockInterface $user */
+        /** @var UserMustVerifyEmail&MockInterface $user */
         $user = Mockery::mock(UserMustVerifyEmail::class)
             ->shouldReceive('hasVerifiedEmail')
             ->andReturnFalse()
@@ -62,7 +58,7 @@ class ResendEmailVerificationTest extends AbstractUnitTest
 
         $userProvider = $this->mockUserProvider($user);
 
-        /** @var EmailVerificationServiceInterface|MockInterface $verificationService */
+        /** @var EmailVerificationServiceInterface&MockInterface $verificationService */
         $verificationService = Mockery::mock(EmailVerificationServiceInterface::class)
             ->shouldReceive('setVerificationUrl')
             ->with('custom-url')
@@ -75,8 +71,8 @@ class ResendEmailVerificationTest extends AbstractUnitTest
         );
 
         $result = $mutation(null, [
-            'email' => 'foo@bar.com',
-            'verification_url'      => [
+            'email'            => 'foo@bar.com',
+            'verification_url' => [
                 'url' => 'custom-url',
             ],
         ]);
@@ -84,12 +80,10 @@ class ResendEmailVerificationTest extends AbstractUnitTest
         static::assertSame('EMAIL_SENT', $result['status']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_does_not_resend_an_email_verification_notification_if_email_verification_is_not_used(): void
     {
-        /** @var UserHasApiTokens|MockInterface $user */
+        /** @var UserHasApiTokens&MockInterface $user */
         $user = Mockery::mock(UserHasApiTokens::class)
             ->shouldNotReceive('sendEmailVerificationNotification')
             ->getMock();
@@ -109,12 +103,10 @@ class ResendEmailVerificationTest extends AbstractUnitTest
         static::assertSame('EMAIL_SENT', $result['status']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_does_not_resend_an_email_verification_notification_if_the_email_is_already_verified(): void
     {
-        /** @var UserMustVerifyEmail|MockInterface $user */
+        /** @var UserMustVerifyEmail&MockInterface $user */
         $user = Mockery::mock(UserMustVerifyEmail::class)
             ->shouldReceive('hasVerifiedEmail')
             ->andReturnTrue()
@@ -137,12 +129,9 @@ class ResendEmailVerificationTest extends AbstractUnitTest
         static::assertSame('EMAIL_SENT', $result['status']);
     }
 
-    /**
-     * @return UserProvider|MockInterface
-     */
-    protected function mockUserProvider(?User $user)
+    protected function mockUserProvider(?User $user): UserProvider&MockInterface
     {
-        /** @var UserProvider|MockInterface $userProvider */
+        /** @var UserProvider&MockInterface $userProvider */
         $userProvider = Mockery::mock(UserProvider::class)
             ->shouldReceive('retrieveByCredentials')
             ->with([

@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 
-use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTest;
+use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use Laravel\Sanctum\Sanctum;
 
-class LogoutTest extends AbstractIntegrationTest
+class LogoutTest extends AbstractIntegrationTestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_logs_a_user_out(): void
     {
         Sanctum::actingAs(UserHasApiTokens::factory()->create());
 
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 logout {
                     status
@@ -34,12 +32,10 @@ class LogoutTest extends AbstractIntegrationTest
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_an_error_if_the_user_is_unauthenticated(): void
     {
-        $this->graphQL(/** @lang GraphQL */'
+        $this->graphQL(/** @lang GraphQL */ '
             mutation {
                 logout {
                     status
@@ -47,6 +43,6 @@ class LogoutTest extends AbstractIntegrationTest
                 }
             }
         ')
-        ->assertGraphQLErrorMessage('Unauthenticated.');
+            ->assertGraphQLErrorMessage('Unauthenticated.');
     }
 }
