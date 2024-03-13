@@ -27,8 +27,8 @@ class ResetPasswordService implements ResetPasswordServiceInterface
             '__EMAIL__',
             '__TOKEN__',
         ], [
-            $notifiable->getEmailForPasswordReset(),
-            $token,
+            rawurlencode($notifiable->getEmailForPasswordReset()),
+            rawurlencode($token),
         ], $url);
     }
 
