@@ -42,7 +42,7 @@ class ResetPasswordServiceTest extends AbstractIntegrationTestCase
 
         $url = $this->service->transformUrl($user, $token, 'https://mysite.com/reset-password/__EMAIL__/__TOKEN__');
 
-        static::assertSame('https://mysite.com/reset-password/user@example.com/token123', $url);
+        static::assertSame('https://mysite.com/reset-password/user%40example.com/token123', $url);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -61,7 +61,7 @@ class ResetPasswordServiceTest extends AbstractIntegrationTestCase
 
         $url = call_user_func(ResetPassword::$createUrlCallback, $user, $token);
 
-        static::assertSame('https://mysite.com/reset-password/user@example.com/token123', $url);
+        static::assertSame('https://mysite.com/reset-password/user%40example.com/token123', $url);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
