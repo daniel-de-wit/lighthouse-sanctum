@@ -49,6 +49,7 @@ abstract class AbstractIntegrationTestCase extends TestCase
     protected function defineDatabaseMigrations(): void
     {
         $this->loadLaravelMigrations();
+        $this->loadMigrationsFrom(__DIR__.'/../stubs/migrations');
     }
 
     /**

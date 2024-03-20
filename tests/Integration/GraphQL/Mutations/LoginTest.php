@@ -64,8 +64,6 @@ class LoginTest extends AbstractIntegrationTestCase
         $this->app['config']->set('auth.providers.users.model', UserHasApiTokensIdentifiedByUsername::class);
         $this->app['config']->set('lighthouse-sanctum.user_identifier_field_name', 'username');
 
-        $this->loadMigrationsFrom('./tests/stubs/migrations');
-
         UserHasApiTokensIdentifiedByUsername::factory()->create([
             'username' => 'john.doe',
             'password' => Hash::make('supersecret'),
