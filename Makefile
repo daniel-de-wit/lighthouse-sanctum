@@ -1,12 +1,17 @@
-setup:
+php8.2:
+	@test composer.lock || rm composer.lock
 	@test -s phpunit.xml || cp phpunit.xml.dist phpunit.xml
-	@docker-compose run --rm app composer install
+	@docker-compose run --rm php8.2 composer install
+	@docker-compose run --rm php8.2 sh
 
-destroy:
-	@docker-compose down --remove-orphans --volumes
+php8.3:
+	@test composer.lock || rm composer.lock
+	@test -s phpunit.xml || cp phpunit.xml.dist phpunit.xml
+	@docker-compose run --rm php8.3 composer install
+	@docker-compose run --rm php8.3 sh
 
-app:
-	@docker-compose run --rm app sh
-
-test:
-	@docker-compose run --rm app sh -c "php ./vendor/bin/phpunit"
+php8.4:
+	@test composer.lock || rm composer.lock
+	@test -s phpunit.xml || cp phpunit.xml.dist phpunit.xml
+	@docker-compose run --rm php8.4 composer install
+	@docker-compose run --rm php8.4 sh

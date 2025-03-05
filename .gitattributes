@@ -3,7 +3,7 @@
 
 # Ignore all test and documentation with "export-ignore".
 /.github                export-ignore
-/docker                 export-ignore
+/.docker                export-ignore
 /stubs                  export-ignore
 /tests                  export-ignore
 /.coveralls.yml         export-ignore

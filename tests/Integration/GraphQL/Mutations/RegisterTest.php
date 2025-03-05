@@ -10,10 +10,11 @@ use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Notification;
+use PHPUnit\Framework\Attributes\Test;
 
 class RegisterTest extends AbstractIntegrationTestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_registers_a_user(): void
     {
         $response = $this->graphQL(/** @lang GraphQL */ '
@@ -46,7 +47,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         ]);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_sends_an_email_verification_notification(): void
     {
         Notification::fake();
@@ -101,7 +102,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         });
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_sends_a_signed_email_verification_notification(): void
     {
         Notification::fake();
@@ -164,7 +165,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         });
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_name_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -181,7 +182,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field RegisterInput.name of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_name_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -199,7 +200,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -216,7 +217,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field RegisterInput.email of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -234,7 +235,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -257,7 +258,7 @@ class RegisterTest extends AbstractIntegrationTestCase
             );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_email_is_not_unique(): void
     {
         UserHasApiTokens::factory()->create([
@@ -284,7 +285,7 @@ class RegisterTest extends AbstractIntegrationTestCase
             );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_password_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -301,7 +302,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field RegisterInput.password of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_password_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -319,7 +320,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_password_field_is_not_confirmed(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -342,7 +343,7 @@ class RegisterTest extends AbstractIntegrationTestCase
             );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_password_confirmation_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -359,7 +360,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field RegisterInput.password_confirmation of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_password_confirmation_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -377,7 +378,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_verification_url_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -396,7 +397,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field VerificationUrlInput.url of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_verification_url_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -417,7 +418,7 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_verification_url_field_is_not_a_url(): void
     {
         $this->graphQL(/** @lang GraphQL */ '

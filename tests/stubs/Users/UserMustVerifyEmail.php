@@ -6,9 +6,13 @@ namespace DanielDeWit\LighthouseSanctum\Tests\stubs\Users;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class UserMustVerifyEmail extends UserHasApiTokens implements MustVerifyEmail
 {
+    /** @use HasFactory<UserHasApiTokensFactory> */
+    use HasFactory;
+
     /**
      * @return UserMustVerifyEmailFactory
      */

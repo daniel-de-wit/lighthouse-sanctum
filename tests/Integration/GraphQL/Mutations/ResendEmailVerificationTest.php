@@ -10,10 +10,11 @@ use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Notification;
+use PHPUnit\Framework\Attributes\Test;
 
 class ResendEmailVerificationTest extends AbstractIntegrationTestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_resends_an_email_verification_notification(): void
     {
         Notification::fake();
@@ -58,7 +59,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         });
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_resends_a_signed_email_verification_notification(): void
     {
         Notification::fake();
@@ -111,7 +112,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         });
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_does_not_resend_an_email_verification_notification_if_the_email_does_not_exist(): void
     {
         Notification::fake();
@@ -139,7 +140,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         Notification::assertNothingSent();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_does_not_resend_an_email_verification_notification_if_email_verification_is_not_used(): void
     {
         Notification::fake();
@@ -172,7 +173,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         Notification::assertNothingSent();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_does_not_resend_an_email_verification_notification_if_the_email_is_already_verified(): void
     {
         Notification::fake();
@@ -205,7 +206,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         Notification::assertNothingSent();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -217,7 +218,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field ResendEmailVerificationInput.email of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -231,7 +232,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -250,7 +251,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
             );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_verification_url_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -265,7 +266,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field VerificationUrlInput.url of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_verification_url_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -282,7 +283,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_returns_an_error_if_the_verification_url_field_is_not_a_url(): void
     {
         $this->graphQL(/** @lang GraphQL */ '

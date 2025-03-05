@@ -4,11 +4,19 @@ declare(strict_types=1);
 
 namespace DanielDeWit\LighthouseSanctum\Tests\stubs\Users;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Orchestra\Testbench\Factories\UserFactory;
 
+/**
+ * @extends UserFactory<UserHasApiTokensIdentifiedByUsername>
+ */
 class UserHasApiTokensIdentifiedByUsernameFactory extends UserFactory
 {
+    /**
+     * @var class-string<Model>
+     */
     protected $model = UserHasApiTokensIdentifiedByUsername::class;
 
     /**

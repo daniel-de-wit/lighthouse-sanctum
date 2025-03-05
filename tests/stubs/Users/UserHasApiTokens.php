@@ -14,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 class UserHasApiTokens extends User implements HasApiTokensContract
 {
     use HasApiTokens;
+    /** @use HasFactory<UserHasApiTokensFactory> */
     use HasFactory;
     use Notifiable;
 
