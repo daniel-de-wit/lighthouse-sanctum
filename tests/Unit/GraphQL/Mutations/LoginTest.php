@@ -56,9 +56,8 @@ class LoginTest extends AbstractUnitTestCase
             'password' => 'supersecret',
         ]);
 
-        static::assertIsArray($result);
-        static::assertCount(1, $result);
-        static::assertSame('1234567890', $result['token']);
+        $this->assertCount(1, $result);
+        $this->assertSame('1234567890', $result['token']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -112,9 +111,8 @@ class LoginTest extends AbstractUnitTestCase
             'password'   => 'supersecret',
         ]);
 
-        static::assertIsArray($result);
-        static::assertCount(1, $result);
-        static::assertSame('1234567890', $result['token']);
+        $this->assertCount(1, $result);
+        $this->assertSame('1234567890', $result['token']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

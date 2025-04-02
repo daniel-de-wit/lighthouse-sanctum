@@ -37,7 +37,7 @@ class ResetPassword
         ]);
 
         /** @var string $response */
-        $response = $this->passwordBroker->reset($credentials, function (Authenticatable $user, string $password) {
+        $response = $this->passwordBroker->reset($credentials, function (Authenticatable $user, string $password): void {
             $this->resetPasswordService->resetPassword($user, $password);
         });
 

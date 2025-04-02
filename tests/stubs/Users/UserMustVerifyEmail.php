@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class UserMustVerifyEmail extends UserHasApiTokens implements MustVerifyEmail
 {
-    /** @use HasFactory<UserHasApiTokensFactory> */
+    /** @use HasFactory<UserMustVerifyEmailFactory> */
     use HasFactory;
 
     /**

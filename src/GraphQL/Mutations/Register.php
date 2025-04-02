@@ -31,7 +31,7 @@ class Register
 
     /**
      * @param  array<string, mixed>  $args
-     * @return array<string, string|null>
+     * @return array{token: null|string, status: string}
      *
      * @throws Exception
      */
@@ -89,6 +89,7 @@ class Register
      */
     protected function getPropertiesFromArgs(array $args): array
     {
+        /** @var array<string, string> $properties */
         $properties = Arr::except($args, [
             'directive',
             'password_confirmation',

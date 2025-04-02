@@ -26,7 +26,7 @@ class SignatureServiceTest extends AbstractUnitTestCase
             'foo' => 'bar',
         ]);
 
-        static::assertSame('31a8221d421cd534c64bc15b9d622bfe4c2c3195d127c5816a29dee8f498e9a9', $signature);
+        $this->assertSame('31a8221d421cd534c64bc15b9d622bfe4c2c3195d127c5816a29dee8f498e9a9', $signature);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

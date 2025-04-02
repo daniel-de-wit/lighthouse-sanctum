@@ -11,6 +11,7 @@ use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
+use Orchestra\Testbench\Attributes\WithMigration;
 use PHPUnit\Framework\Attributes\Test;
 
 class EmailVerificationServiceTest extends AbstractIntegrationTestCase
@@ -28,6 +29,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_transforms_a_verification_url(): void
     {
         /** @var UserMustVerifyEmail $user */
@@ -41,10 +43,11 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
             'https://mysite.com/verify-email/__ID__/__HASH__'
         );
 
-        static::assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com'), $url);
+        $this->assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com'), $url);
     }
 
     #[Test]
+    #[WithMigration]
     public function it_transforms_a_signed_verification_url(): void
     {
         Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
@@ -63,10 +66,11 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
             'expires' => 1609480800,
         ]), $this->getAppKey());
 
-        static::assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com').'/1609480800/'.$signature, $url);
+        $this->assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com').'/1609480800/'.$signature, $url);
     }
 
     #[Test]
+    #[WithMigration]
     public function it_sets_the_verification_url(): void
     {
         /** @var UserMustVerifyEmail $user */
@@ -77,14 +81,15 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
 
         $this->service->setVerificationUrl('https://mysite.com/verify-email/__ID__/__HASH__');
 
-        static::assertIsCallable(VerifyEmail::$createUrlCallback);
+        $this->assertIsCallable(VerifyEmail::$createUrlCallback);
 
         $url = call_user_func(VerifyEmail::$createUrlCallback, $user);
 
-        static::assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com'), $url);
+        $this->assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com'), $url);
     }
 
     #[Test]
+    #[WithMigration]
     public function it_sets_the_signed_verification_url(): void
     {
         Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
@@ -97,7 +102,7 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
 
         $this->service->setVerificationUrl('https://mysite.com/verify-email/__ID__/__HASH__/__EXPIRES__/__SIGNATURE__');
 
-        static::assertIsCallable(VerifyEmail::$createUrlCallback);
+        $this->assertIsCallable(VerifyEmail::$createUrlCallback);
 
         $url = call_user_func(VerifyEmail::$createUrlCallback, $user);
 
@@ -107,21 +112,24 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
             'expires' => 1609480800,
         ]), $this->getAppKey());
 
-        static::assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com').'/1609480800/'.$signature, $url);
+        $this->assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com').'/1609480800/'.$signature, $url);
     }
 
     #[Test]
+    #[WithMigration]
     public function it_throws_an_exception_if_the_hash_is_incorrect(): void
     {
         static::expectException(AuthenticationException::class);
         static::expectExceptionMessage('The provided input is incorrect.');
 
+        /** @var UserMustVerifyEmail $user */
         $user = UserMustVerifyEmail::factory()->create();
 
         $this->service->verify($user, 'foobar');
     }
 
     #[Test]
+    #[WithMigration]
     public function it_throws_an_exception_if_the_expires_is_less_than_now(): void
     {
         static::expectException(AuthenticationException::class);
@@ -129,12 +137,14 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
 
         Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
 
+        /** @var UserMustVerifyEmail $user */
         $user = UserMustVerifyEmail::factory()->create();
 
         $this->service->verifySigned($user, 'foobar', 1609476200, 'signature');
     }
 
     #[Test]
+    #[WithMigration]
     public function it_throws_an_exception_if_the_signature_is_invalid(): void
     {
         static::expectException(AuthenticationException::class);

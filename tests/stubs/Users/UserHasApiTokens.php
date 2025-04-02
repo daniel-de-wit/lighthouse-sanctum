@@ -24,7 +24,7 @@ class UserHasApiTokens extends User implements HasApiTokensContract
     protected $table = 'users';
 
     /**
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -34,7 +34,7 @@ class UserHasApiTokens extends User implements HasApiTokensContract
     ];
 
     /**
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',

@@ -71,7 +71,7 @@ class UpdatePasswordTest extends AbstractUnitTestCase
             $this->mockResolveInfo(),
         );
 
-        static::assertSame('PASSWORD_UPDATED', $result['status']);
+        $this->assertSame('PASSWORD_UPDATED', $result['status']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

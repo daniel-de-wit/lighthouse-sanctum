@@ -81,7 +81,7 @@ class VerifyEmail
         ]);
 
         if ($validator->fails()) {
-            throw new ValidationException("Validation failed for the field [$path].", $validator);
+            throw new ValidationException(sprintf('Validation failed for the field [%s].', $path), $validator);
         }
     }
 

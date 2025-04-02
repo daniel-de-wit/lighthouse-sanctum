@@ -8,11 +8,13 @@ use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
+use Orchestra\Testbench\Attributes\WithMigration;
 use PHPUnit\Framework\Attributes\Test;
 
 class UpdatePasswordTest extends AbstractIntegrationTestCase
 {
     #[Test]
+    #[WithMigration]
     public function it_updates_the_password(): void
     {
         $user = $this->actAsUser();
@@ -37,10 +39,11 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
 
         $user->refresh();
 
-        static::assertTrue(Hash::check('secret', $user->getAuthPassword()));
+        $this->assertTrue(Hash::check('secret', $user->getAuthPassword()));
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_user_is_unauthenticated(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -58,6 +61,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_current_password_is_not_the_same(): void
     {
         $this->actAsUser();
@@ -81,6 +85,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_new_password_is_not_different(): void
     {
         $this->actAsUser();
@@ -104,6 +109,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_current_password_field_is_missing(): void
     {
         $this->actAsUser();
@@ -121,6 +127,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_current_password_field_is_not_a_string(): void
     {
         $this->actAsUser();
@@ -139,6 +146,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_field_is_missing(): void
     {
         $this->actAsUser();
@@ -156,6 +164,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_field_is_not_a_string(): void
     {
         $this->actAsUser();
@@ -174,6 +183,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_field_is_not_confirmed(): void
     {
         $this->actAsUser();
@@ -197,6 +207,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_confirmation_field_is_missing(): void
     {
         $this->actAsUser();
@@ -214,6 +225,7 @@ class UpdatePasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_confirmation_field_is_not_a_string(): void
     {
         $this->actAsUser();

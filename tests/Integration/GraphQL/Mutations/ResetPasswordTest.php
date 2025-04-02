@@ -10,11 +10,13 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Event;
+use Orchestra\Testbench\Attributes\WithMigration;
 use PHPUnit\Framework\Attributes\Test;
 
 class ResetPasswordTest extends AbstractIntegrationTestCase
 {
     #[Test]
+    #[WithMigration]
     public function it_resets_a_password(): void
     {
         Event::fake([PasswordReset::class]);
@@ -30,7 +32,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
         $passwordBroker = $this->app->make(PasswordBroker::class);
         $passwordBroker->sendResetLink(
             ['email' => 'foo@bar.com'],
-            function ($user, $resetToken) use (&$token) {
+            function ($user, string $resetToken) use (&$token): void {
                 $token = $resetToken;
             }
         );
@@ -65,6 +67,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -82,6 +85,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -100,6 +104,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -123,6 +128,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_is_not_found(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -143,6 +149,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_token_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -160,6 +167,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_token_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -178,6 +186,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_token_is_not_found(): void
     {
         UserHasApiTokens::factory()->create([
@@ -202,6 +211,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -219,6 +229,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -237,6 +248,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_field_is_not_confirmed(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -260,6 +272,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_confirmation_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -277,6 +290,7 @@ class ResetPasswordTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_confirmation_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '

@@ -42,7 +42,7 @@ class ResendEmailVerificationTest extends AbstractUnitTestCase
             'email' => 'foo@bar.com',
         ]);
 
-        static::assertSame('EMAIL_SENT', $result['status']);
+        $this->assertSame('EMAIL_SENT', $result['status']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -77,7 +77,7 @@ class ResendEmailVerificationTest extends AbstractUnitTestCase
             ],
         ]);
 
-        static::assertSame('EMAIL_SENT', $result['status']);
+        $this->assertSame('EMAIL_SENT', $result['status']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -100,7 +100,7 @@ class ResendEmailVerificationTest extends AbstractUnitTestCase
             'email' => 'foo@bar.com',
         ]);
 
-        static::assertSame('EMAIL_SENT', $result['status']);
+        $this->assertSame('EMAIL_SENT', $result['status']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -126,7 +126,7 @@ class ResendEmailVerificationTest extends AbstractUnitTestCase
             'email' => 'foo@bar.com',
         ]);
 
-        static::assertSame('EMAIL_SENT', $result['status']);
+        $this->assertSame('EMAIL_SENT', $result['status']);
     }
 
     protected function mockUserProvider(?User $user): UserProvider&MockInterface

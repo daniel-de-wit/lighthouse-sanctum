@@ -8,11 +8,13 @@ use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
+use Orchestra\Testbench\Attributes\WithMigration;
 use PHPUnit\Framework\Attributes\Test;
 
 class ForgotPasswordTest extends AbstractIntegrationTestCase
 {
     #[Test]
+    #[WithMigration]
     public function it_sends_a_reset_password_notification(): void
     {
         Notification::fake();
@@ -43,16 +45,17 @@ class ForgotPasswordTest extends AbstractIntegrationTestCase
             ],
         ]);
 
-        Notification::assertSentTo($user, function (ResetPassword $notification) use ($user) {
-            static::assertIsCallable($notification::$createUrlCallback);
+        Notification::assertSentTo($user, function (ResetPassword $notification) use ($user): bool {
+            $this->assertIsCallable($notification::$createUrlCallback);
 
             $url = call_user_func($notification::$createUrlCallback, $user, $notification->token);
 
-            return $url === "https://my-front-end.com/reset-password?email=john.doe%40gmail.com&token={$notification->token}";
+            return $url === 'https://my-front-end.com/reset-password?email=john.doe%40gmail.com&token=' . $notification->token;
         });
     }
 
     #[Test]
+    #[WithMigration]
     public function it_fails_silently_when_the_email_is_not_found(): void
     {
         Notification::fake();

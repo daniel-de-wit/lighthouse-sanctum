@@ -13,6 +13,7 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Event;
+use Orchestra\Testbench\Attributes\WithMigration;
 use PHPUnit\Framework\Attributes\Test;
 
 class ResetPasswordServiceTest extends AbstractIntegrationTestCase
@@ -32,6 +33,7 @@ class ResetPasswordServiceTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_transforms_a_reset_password_url(): void
     {
         /** @var UserMustVerifyEmail $user */
@@ -43,10 +45,11 @@ class ResetPasswordServiceTest extends AbstractIntegrationTestCase
 
         $url = $this->service->transformUrl($user, $token, 'https://mysite.com/reset-password/__EMAIL__/__TOKEN__');
 
-        static::assertSame('https://mysite.com/reset-password/user%40example.com/token123', $url);
+        $this->assertSame('https://mysite.com/reset-password/user%40example.com/token123', $url);
     }
 
     #[Test]
+    #[WithMigration]
     public function it_sets_the_reset_password_url(): void
     {
         /** @var UserMustVerifyEmail $user */
@@ -58,14 +61,15 @@ class ResetPasswordServiceTest extends AbstractIntegrationTestCase
 
         $this->service->setResetPasswordUrl('https://mysite.com/reset-password/__EMAIL__/__TOKEN__');
 
-        static::assertIsCallable(ResetPassword::$createUrlCallback);
+        $this->assertIsCallable(ResetPassword::$createUrlCallback);
 
         $url = call_user_func(ResetPassword::$createUrlCallback, $user, $token);
 
-        static::assertSame('https://mysite.com/reset-password/user%40example.com/token123', $url);
+        $this->assertSame('https://mysite.com/reset-password/user%40example.com/token123', $url);
     }
 
     #[Test]
+    #[WithMigration]
     public function it_resets_a_password(): void
     {
         /** @var Hasher $hasher */
@@ -80,7 +84,7 @@ class ResetPasswordServiceTest extends AbstractIntegrationTestCase
 
         $this->service->resetPassword($user, 'supersecret');
 
-        static::assertNotSame($password, $user->getAuthPassword());
+        $this->assertNotSame($password, $user->getAuthPassword());
 
         Event::assertDispatched(function (PasswordReset $event) use ($user) {
             /** @var Model $eventUser */

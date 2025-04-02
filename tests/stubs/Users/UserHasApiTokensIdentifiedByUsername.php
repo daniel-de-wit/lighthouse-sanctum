@@ -24,7 +24,7 @@ class UserHasApiTokensIdentifiedByUsername extends User implements HasApiTokensC
     protected $table = 'users_with_usernames';
 
     /**
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -34,7 +34,7 @@ class UserHasApiTokensIdentifiedByUsername extends User implements HasApiTokensC
     ];
 
     /**
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',

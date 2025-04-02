@@ -60,9 +60,8 @@ class VerifyEmailTest extends AbstractUnitTestCase
             'hash' => '1234567890',
         ], Mockery::mock(GraphQLContext::class), Mockery::mock(ResolveInfo::class));
 
-        static::assertIsArray($result);
-        static::assertCount(1, $result);
-        static::assertSame('VERIFIED', $result['status']);
+        $this->assertCount(1, $result);
+        $this->assertSame('VERIFIED', $result['status']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -105,9 +104,8 @@ class VerifyEmailTest extends AbstractUnitTestCase
             'signature' => 'signature',
         ], Mockery::mock(GraphQLContext::class), $resolveInfo);
 
-        static::assertIsArray($result);
-        static::assertCount(1, $result);
-        static::assertSame('VERIFIED', $result['status']);
+        $this->assertCount(1, $result);
+        $this->assertSame('VERIFIED', $result['status']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

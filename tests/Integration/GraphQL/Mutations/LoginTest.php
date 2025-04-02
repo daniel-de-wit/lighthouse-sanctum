@@ -9,11 +9,13 @@ use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokensIdentifiedByUsername;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Support\Facades\Hash;
+use Orchestra\Testbench\Attributes\WithMigration;
 use PHPUnit\Framework\Attributes\Test;
 
 class LoginTest extends AbstractIntegrationTestCase
 {
     #[Test]
+    #[WithMigration]
     public function it_logs_a_user_in(): void
     {
         UserHasApiTokens::factory()->create([
@@ -40,6 +42,7 @@ class LoginTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_logs_a_user_in_using_custom_user_identifier(): void
     {
         $this->schema = /** @lang GraphQL */ '
@@ -89,6 +92,7 @@ class LoginTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_credentials_are_incorrect(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -104,6 +108,7 @@ class LoginTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_is_incorrect(): void
     {
         UserHasApiTokens::factory()->create([
@@ -124,6 +129,7 @@ class LoginTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_is_not_verified(): void
     {
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
@@ -147,6 +153,7 @@ class LoginTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -161,6 +168,7 @@ class LoginTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -176,6 +184,7 @@ class LoginTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -196,6 +205,7 @@ class LoginTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -210,6 +220,7 @@ class LoginTest extends AbstractIntegrationTestCase
     }
 
     #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
