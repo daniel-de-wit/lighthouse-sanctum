@@ -1,0 +1,44 @@
+name: Style
+
+on:
+  push:
+
+jobs:
+  style:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: [ 8.2 ]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Install dependencies
+        run: |
+          docker compose -f docker-compose.ci.yml run --rm --quiet-pull php${{ matrix.php }} \
+            composer update --no-interaction --no-progress --prefer-dist --prefer-stable
+
+      - name: Rector
+        run: |
+          docker compose -f docker-compose.ci.yml run --rm php${{ matrix.php }} \
+             composer rector
+
+      - name: Pint
+        run: |
+          docker compose -f docker-compose.ci.yml run --rm php${{ matrix.php }} \
+             composer pint
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: composer pint

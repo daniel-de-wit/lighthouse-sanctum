@@ -1,0 +1,41 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: [ 8.4, 8.3, 8.2 ]
+        release: [ stable, lowest ]
+
+    name: P${{ matrix.php }} - ${{ matrix.release }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Install dependencies
+        run: |
+          docker compose -f docker-compose.ci.yml run --rm --quiet-pull php${{ matrix.php }} \
+            composer update --no-interaction --no-progress --prefer-dist --prefer-${{ matrix.release }}
+
+      - name: Run tests
+        run: |
+          docker compose -f docker-compose.ci.yml run --rm php${{ matrix.php }} \
+             composer test
