@@ -28,8 +28,8 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
         "kubawerlos/php-cs-fixer-custom-fixers": "^3.14",
-        "mockery/mockery": "^1.5",
         "larastan/larastan": "^3.0",
+        "mockery/mockery": "^1.5",
         "orchestra/testbench": "^10.0",
         "phpstan/phpstan-mockery": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
