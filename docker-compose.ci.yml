@@ -1,0 +1,15 @@
+services:
+  php8.2:
+    build: .docker/php/8.2
+    volumes:
+      - .:/var/www/html
+
+  php8.3:
+      build: .docker/php/8.3
+      volumes:
+          - .:/var/www/html
+
+  php8.4:
+      build: .docker/php/8.4
+      volumes:
+          - .:/var/www/html
