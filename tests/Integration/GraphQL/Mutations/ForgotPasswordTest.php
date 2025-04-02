@@ -50,7 +50,7 @@ class ForgotPasswordTest extends AbstractIntegrationTestCase
 
             $url = call_user_func($notification::$createUrlCallback, $user, $notification->token);
 
-            return $url === 'https://my-front-end.com/reset-password?email=john.doe%40gmail.com&token=' . $notification->token;
+            return $url === 'https://my-front-end.com/reset-password?email=john.doe%40gmail.com&token='.$notification->token;
         });
     }
 

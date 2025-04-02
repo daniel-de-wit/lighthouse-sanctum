@@ -35,7 +35,7 @@ class GraphQLValidationException extends Exception implements ClientAware, Provi
     {
         return [
             'validation' => [
-                'input.' . $this->field => [$this->validationMessage],
+                'input.'.$this->field => [$this->validationMessage],
             ],
         ];
     }

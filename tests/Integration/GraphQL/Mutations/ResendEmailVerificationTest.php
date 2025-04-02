@@ -57,7 +57,7 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
 
             $hash = sha1('foo@bar.com');
 
-            return $url === 'https://mysite.com/verify-email/123/' . $hash;
+            return $url === 'https://mysite.com/verify-email/123/'.$hash;
         });
     }
 
