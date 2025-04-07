@@ -156,11 +156,13 @@ class RegisterTest extends AbstractIntegrationTestCase
 
             $url = call_user_func($notification::$createUrlCallback, $user);
 
-            $id   = (string) $user->getKey();
+            $id   = $user->getKey();
             $hash = sha1('foo@bar.com');
 
+            assert(is_int($id) || is_string($id));
+
             $params = [
-                'id'      => $id,
+                'id'      => (string) $id,
                 'hash'    => $hash,
                 'expires' => '1609480800',
             ];
