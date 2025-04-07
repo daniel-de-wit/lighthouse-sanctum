@@ -61,9 +61,9 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
         $url = $this->service->transformUrl($user, 'https://mysite.com/verify-email/__ID__/__HASH__/__EXPIRES__/__SIGNATURE__');
 
         $signature = hash_hmac('sha256', serialize([
-            'id'      => 12345,
+            'id'      => '12345',
             'hash'    => sha1('user@example.com'),
-            'expires' => 1609480800,
+            'expires' => '1609480800',
         ]), $this->getAppKey());
 
         $this->assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com').'/1609480800/'.$signature, $url);
@@ -107,9 +107,9 @@ class EmailVerificationServiceTest extends AbstractIntegrationTestCase
         $url = call_user_func(VerifyEmail::$createUrlCallback, $user);
 
         $signature = hash_hmac('sha256', serialize([
-            'id'      => 12345,
+            'id'      => '12345',
             'hash'    => sha1('user@example.com'),
-            'expires' => 1609480800,
+            'expires' => '1609480800',
         ]), $this->getAppKey());
 
         $this->assertSame('https://mysite.com/verify-email/12345/'.sha1('user@example.com').'/1609480800/'.$signature, $url);

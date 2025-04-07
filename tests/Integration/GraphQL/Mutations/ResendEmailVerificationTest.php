@@ -106,9 +106,9 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
 
             $hash      = sha1('foo@bar.com');
             $signature = hash_hmac('sha256', serialize([
-                'id'      => 123,
+                'id'      => '123',
                 'hash'    => $hash,
-                'expires' => 1609480800,
+                'expires' => '1609480800',
             ]), $this->getAppKey());
 
             return $url === sprintf('https://mysite.com/verify-email/123/%s/1609480800/%s', $hash, $signature);

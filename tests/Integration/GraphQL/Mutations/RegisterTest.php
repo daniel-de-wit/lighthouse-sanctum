@@ -156,14 +156,16 @@ class RegisterTest extends AbstractIntegrationTestCase
 
             $url = call_user_func($notification::$createUrlCallback, $user);
 
-            /** @var int|string $id */
-            $id        = $user->getKey();
-            $hash      = sha1('foo@bar.com');
-            $signature = hash_hmac('sha256', serialize([
+            $id   = (string) $user->getKey();
+            $hash = sha1('foo@bar.com');
+
+            $params = [
                 'id'      => $id,
                 'hash'    => $hash,
-                'expires' => 1609480800,
-            ]), $this->getAppKey());
+                'expires' => '1609480800',
+            ];
+
+            $signature = hash_hmac('sha256', serialize($params), $this->getAppKey());
 
             return $url === sprintf('https://mysite.com/verify-email/%s/%s/1609480800/%s', $id, $hash, $signature);
         });
