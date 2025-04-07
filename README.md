@@ -1,7 +1,7 @@
 # Lighthouse Sanctum
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/daniel-de-wit/lighthouse-sanctum/.github/workflows/run-tests.yml?branch=master)](https://github.com/daniel-de-wit/lighthouse-sanctum/actions/workflows/run-tests.yml?query=workflow%3Arun-tests+branch%3Amaster)
+[![Tests](https://github.com/daniel-de-wit/lighthouse-sanctum/actions/workflows/tests.yml/badge.svg)](https://github.com/daniel-de-wit/lighthouse-sanctum/actions/workflows/tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/daniel-de-wit/lighthouse-sanctum/badge.svg?branch=master)](https://coveralls.io/github/daniel-de-wit/lighthouse-sanctum?branch=master)
 [![PHPStan](https://img.shields.io/badge/PHPStan-enabled-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/daniel-de-wit/lighthouse-sanctum.svg)](https://packagist.org/packages/daniel-de-wit/lighthouse-sanctum)
