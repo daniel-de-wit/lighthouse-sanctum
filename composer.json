@@ -60,9 +60,9 @@
         "post-autoload-dump": [
             "@php ./vendor/bin/testbench package:discover --ansi"
         ],
-        "analyze": "vendor/phpstan/phpstan/phpstan analyse",
-        "coverage": "vendor/bin/phpunit",
-        "fix-style": "vendor/bin/pint",
+        "phpstan": "vendor/phpstan/phpstan/phpstan analyse",
+        "covarge": "vendor/bin/phpunit",
+        "pint": "vendor/bin/pint",
         "rector": "vendor/bin/rector",
         "test": "vendor/bin/phpunit --no-coverage"
     }
