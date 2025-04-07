@@ -20,8 +20,7 @@ class ResetPassword
         protected PasswordBroker $passwordBroker,
         protected Translator $translator,
         protected ResetPasswordServiceInterface $resetPasswordService,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<string, mixed>  $args

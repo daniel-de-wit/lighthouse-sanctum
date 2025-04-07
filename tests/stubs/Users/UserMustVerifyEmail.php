@@ -18,6 +18,6 @@ class UserMustVerifyEmail extends UserHasApiTokens implements MustVerifyEmail
      */
     protected static function newFactory(): Factory
     {
-        return new UserMustVerifyEmailFactory();
+        return new UserMustVerifyEmailFactory;
     }
 }

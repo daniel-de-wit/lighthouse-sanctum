@@ -55,6 +55,6 @@ class UserHasApiTokens extends User implements HasApiTokensContract
      */
     protected static function newFactory(): Factory
     {
-        return new UserHasApiTokensFactory();
+        return new UserHasApiTokensFactory;
     }
 }

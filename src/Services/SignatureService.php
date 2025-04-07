@@ -11,8 +11,7 @@ class SignatureService implements SignatureServiceInterface
 {
     public function __construct(
         protected string $appKey,
-    ) {
-    }
+    ) {}
 
     public function generate(array $params): string
     {
@@ -22,7 +21,7 @@ class SignatureService implements SignatureServiceInterface
     public function verify(array $params, string $signature): void
     {
         if (! hash_equals($signature, $this->generate($params))) {
-            throw new InvalidSignatureException();
+            throw new InvalidSignatureException;
         }
     }
 }

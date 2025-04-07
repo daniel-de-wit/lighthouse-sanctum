@@ -26,8 +26,7 @@ class Register
         protected Config $config,
         protected Hasher $hash,
         protected EmailVerificationServiceInterface $emailVerificationService,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<string, mixed>  $args

@@ -55,6 +55,6 @@ class UserHasApiTokensIdentifiedByUsername extends User implements HasApiTokensC
      */
     protected static function newFactory(): Factory
     {
-        return new UserHasApiTokensIdentifiedByUsernameFactory();
+        return new UserHasApiTokensIdentifiedByUsernameFactory;
     }
 }

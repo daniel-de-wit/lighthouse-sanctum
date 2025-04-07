@@ -18,8 +18,7 @@ class ResetPasswordService implements ResetPasswordServiceInterface
     public function __construct(
         protected Hasher $hash,
         protected Dispatcher $dispatcher,
-    ) {
-    }
+    ) {}
 
     public function transformUrl(CanResetPassword $notifiable, string $token, string $url): string
     {

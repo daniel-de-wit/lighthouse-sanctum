@@ -26,9 +26,9 @@
         "nuwave/lighthouse": "^6.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.0",
         "kubawerlos/php-cs-fixer-custom-fixers": "^3.14",
         "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.21",
         "mockery/mockery": "^1.5",
         "orchestra/testbench": "^10.0",
         "phpstan/phpstan-mockery": "^2.0",
@@ -61,9 +61,8 @@
             "@php ./vendor/bin/testbench package:discover --ansi"
         ],
         "analyze": "vendor/phpstan/phpstan/phpstan analyse",
-        "check-style": "php-cs-fixer fix --diff --dry-run",
         "coverage": "vendor/bin/phpunit",
-        "fix-style": "php-cs-fixer fix",
+        "fix-style": "vendor/bin/pint",
         "rector": "vendor/bin/rector",
         "test": "vendor/bin/phpunit --no-coverage"
     }
