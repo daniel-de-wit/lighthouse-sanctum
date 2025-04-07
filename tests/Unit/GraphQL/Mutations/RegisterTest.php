@@ -17,13 +17,14 @@ use Illuminate\Foundation\Auth\User;
 use Laravel\Sanctum\NewAccessToken;
 use Mockery;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
 
 class RegisterTest extends AbstractUnitTestCase
 {
     use MocksUserProvider;
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_registers_a_user(): void
     {
         $token                 = Mockery::mock(NewAccessToken::class);
@@ -52,13 +53,11 @@ class RegisterTest extends AbstractUnitTestCase
             'password_confirmation' => 'supersecret',
         ]);
 
-        static::assertIsArray($result);
-        static::assertCount(2, $result);
-        static::assertSame('SUCCESS', $result['status']);
-        static::assertSame('1234567890', $result['token']);
+        $this->assertSame('SUCCESS', $result['status']);
+        $this->assertSame('1234567890', $result['token']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_sends_an_email_verification_notification(): void
     {
         $token                 = Mockery::mock(NewAccessToken::class);
@@ -89,13 +88,11 @@ class RegisterTest extends AbstractUnitTestCase
             'password_confirmation' => 'supersecret',
         ]);
 
-        static::assertIsArray($result);
-        static::assertCount(2, $result);
-        static::assertSame('MUST_VERIFY_EMAIL', $result['status']);
-        static::assertNull($result['token']);
+        $this->assertSame('MUST_VERIFY_EMAIL', $result['status']);
+        $this->assertNull($result['token']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_sends_an_email_verification_notification_with_a_custom_url(): void
     {
         $token                 = Mockery::mock(NewAccessToken::class);
@@ -135,13 +132,11 @@ class RegisterTest extends AbstractUnitTestCase
             ],
         ]);
 
-        static::assertIsArray($result);
-        static::assertCount(2, $result);
-        static::assertSame('MUST_VERIFY_EMAIL', $result['status']);
-        static::assertNull($result['token']);
+        $this->assertSame('MUST_VERIFY_EMAIL', $result['status']);
+        $this->assertNull($result['token']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_throws_an_exception_if_the_user_provider_is_not_found(): void
     {
         static::expectException(RuntimeException::class);
@@ -162,7 +157,7 @@ class RegisterTest extends AbstractUnitTestCase
         ]);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function it_throws_an_exception_if_the_user_does_not_have_the_has_api_tokens_trait(): void
     {
         $user = $this->mockUser(User::class);

@@ -20,7 +20,7 @@ class GraphQLValidationException extends Exception implements ClientAware, Provi
             $path = implode('.', $path->path);
         }
 
-        parent::__construct("Validation failed for the field [{$path}].");
+        parent::__construct(sprintf('Validation failed for the field [%s].', $path));
     }
 
     public function isClientSafe(): bool
@@ -35,7 +35,7 @@ class GraphQLValidationException extends Exception implements ClientAware, Provi
     {
         return [
             'validation' => [
-                "input.{$this->field}" => [$this->validationMessage],
+                'input.'.$this->field => [$this->validationMessage],
             ],
         ];
     }

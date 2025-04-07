@@ -42,10 +42,9 @@ class ForgotPasswordTest extends AbstractUnitTestCase
             'email' => 'foo@bar.com',
         ]);
 
-        static::assertIsArray($result);
-        static::assertCount(2, $result);
-        static::assertSame('EMAIL_SENT', $result['status']);
-        static::assertSame('translation', $result['message']);
+        $this->assertCount(2, $result);
+        $this->assertSame('EMAIL_SENT', $result['status']);
+        $this->assertSame('translation', $result['message']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -85,9 +84,8 @@ class ForgotPasswordTest extends AbstractUnitTestCase
             ],
         ]);
 
-        static::assertIsArray($result);
-        static::assertCount(2, $result);
-        static::assertSame('EMAIL_SENT', $result['status']);
-        static::assertSame('translation', $result['message']);
+        $this->assertCount(2, $result);
+        $this->assertSame('EMAIL_SENT', $result['status']);
+        $this->assertSame('translation', $result['message']);
     }
 }

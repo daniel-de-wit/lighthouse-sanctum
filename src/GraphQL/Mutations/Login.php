@@ -20,8 +20,7 @@ class Login
     public function __construct(
         protected AuthManager $authManager,
         protected Config $config,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<string, string>  $args

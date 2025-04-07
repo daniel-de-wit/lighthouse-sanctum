@@ -20,7 +20,7 @@ class LighthouseSanctumServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ResetPasswordServiceInterface::class, ResetPasswordService::class);
 
-        $this->app->singleton(SignatureServiceInterface::class, function (Container $container) {
+        $this->app->singleton(SignatureServiceInterface::class, function (Container $container): SignatureService {
             /** @var Config $config */
             $config = $container->make(Config::class);
 
@@ -30,7 +30,7 @@ class LighthouseSanctumServiceProvider extends ServiceProvider
             return new SignatureService($appKey);
         });
 
-        $this->app->singleton(EmailVerificationServiceInterface::class, function (Container $container) {
+        $this->app->singleton(EmailVerificationServiceInterface::class, function (Container $container): EmailVerificationService {
             /** @var Config $config */
             $config = $container->make(Config::class);
 

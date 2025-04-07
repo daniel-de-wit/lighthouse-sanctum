@@ -10,10 +10,13 @@ use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Notification;
+use Orchestra\Testbench\Attributes\WithMigration;
+use PHPUnit\Framework\Attributes\Test;
 
 class ResendEmailVerificationTest extends AbstractIntegrationTestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_resends_an_email_verification_notification(): void
     {
         Notification::fake();
@@ -45,20 +48,21 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
             ],
         ]);
 
-        static::assertSame('EMAIL_SENT', $response->json('data.resendEmailVerification.status'));
+        $this->assertSame('EMAIL_SENT', $response->json('data.resendEmailVerification.status'));
 
-        Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user) {
-            static::assertIsCallable($notification::$createUrlCallback);
+        Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user): bool {
+            $this->assertIsCallable($notification::$createUrlCallback);
 
             $url = call_user_func($notification::$createUrlCallback, $user);
 
             $hash = sha1('foo@bar.com');
 
-            return $url === "https://mysite.com/verify-email/123/{$hash}";
+            return $url === 'https://mysite.com/verify-email/123/'.$hash;
         });
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_resends_a_signed_email_verification_notification(): void
     {
         Notification::fake();
@@ -93,25 +97,26 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
             ],
         ]);
 
-        static::assertSame('EMAIL_SENT', $response->json('data.resendEmailVerification.status'));
+        $this->assertSame('EMAIL_SENT', $response->json('data.resendEmailVerification.status'));
 
-        Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user) {
-            static::assertIsCallable($notification::$createUrlCallback);
+        Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user): bool {
+            $this->assertIsCallable($notification::$createUrlCallback);
 
             $url = call_user_func($notification::$createUrlCallback, $user);
 
             $hash      = sha1('foo@bar.com');
             $signature = hash_hmac('sha256', serialize([
-                'id'      => 123,
+                'id'      => '123',
                 'hash'    => $hash,
-                'expires' => 1609480800,
+                'expires' => '1609480800',
             ]), $this->getAppKey());
 
-            return $url === "https://mysite.com/verify-email/123/{$hash}/1609480800/{$signature}";
+            return $url === sprintf('https://mysite.com/verify-email/123/%s/1609480800/%s', $hash, $signature);
         });
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_does_not_resend_an_email_verification_notification_if_the_email_does_not_exist(): void
     {
         Notification::fake();
@@ -134,12 +139,13 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
             ],
         ]);
 
-        static::assertSame('EMAIL_SENT', $response->json('data.resendEmailVerification.status'));
+        $this->assertSame('EMAIL_SENT', $response->json('data.resendEmailVerification.status'));
 
         Notification::assertNothingSent();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_does_not_resend_an_email_verification_notification_if_email_verification_is_not_used(): void
     {
         Notification::fake();
@@ -167,12 +173,13 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
             ],
         ]);
 
-        static::assertSame('EMAIL_SENT', $response->json('data.resendEmailVerification.status'));
+        $this->assertSame('EMAIL_SENT', $response->json('data.resendEmailVerification.status'));
 
         Notification::assertNothingSent();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_does_not_resend_an_email_verification_notification_if_the_email_is_already_verified(): void
     {
         Notification::fake();
@@ -200,12 +207,13 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
             ],
         ]);
 
-        static::assertSame('EMAIL_SENT', $response->json('data.resendEmailVerification.status'));
+        $this->assertSame('EMAIL_SENT', $response->json('data.resendEmailVerification.status'));
 
         Notification::assertNothingSent();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -217,7 +225,8 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field ResendEmailVerificationInput.email of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -231,7 +240,8 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -250,7 +260,8 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
             );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_verification_url_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -265,7 +276,8 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field VerificationUrlInput.url of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_verification_url_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -282,7 +294,8 @@ class ResendEmailVerificationTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_verification_url_field_is_not_a_url(): void
     {
         $this->graphQL(/** @lang GraphQL */ '

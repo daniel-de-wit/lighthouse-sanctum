@@ -45,10 +45,9 @@ class LogoutTest extends AbstractUnitTestCase
 
         $result = $mutation(null, []);
 
-        static::assertIsArray($result);
-        static::assertCount(2, $result);
-        static::assertSame('TOKEN_REVOKED', $result['status']);
-        static::assertSame('Translated string!', $result['message']);
+        $this->assertCount(2, $result);
+        $this->assertSame('TOKEN_REVOKED', $result['status']);
+        $this->assertSame('Translated string!', $result['message']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

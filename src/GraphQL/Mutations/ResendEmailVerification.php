@@ -18,8 +18,7 @@ class ResendEmailVerification
         protected AuthManager $authManager,
         protected Config $config,
         protected EmailVerificationServiceInterface $emailVerificationService,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<string, mixed>  $args

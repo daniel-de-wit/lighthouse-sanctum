@@ -20,8 +20,7 @@ class ResetPassword
         protected PasswordBroker $passwordBroker,
         protected Translator $translator,
         protected ResetPasswordServiceInterface $resetPasswordService,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<string, mixed>  $args
@@ -37,7 +36,7 @@ class ResetPassword
         ]);
 
         /** @var string $response */
-        $response = $this->passwordBroker->reset($credentials, function (Authenticatable $user, string $password) {
+        $response = $this->passwordBroker->reset($credentials, function (Authenticatable $user, string $password): void {
             $this->resetPasswordService->resetPassword($user, $password);
         });
 

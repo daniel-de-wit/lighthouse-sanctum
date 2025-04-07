@@ -19,8 +19,7 @@ class Logout
     public function __construct(
         protected AuthFactory $authFactory,
         protected Translator $translator,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<string, mixed>  $args

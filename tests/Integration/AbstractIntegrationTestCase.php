@@ -50,6 +50,7 @@ abstract class AbstractIntegrationTestCase extends TestCase
     {
         $this->loadLaravelMigrations();
         $this->loadMigrationsFrom(__DIR__.'/../stubs/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../vendor/laravel/sanctum/database/migrations');
     }
 
     /**

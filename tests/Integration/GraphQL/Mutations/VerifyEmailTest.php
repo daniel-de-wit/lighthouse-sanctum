@@ -7,10 +7,13 @@ namespace DanielDeWit\LighthouseSanctum\Tests\Integration\GraphQL\Mutations;
 use Carbon\Carbon;
 use DanielDeWit\LighthouseSanctum\Tests\Integration\AbstractIntegrationTestCase;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
+use Orchestra\Testbench\Attributes\WithMigration;
+use PHPUnit\Framework\Attributes\Test;
 
 class VerifyEmailTest extends AbstractIntegrationTestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_verifies_an_email(): void
     {
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
@@ -41,10 +44,11 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
 
         $user->refresh();
 
-        static::assertNotNull($user->getAttribute('email_verified_at'));
+        $this->assertNotNull($user->getAttribute('email_verified_at'));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_verifies_an_email_with_a_signature(): void
     {
         Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
@@ -86,10 +90,11 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
 
         $user->refresh();
 
-        static::assertNotNull($user->getAttribute('email_verified_at'));
+        $this->assertNotNull($user->getAttribute('email_verified_at'));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_user_is_not_found(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -104,7 +109,8 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('The provided input is incorrect.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_hash_is_incorrect(): void
     {
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
@@ -126,7 +132,8 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('The provided input is incorrect.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_expires_is_incorrect(): void
     {
         Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
@@ -160,7 +167,8 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('The provided input is incorrect.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_signature_has_expired(): void
     {
         Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
@@ -194,7 +202,8 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('The provided input is incorrect.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_signature_is_incorrect(): void
     {
         Carbon::setTestNow(Carbon::createFromTimestamp(1609477200));
@@ -222,7 +231,8 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('The provided input is incorrect.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_id_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -236,7 +246,8 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field VerifyEmailInput.id of required type ID! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_id_field_is_not_an_id(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -251,7 +262,8 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('ID cannot represent a non-string and non-integer value: true');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_hash_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -265,7 +277,8 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field VerifyEmailInput.hash of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_hash_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -280,7 +293,8 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_expires_field_is_missing_when_using_signed_verification(): void
     {
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
@@ -310,7 +324,8 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
             );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_expires_field_is_not_an_int(): void
     {
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
@@ -336,7 +351,8 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Int cannot represent non-integer value: true');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_signature_field_is_missing_when_using_signed_verification(): void
     {
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);
@@ -366,7 +382,8 @@ class VerifyEmailTest extends AbstractIntegrationTestCase
             );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_signature_field_is_not_a_string(): void
     {
         $this->app['config']->set('auth.providers.users.model', UserMustVerifyEmail::class);

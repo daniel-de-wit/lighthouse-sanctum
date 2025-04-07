@@ -10,10 +10,13 @@ use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserHasApiTokens;
 use DanielDeWit\LighthouseSanctum\Tests\stubs\Users\UserMustVerifyEmail;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Notification;
+use Orchestra\Testbench\Attributes\WithMigration;
+use PHPUnit\Framework\Attributes\Test;
 
 class RegisterTest extends AbstractIntegrationTestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_registers_a_user(): void
     {
         $response = $this->graphQL(/** @lang GraphQL */ '
@@ -37,8 +40,8 @@ class RegisterTest extends AbstractIntegrationTestCase
             ],
         ]);
 
-        static::assertNotNull($response->json('data.register.token'));
-        static::assertSame('SUCCESS', $response->json('data.register.status'));
+        $this->assertNotNull($response->json('data.register.token'));
+        $this->assertSame('SUCCESS', $response->json('data.register.status'));
 
         $this->assertDatabaseHas('users', [
             'name'  => 'Foo Bar',
@@ -46,7 +49,8 @@ class RegisterTest extends AbstractIntegrationTestCase
         ]);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_sends_an_email_verification_notification(): void
     {
         Notification::fake();
@@ -77,8 +81,8 @@ class RegisterTest extends AbstractIntegrationTestCase
             ],
         ]);
 
-        static::assertNull($response->json('data.register.token'));
-        static::assertSame('MUST_VERIFY_EMAIL', $response->json('data.register.status'));
+        $this->assertNull($response->json('data.register.token'));
+        $this->assertSame('MUST_VERIFY_EMAIL', $response->json('data.register.status'));
 
         $this->assertDatabaseHas('users', [
             'name'  => 'Foo Bar',
@@ -88,8 +92,8 @@ class RegisterTest extends AbstractIntegrationTestCase
         /** @var UserMustVerifyEmail $user */
         $user = UserMustVerifyEmail::first();
 
-        Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user) {
-            static::assertIsCallable($notification::$createUrlCallback);
+        Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user): bool {
+            $this->assertIsCallable($notification::$createUrlCallback);
 
             $url = call_user_func($notification::$createUrlCallback, $user);
 
@@ -97,11 +101,12 @@ class RegisterTest extends AbstractIntegrationTestCase
             $id   = $user->getKey();
             $hash = sha1('foo@bar.com');
 
-            return $url === "https://mysite.com/verify-email/{$id}/{$hash}";
+            return $url === sprintf('https://mysite.com/verify-email/%s/%s', $id, $hash);
         });
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_sends_a_signed_email_verification_notification(): void
     {
         Notification::fake();
@@ -135,8 +140,8 @@ class RegisterTest extends AbstractIntegrationTestCase
             ],
         ]);
 
-        static::assertNull($response->json('data.register.token'));
-        static::assertSame('MUST_VERIFY_EMAIL', $response->json('data.register.status'));
+        $this->assertNull($response->json('data.register.token'));
+        $this->assertSame('MUST_VERIFY_EMAIL', $response->json('data.register.status'));
 
         $this->assertDatabaseHas('users', [
             'name'  => 'Foo Bar',
@@ -146,25 +151,30 @@ class RegisterTest extends AbstractIntegrationTestCase
         /** @var UserMustVerifyEmail $user */
         $user = UserMustVerifyEmail::first();
 
-        Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user) {
-            static::assertIsCallable($notification::$createUrlCallback);
+        Notification::assertSentTo($user, function (VerifyEmail $notification) use ($user): bool {
+            $this->assertIsCallable($notification::$createUrlCallback);
 
             $url = call_user_func($notification::$createUrlCallback, $user);
 
-            /** @var int|string $id */
-            $id        = $user->getKey();
-            $hash      = sha1('foo@bar.com');
-            $signature = hash_hmac('sha256', serialize([
-                'id'      => $id,
-                'hash'    => $hash,
-                'expires' => 1609480800,
-            ]), $this->getAppKey());
+            $id   = $user->getKey();
+            $hash = sha1('foo@bar.com');
 
-            return $url === "https://mysite.com/verify-email/{$id}/{$hash}/1609480800/{$signature}";
+            assert(is_int($id) || is_string($id));
+
+            $params = [
+                'id'      => (string) $id,
+                'hash'    => $hash,
+                'expires' => '1609480800',
+            ];
+
+            $signature = hash_hmac('sha256', serialize($params), $this->getAppKey());
+
+            return $url === sprintf('https://mysite.com/verify-email/%s/%s/1609480800/%s', $id, $hash, $signature);
         });
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_name_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -181,7 +191,8 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field RegisterInput.name of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_name_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -199,7 +210,8 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -216,7 +228,8 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field RegisterInput.email of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -234,7 +247,8 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_field_is_not_an_email(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -257,7 +271,8 @@ class RegisterTest extends AbstractIntegrationTestCase
             );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_email_is_not_unique(): void
     {
         UserHasApiTokens::factory()->create([
@@ -284,7 +299,8 @@ class RegisterTest extends AbstractIntegrationTestCase
             );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -301,7 +317,8 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field RegisterInput.password of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -319,7 +336,8 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_field_is_not_confirmed(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -342,7 +360,8 @@ class RegisterTest extends AbstractIntegrationTestCase
             );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_confirmation_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -359,7 +378,8 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field RegisterInput.password_confirmation of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_password_confirmation_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -377,7 +397,8 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_verification_url_field_is_missing(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -396,7 +417,8 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('Field VerificationUrlInput.url of required type String! was not provided.');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_verification_url_field_is_not_a_string(): void
     {
         $this->graphQL(/** @lang GraphQL */ '
@@ -417,7 +439,8 @@ class RegisterTest extends AbstractIntegrationTestCase
         ')->assertGraphQLErrorMessage('String cannot represent a non string value: 12345');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
+    #[WithMigration]
     public function it_returns_an_error_if_the_verification_url_field_is_not_a_url(): void
     {
         $this->graphQL(/** @lang GraphQL */ '

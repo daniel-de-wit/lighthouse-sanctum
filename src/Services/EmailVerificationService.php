@@ -38,7 +38,7 @@ class EmailVerificationService implements EmailVerificationServiceInterface
 
     public function setVerificationUrl(string $url): void
     {
-        VerifyEmail::createUrlUsing(fn (MustVerifyEmail $user) => $this->transformUrl($user, $url));
+        VerifyEmail::createUrlUsing(fn (MustVerifyEmail $user): string => $this->transformUrl($user, $url));
     }
 
     /**
@@ -82,14 +82,18 @@ class EmailVerificationService implements EmailVerificationServiceInterface
     }
 
     /**
-     * @return mixed[]
+     * @return list<string>
      */
     protected function createUrlParameters(MustVerifyEmail $user): array
     {
+        $id = $this->getModelFromUser($user)->getKey();
+
+        assert(is_int($id) || is_string($id));
+
         $parameters = [
-            'id'      => $this->getModelFromUser($user)->getKey(),
+            'id'      => (string) $id,
             'hash'    => $this->createHash($user),
-            'expires' => $this->createExpires(),
+            'expires' => (string) $this->createExpires(),
         ];
 
         $signature = $this->signatureService->generate($parameters);

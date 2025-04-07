@@ -14,7 +14,10 @@ use Laravel\Sanctum\HasApiTokens;
 class UserHasApiTokensIdentifiedByUsername extends User implements HasApiTokensContract
 {
     use HasApiTokens;
+
+    /** @use HasFactory<UserHasApiTokensIdentifiedByUsernameFactory> */
     use HasFactory;
+
     use Notifiable;
 
     /**
@@ -23,7 +26,7 @@ class UserHasApiTokensIdentifiedByUsername extends User implements HasApiTokensC
     protected $table = 'users_with_usernames';
 
     /**
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -33,7 +36,7 @@ class UserHasApiTokensIdentifiedByUsername extends User implements HasApiTokensC
     ];
 
     /**
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',
@@ -52,6 +55,6 @@ class UserHasApiTokensIdentifiedByUsername extends User implements HasApiTokensC
      */
     protected static function newFactory(): Factory
     {
-        return new UserHasApiTokensIdentifiedByUsernameFactory();
+        return new UserHasApiTokensIdentifiedByUsernameFactory;
     }
 }

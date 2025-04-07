@@ -26,8 +26,7 @@ class UpdatePassword
         protected AuthFactory $authFactory,
         protected Hasher $hasher,
         protected Translator $translator,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<string, string>  $args

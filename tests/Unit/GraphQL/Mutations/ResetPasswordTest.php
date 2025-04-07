@@ -28,14 +28,14 @@ class ResetPasswordTest extends AbstractUnitTestCase
         /** @var PasswordBroker&MockInterface $passwordBroker */
         $passwordBroker = Mockery::mock(PasswordBroker::class)
             ->shouldReceive('reset')
-            ->withArgs(function (array $credentials, Closure $callback) use ($user) {
+            ->withArgs(function (array $credentials, Closure $callback) use ($user): bool {
                 $callback($user, 'supersecret');
 
-                return empty(array_diff($credentials, [
+                return array_diff($credentials, [
                     'email'    => 'foo@bar.com',
                     'token'    => '1234567890',
                     'password' => 'supersecret',
-                ]));
+                ]) === [];
             })
             ->andReturn('passwords.reset')
             ->getMock();
@@ -66,10 +66,9 @@ class ResetPasswordTest extends AbstractUnitTestCase
             'password_confirmation' => 'supersecret',
         ], Mockery::mock(GraphQLContext::class), Mockery::mock(ResolveInfo::class));
 
-        static::assertIsArray($result);
-        static::assertCount(2, $result);
-        static::assertSame('PASSWORD_RESET', $result['status']);
-        static::assertSame('response-translation', $result['message']);
+        $this->assertCount(2, $result);
+        $this->assertSame('PASSWORD_RESET', $result['status']);
+        $this->assertSame('response-translation', $result['message']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -81,11 +80,11 @@ class ResetPasswordTest extends AbstractUnitTestCase
         /** @var PasswordBroker&MockInterface $passwordBroker */
         $passwordBroker = Mockery::mock(PasswordBroker::class)
             ->shouldReceive('reset')
-            ->withArgs(fn (array $credentials, Closure $callback) => empty(array_diff($credentials, [
+            ->withArgs(fn (array $credentials, Closure $callback): bool => array_diff($credentials, [
                 'email'    => 'foo@bar.com',
                 'token'    => '1234567890',
                 'password' => 'supersecret',
-            ])))
+            ]) === [])
             ->andReturn('some-error')
             ->getMock();
 
