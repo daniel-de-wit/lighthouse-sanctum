@@ -17,11 +17,11 @@
     "homepage": "https://github.com/daniel-de-wit/lighthouse-sanctum",
     "require": {
         "php": "^8.2",
-        "illuminate/auth": "^11 || ^12",
-        "illuminate/contracts": "^11 || ^12",
-        "illuminate/database": "^11 || ^12",
-        "illuminate/routing": "^11 || ^12",
-        "illuminate/support": "^11 || ^12",
+        "illuminate/auth": "^11 || ^12 || ^13.0",
+        "illuminate/contracts": "^11 || ^12 || ^13.0",
+        "illuminate/database": "^11 || ^12 || ^13.0",
+        "illuminate/routing": "^11 || ^12 || ^13.0",
+        "illuminate/support": "^11 || ^12 || ^13.0",
         "laravel/sanctum": "^3.0 || ^4.0",
         "nuwave/lighthouse": "^6.0"
     },
@@ -30,10 +30,10 @@
         "larastan/larastan": "^3.0",
         "laravel/pint": "^1.21",
         "mockery/mockery": "^1.5",
-        "orchestra/testbench": "^10.0",
+        "orchestra/testbench": "^10.0 || ^11.0",
         "phpstan/phpstan-mockery": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
-        "phpunit/phpunit": "^11.0",
+        "phpunit/phpunit": "^11.0 || ^12.5.12",
         "rector/rector": "^2.0"
     },
     "autoload": {
